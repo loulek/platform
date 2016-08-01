@@ -49,7 +49,7 @@ class CreateEvent extends React.Component {
 				startHour: null,
 				endHour: null,
 				workers: null,
-				budget: null	
+				budget: null
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -57,7 +57,6 @@ class CreateEvent extends React.Component {
 			editLocation: false
 		}
 	}
-
 
 _createEvent(isEnabled) {
 	var that = this
@@ -104,7 +103,7 @@ _createEvent(isEnabled) {
 					</div>
 				</div>
 			);
-		} 
+		}
 
 
 render() {

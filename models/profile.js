@@ -5,6 +5,7 @@ var profileSchema = mongoose.Schema({
 	lastName   	 	: {type: String, required: false},
 	phone       	: {type: String, required: false},
 	specialty   	: {type: Array,  required: false},
+	location 			: {latitude: {type: Number}, longitude:{type: Number}},
     description 	: {type: String, required: false},
     gender        	: {type: String, required: false},
     profileImageUrl : {type: String, required: false},

@@ -187,8 +187,7 @@ router.post('/user/update-profile', function(req, res) {
 			gender: req.body.gender,
 			address: req.body.address
 
-		})
-    })
+	    })
 
 		console.log('new profile: ', newProfile);
 		newProfile.save(function(err, profile) {
@@ -207,6 +206,7 @@ router.post('/user/update-profile', function(req, res) {
 				});
 			}
 		});
+	  })
 	}
 });
 

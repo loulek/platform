@@ -18,7 +18,7 @@ class App extends React.Component {
 		var userContent = <div>
 							<h3>Bienvenue</h3>
 							<hr />
-							<EditEvent />
+							<CreateEvent />
 						  </div>;
 
 		var content = null;
@@ -36,23 +36,20 @@ class App extends React.Component {
 }
 
 
-class EditEvent extends React.Component {
+class CreateEvent extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			profileData: {
-				email: null,
-				gender: null,
-				firstName: null,
-				lastName: null,
-				phone: null,
-				specialty: [],
-				image: null,
-				description: null,
-				profileImageUrl: null,
-				resumeImageUrl: null,
-				address: null
+			eventData: {
+				title: null,
+				location: [],
+				startDate: null,
+				endDate: null,
+				startHour: null,
+				endHour: null,
+				workers: null,
+				budget: null	
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -62,7 +59,7 @@ class EditEvent extends React.Component {
 	}
 
 
-_editContact(isEnabled) {
+_createEvent(isEnabled) {
 	var that = this
 			return (
 				<div className='panel panel-default'>
@@ -103,7 +100,7 @@ _editContact(isEnabled) {
 							</div>
 						</div>
 						<button className="btn btn-success margin5 float-right" onClick={that._updateContact}>Save</button>
-						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editContact: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
+						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({CreateEvent: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
 					</div>
 				</div>
 			);
@@ -114,9 +111,9 @@ render() {
 
 		var contactForm = null;
 		if(this.state.editContact) {
-			contactForm = this._editContact(true);
+			contactForm = this._createEvent(true);
 		} else {
-			contactForm = this._editContact(false);
+			contactForm = this._createEvent(false);
 		}
 
 

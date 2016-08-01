@@ -12,7 +12,7 @@ import EditProfile from "./components/account/edit-profile";
 import EditNotifications from "./components/account/edit-notifications";
 import ChangePassword from "./components/account/change-password";
 import Calendar from "./components/calendar";
-
+import Search from "./components/search";
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
     replace({
@@ -36,6 +36,7 @@ function render() {
           <Route path="/account/change-password" component={ChangePassword} onEnter={requireAuth} />
         </Route>
         <Route path="/calendar" component={Calendar} />
+        <Route path="/search/:address" component={Search}/>
     	</Route>
     </Router>
     ,

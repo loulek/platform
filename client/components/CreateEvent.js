@@ -17,13 +17,19 @@ class CreateEvent extends React.Component {
 				startHour: null,
 				endHour: null,
 				workerNumber: null,
-				budget: null	
+				budget: null
 			},
 			tempSpecialty: [],
 			editContact: false,
 			editBio: false,
 			editLocation: false
 		}
+	}
+
+	handleChange(e){
+		var that=this
+    if(e.target.value){
+     that.setState({address: e.target.value})}
 	}
 
 _createEvent(isEnabled) {
@@ -44,7 +50,7 @@ _createEvent(isEnabled) {
 							<p className="col-sm-2 form-control-static"><b>Adresse:</b></p>
 							<div className="col-sm-8">
 
-							<Geosuggest inputClassName="form-control" placeholder="" initialValue={this.state.eventData.address} id="address" />
+							<Geosuggest inputClassName="form-control" placeholder="" initialValue={this.state.eventData.address} id="address" onChange={this.handleChange}/>
 
 							</div>
 						</div>
@@ -77,7 +83,7 @@ _createEvent(isEnabled) {
 								<input type="text" className="form-control" name="phone" defaultValue={this.state.eventData.phone} id="phone"/>
 							</div>
 						</div>
-						<button className="btn btn-success margin5 float-right" onClick={that._updateContact}>Save</button>
+						<Link to={'/search/philadelphia'} > Click to find hostess around you</Link>
 						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({CreateEvent: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
 					</div>
 				</div>

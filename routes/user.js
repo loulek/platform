@@ -126,6 +126,23 @@ router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
 	// 	});
 });
 
+//TODO: FIND USERS GIVEN USER INPUT
+router.post('/user/find',function(req,res){
+  var address="philadelphia"
+  geocoder.geocode(address, function(err, data) {
+     var longitude_new = data[0].longitude;
+     var latitude_new = data[0].latitude;
+     console.log("nlllllllllllll", longitude_new)
+     Profile.find(
+{location: {
+             $near: [longitude, latitude],
+             $maxDistance: 100
+         }},function(users,err){
+           if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
+           res.send(users)
+         })
+})
+})
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
@@ -153,8 +170,8 @@ router.post('/user/update-profile', function(req, res) {
 			phone: req.body.phone,
 			specialty: req.body['specialty[]'],
       location:{
-        latitude:latitude_new,
-        longitude:longitude_new
+        longitude:longitude_new,
+        latitude:latitude_new
       },
 			image: req.body.image,
 			description: req.body.description,
@@ -178,8 +195,8 @@ router.post('/user/update-profile', function(req, res) {
 			lastName: req.body.lastName,
 			phone: req.body.phone,
       location: {
-        latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        latitude: latitude
       },
 			specialty: req.body.specialty,
 			image: req.body.image,

@@ -18,7 +18,7 @@ class App extends React.Component {
 		var userContent = <div>
 							<h3>Bienvenue</h3>
 							<hr />
-							
+
 						  </div>;
 
 		var content = null;

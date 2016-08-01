@@ -49,13 +49,8 @@ class CreateEvent extends React.Component {
 				endDate: null,
 				startHour: null,
 				endHour: null,
-<<<<<<< HEAD
 				workerNumber: null,
 				budget: null	
-=======
-				workers: null,
-				budget: null
->>>>>>> z
 			},
 			tempSpecialty: [],
 			editContact: false,

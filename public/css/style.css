@@ -1,5 +1,11 @@
 body {
   margin-top: 50px;
+  background-image: url("http://www.premierehostess.com/wp-content/uploads/2014/09/Premiere-Hostess-Dubai-9.jpg");
+  background-size: cover;
+  background-repeat: repeat-x;
+}
+.panel-default {
+   opacity: 0.97 
 }
 
 .margin5 {
@@ -16,6 +22,11 @@ body {
 
 .center {
 	text-align: center;
+    color: white;
+    font-size: 35px;
+    text-shadow: 2px 2px black;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 .languages_container{
     display: flex;
@@ -143,6 +154,5 @@ body {
 .languages_padding{
     padding-top: 7px;
 }
-
 
 

@@ -2,7 +2,13 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
-
+var NodeGeocoder = require('node-geocoder');
+var geocoder = NodeGeocoder({
+ provider: "google",
+ apiKey: process.env.GEOCODING_API_KEY,
+ httpAdapter: "https",
+ formatter: null
+});
 var aws = require('aws-sdk');
 
 // require multer
@@ -18,7 +24,7 @@ var options = {
   // NEEDED for Buckets in Frankfurt (and change region)
   // signatureVersion: 'v4',
   // s3DisableBodySigning: true
-  // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property 
+  // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
 };
 
 // create s3 client
@@ -39,9 +45,9 @@ var upload = multer({
 
 
 // POST to `/uploadFile`
-// 
+//
 // Upload a file to this url
-// 
+//
 // @note: upload.single(...) takes the name of the field you called the file on
 // the client (in this example, you can see it's called 'fileName')
 // @note: Doesn't matter if you used React or HTML forms to send the request
@@ -136,13 +142,20 @@ router.post('/user/profile', function(req, res) {
 
 // update user information
 router.post('/user/update-profile', function(req, res) {
-
 	if(req.user.profile) {
+    geocoder.geocode(req.body.address, function(err, data) {
+       var longitude_new = data[0].longitude;
+       var latitude_new = data[0].latitude;
+
 		Profile.findByIdAndUpdate(req.user.profile, {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			phone: req.body.phone,
 			specialty: req.body['specialty[]'],
+      location:{
+        latitude:latitude_new,
+        longitude:longitude_new
+      },
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,
@@ -153,19 +166,28 @@ router.post('/user/update-profile', function(req, res) {
 			} else {
 				return res.json({status: 'ok'});
 			}
-		});
+		})
+  });
 	} else {
+    geocoder.geocode(req.body.address, function(err, data) {
+       var longitude = data[0].longitude;
+       var latitude = data[0].latitude;
+
 		var newProfile = new Profile({
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			phone: req.body.phone,
+      location: {
+        latitude: latitude,
+        longitude: longitude
+      },
 			specialty: req.body.specialty,
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,
 			address: req.body.address
 
-		});
+	    })
 
 		console.log('new profile: ', newProfile);
 		newProfile.save(function(err, profile) {
@@ -184,6 +206,7 @@ router.post('/user/update-profile', function(req, res) {
 				});
 			}
 		});
+	  })
 	}
 });
 

@@ -113,10 +113,10 @@ class EditProfile extends React.Component {
 	}
 
 	_uploadNewPhoto(file) {
-	    
+
 	    // create the container for our file data
 	    var fileData = new FormData();
-	    
+
 	    // encode the file
 	    fileData.append('img', file);
 
@@ -137,10 +137,10 @@ class EditProfile extends React.Component {
 	    });
 	}
 	_uploadNewResume(file) {
-	    
+
 	    // create the container for our file data
 	    var fileData = new FormData();
-	    
+
 	    // encode the file
 	    fileData.append('resu', file);
 
@@ -160,7 +160,7 @@ class EditProfile extends React.Component {
 		    })
 	    });
 	}
-	
+
 	_updateBio(e) {
 		e.preventDefault();
 		var profileData = this.state.profileData;
@@ -168,7 +168,7 @@ class EditProfile extends React.Component {
 		// get a reference to the fileInput
 	    var fileInput = $("#image");
 	    if (fileInput[0].files.length > 0) {
-	    	// so that you can get the file you wanted to upload 
+	    	// so that you can get the file you wanted to upload
 		    var file = fileInput[0].files[0];
 			this._uploadNewPhoto(file).then(function(JSONsentFromServer) {
 		        // what do you do went it goes through
@@ -179,10 +179,10 @@ class EditProfile extends React.Component {
 		        	console.log("[Error]", JSONsentFromServer.message);
 		        }
 			}.bind(this))
-	    } 
-	    var resumeInput = $("#resume")	    
+	    }
+	    var resumeInput = $("#resume")
 	    if (resumeInput[0].files.length > 0) {
-	    	// so that you can get the file you wanted to upload 
+	    	// so that you can get the file you wanted to upload
 		    var file = resumeInput[0].files[0];
 			this._uploadNewResume(file).then(function(JSONsentFromServer) {
 		        // what do you do went it goes through
@@ -193,7 +193,7 @@ class EditProfile extends React.Component {
 		        	console.log("[Error]", JSONsentFromServer.message);
 		        }
 			}.bind(this))
-	    } 
+	    }
 	    profileData.gender = $('#genderSelector').val();
 	    profileData.description = $('#description').val();
 		var languages = document.querySelectorAll(".checkbox > input:checked");
@@ -211,7 +211,7 @@ class EditProfile extends React.Component {
 	_saveChanges(e) {
 		e.preventDefault();
 		$.ajax({
-			url: '/user/update-profile',
+			url: '/user/update-profile', 
 			type: 'POST',
 			data: this.state.profileData,
 			success: function(data) {
@@ -329,12 +329,12 @@ class EditProfile extends React.Component {
 
 	_editBio(isEnabled) {
 
-		var buttonResume = null	    
+		var buttonResume = null
 	    if (this.state.profileData.resumeImageUrl){
 	    	buttonResume = (
 			<button className="btn btn-primary" width="150" onClick={this.openLightBox.bind(this, this.state.profileData.resumeImageUrl)}>View Resume</button>
 			)
-		}	
+		}
 
 		if(this.state.lightBox){
 			var box = (
@@ -344,7 +344,7 @@ class EditProfile extends React.Component {
                     onCloseRequest={this.closeLightbox.bind(this)}/>
             );
 
-		} 
+		}
 
 		if(isEnabled) {
 			var specialtyContent = [];
@@ -355,7 +355,7 @@ class EditProfile extends React.Component {
 				);
 			}
 
-		
+
 
 
 			var specialties = ['Bahasa Indonesia', 'Bahasa Malaysia', 'Bengali', 'Dansk', 'Deutsch', 'English', 'Español', 'Français', 'Hindi', 'Italiano',
@@ -395,7 +395,7 @@ class EditProfile extends React.Component {
 							<div className="col-sm-8 languages_container">
 
 								  {specialties}
-								
+
 							</div>
 						</div>
 						<div className="form-group row">
@@ -419,7 +419,7 @@ class EditProfile extends React.Component {
 							</div>
 						</div>
 						<button className="btn btn-success margin5 float-right" onClick={this._updateBio.bind(this)}>Save</button>
-						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editBio: false})}.bind(this)}>Cancel</button>	
+						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editBio: false})}.bind(this)}>Cancel</button>
 					</div>
 				</div>
 			);
@@ -450,7 +450,7 @@ class EditProfile extends React.Component {
 								<p className="form-control-static">{this.state.profileData.gender}</p>
 							</div>
 						</div>
-						
+
 						<div className="form-group row">
 							<p className="col-sm-2 form-control-static"><b>Langues:</b></p>
 							<div className="col-sm-10 languages_padding">
@@ -474,7 +474,7 @@ class EditProfile extends React.Component {
 							<div className="col-sm-10">
 							{buttonResume}
 							</div>
-						</div>	
+						</div>
 						<button className="btn btn-primary float-right" onClick={function() {this.setState({editBio: true, tempSpecialty: this.state.profileData.specialty.slice(0)})}.bind(this)}>Modifier</button>
 					</div>
 				</div>
@@ -482,7 +482,7 @@ class EditProfile extends React.Component {
 		}
 	}
 
-	
+
 	render() {
 
 		var contactForm = null;
@@ -506,7 +506,7 @@ class EditProfile extends React.Component {
 				<hr />
 				{contactForm}
 				<hr />
-				{bioForm}			
+				{bioForm}
 			</div>
 		);
 	}

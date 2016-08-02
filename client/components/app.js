@@ -2,6 +2,7 @@ import React from "react";
 import TopNavBar from "./top-navbar";
 import Login from "./login";
 
+
 class App extends React.Component{
 
 	constructor(props) {
@@ -17,7 +18,9 @@ class App extends React.Component{
 						return React.cloneElement(child);
 					}.bind(this))}
 				</div>
+				
 			</div>
+
 		);
 	}
 };

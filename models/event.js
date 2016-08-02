@@ -12,10 +12,6 @@ var eventSchema = mongoose.Schema({
 	workerNumber	: Number,
 	address			: String,
 	description 	: String,
-	endUndecided	: {type: boolean},
-	attendees   	: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-	ommitAttendees  : Boolean,
-	attachments		: [{'url': String, title: String, fileId: String}],
 	updatedAt   	: { type: Date, default: Date.now },
 	createdAt   	: { type: Date, default: Date.now }
 });

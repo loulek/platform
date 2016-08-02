@@ -12,12 +12,11 @@ class App extends React.Component {
 
 	render() {
 
-		var guestContent = <div><h3>Viewing page as guest</h3><CreateEvent /></div>;
+		var guestContent = <div><CreateEvent /></div>;
 
 
 		var userContent = <div>
-							<h3>Bienvenue</h3>
-							<hr />
+							<h3 style={{"color":"white"}}>Bienvenue</h3>
 							
 						  </div>;
 

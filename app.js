@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo/es5')(session);
 var passport = require('./config/passport');
+var LocalStrategy = require('passport-local');
 var flash = require('connect-flash');
 var app = express();
 var http = require('http').Server(app);
@@ -19,6 +20,7 @@ var webpackConfig = require('./webpack.config');
 var routesAuth = require('./routes/auth');
 var authWall = require('./routes/authWall');
 var routesUser = require('./routes/user');
+var User = require('./models/user')
 
 // express configuration ======================================================
 app.use(logger('dev'));
@@ -33,18 +35,6 @@ var connect = process.env.MONGODB_URI;
 mongoose.connect(connect);
 
 
-// required for passport ======================================================
-var mongoStore = new MongoStore({mongooseConnection: mongoose.connection});
-app.use(session({ secret: 'cookie secret',
-                  name: 'cookie name',
-                  store: mongoStore,
-                  proxy: true,
-                  resave: true,
-                  saveUninitialized: true}));
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
-
 // webpack setup ==============================================================
 
 if (process.env.NODE_ENV !== 'production') {
@@ -57,6 +47,21 @@ if (process.env.NODE_ENV !== 'production') {
   }));
   app.use(require('webpack-hot-middleware')(compiler));
 }
+
+// required for passport ======================================================
+var mongoStore = new MongoStore({mongooseConnection: mongoose.connection});
+app.use(session({ secret: 'cookie secret',
+                  name: 'cookie name',
+                  store: mongoStore,
+                  proxy: true,
+                  resave: true,
+                  saveUninitialized: true}));
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+
 
 // routes =====================================================================
 app.use('/', routesAuth(passport));

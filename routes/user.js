@@ -129,15 +129,17 @@ router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
-	User.findById(req.user._id)
-	.populate('profile')
-	.exec(function(err, user) {
-		if(err) {
-			throw err;
-		} else {
-			return res.json(user);
-		}
-	});
+	console.log("REQ>USER>PROFILE", req.user.profile)
+	res.json(req.user);
+	// User.findById(req.user._id)
+	// .populate('profile')
+	// .exec(function(err, user) {
+	// 	if(err) {
+	// 		throw err;
+	// 	} else {
+	// 		return res.json(user);
+	// 	}
+	// });
 });
 
 // update user information
@@ -152,10 +154,7 @@ router.post('/user/update-profile', function(req, res) {
 			lastName: req.body.lastName,
 			phone: req.body.phone,
 			specialty: req.body['specialty[]'],
-      location:{
-        latitude:latitude_new,
-        longitude:longitude_new
-      },
+      		location:[longitude_new, latitude_new],
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,
@@ -177,10 +176,7 @@ router.post('/user/update-profile', function(req, res) {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			phone: req.body.phone,
-      location: {
-        latitude: latitude,
-        longitude: longitude
-      },
+      		location: [longitude, latitude],
 			specialty: req.body.specialty,
 			image: req.body.image,
 			description: req.body.description,

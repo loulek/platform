@@ -6,7 +6,8 @@ var findOrCreate = require('mongoose-findorcreate');
 var userSchema = mongoose.Schema({
     email    : {type: String, required: true},
     password : {type: String, required: true},
-    profile  : {type: mongoose.Schema.Types.ObjectId, ref: 'Profile'},
+    profile  : {type: mongoose.Schema.Types.ObjectId},
+    type     : {type: String, required: true},
     createdAt: {type: Date, default: Date.now}
 });
 
@@ -14,7 +15,7 @@ userSchema.plugin(findOrCreate);
 
 // methods ====================================================================
 // hash password
-userSchema.methods.generateHash = function(password) {
+userSchema.statics.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 

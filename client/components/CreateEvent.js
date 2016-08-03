@@ -29,6 +29,125 @@ class CreateEvent extends React.Component {
 		}
 	}
 
+componentWillMount() {
+		$.ajax({
+			url: '/user/event',
+			type: 'POST',
+			success: function(user) {
+
+				// function variables that hold values for setting react state
+				var title = null;
+				var address = null;
+				var location = [];
+				var startDate = null;
+				var endDate = null;
+				var startHour = null;
+				var endHour = [];
+				var workerNumber = null;
+
+				if(user.event) {
+					title = user.event.title;
+					address = user.event.address;
+					location = user.event.location;
+					startDate = user.event.startDate;
+					endDate = user.event.endDate;
+					startHour = user.event.startHour;
+					endHour = user.event.endHour;
+					workerNumber = user.event.workerNumber;
+				}
+
+				// set react state using values from function variables
+				this.setState({
+					eventData: {
+						title: title,
+						address: address,
+						location: location,
+						startDate: startDate,
+						endDate: endDate,
+						startHour: startHour,
+						endHour: endHour,
+						workerNumber: workerNumber,
+					}
+				});
+			}.bind(this),
+			error: function(err) {
+				console.log(err)
+			}.bind(this)
+		});
+	}
+
+
+
+_searchEvent(e) {
+		var that=this
+		e.preventDefault();
+		console.log("tststtst", this.state)
+		var neweventData = {
+			title: $('#title').val(),
+			address: $('#address').val(),
+			startDate: $('#startDate').val(),
+			endDate: $('#endDate').val(),
+			startHour: $('#startHour').val(),
+			endHour: $('#endHour').val(),
+			workerNumber: $('#workerNumber').val()
+		};
+		this.setState({
+			eventData: neweventData,
+			editContact: false
+		});
+
+		$.ajax({
+		      type: "POST",
+		      // specify the url we want to upload our file to
+		      url: '/event/new',
+		      // this is how we pass in the actual file data from the form
+		      data: {
+			title: $('#title').val(),
+			address: $('#address').val(),
+			startDate: $('#startDate').val(),
+			endDate: $('#endDate').val(),
+			startHour: $('#startHour').val(),
+			endHour: $('#endHour').val(),
+			workerNumber: $('#workerNumber').val(),
+		},
+		  	  success: function(response){
+		  	  console.log("response", response.event); 
+		  	  var id=response.event
+		  	  that.context.router.push({
+				  pathname: '/search/'+id,
+				  query: { modal: true },
+				  state: { fromDashboard: true }
+				})
+		  	  },
+		  	  error: function(error){
+		  	  console.log("error", error);
+		  	  if(!error.responseJSON.success){
+		  	  		return alert(error.responseJSON.error)
+		  	  	}	
+		  	  }
+		    })
+
+
+	}
+
+
+_changeStart(e) {
+	var newState = Object.assign({}, this.state);
+	newState.eventData = Object.assign({}, newState.eventData, { startDate: e })
+	this.setState(newState)
+}
+
+_changeEnd(e) {
+	var newState = Object.assign({}, this.state);
+	newState.eventData = Object.assign({}, newState.eventData, { endDate: e })
+	this.setState(newState)
+}
+
+
+
+
+
+
 _createEvent(isEnabled) {
 	var that = this
 			return (
@@ -62,7 +181,7 @@ _createEvent(isEnabled) {
 								</select>
 							</div>
 							<div className="col-sm-3">
-								<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="workerNumber">
+								<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="startHour">
 									<option value="" selected disabled>Heure de début</option>
 									<option value='7:00'>7:00</option>
 									<option value='7:30'>7:30</option>
@@ -101,7 +220,7 @@ _createEvent(isEnabled) {
 								</select>
 							</div>
 							<div className="col-sm-3">
-								<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="workerNumber">
+								<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="endHour">
 									<option value="" selected disabled>Heure de fin</option>
 									<option value='7:30'>7:30</option>
 									<option value='8:00'>8:00</option>
@@ -141,14 +260,11 @@ _createEvent(isEnabled) {
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-1 form-control-static"><b>Date:</b></p>
-								<div className="col-sm-2">
-									<MyDatePicker />
+								<div className="col-sm-1">
+									<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Date de début"} />
 								</div>
-						
-							<p className="col-sm-1 form-control-static col-sm-offset-1"><b>jusqu'au:</b></p>
-								<div className="col-sm-2">
-									<MyDatePicker />
+								<div className="col-sm-1 col-sm-offset-3">
+									<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"Date de fin"} />
 								</div>
 						</div>
 						<div className="form-group row">
@@ -156,7 +272,7 @@ _createEvent(isEnabled) {
 								<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="title"/>
 							</div>
 						</div>	
-						<button className="btn btn-success margin5 float-right" onClick={that._updateContact}>Rechercher</button>
+						<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} to={'/search'} address={that.state.address}>Rechercher des Hôtesses</button>
 					</div>
 				</div>
 			);
@@ -186,18 +302,21 @@ class MyDatePicker extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			datetime: new Date(),
-		}
+		this.state = {}
+	}
+
+	componentWillReceiveProps(nextProps) {
+	    this.setState({ datetime: nextProps.datetime })  
 	}
 
 	render() {
+		console.log('{this.state.datetime}',this.state.datetime)
 		return(
 			<div>
 				<Kronos
 					date={this.state.datetime}
-					onChange={this.onChange}
-					placeholder="hello"
+					onChangeDateTime={this.props.onChange}
+					placeholder={this.props.placeholder}
 					options={{
 						font: "helvetica",
 						color: "black",
@@ -260,5 +379,8 @@ class MyDatePicker extends React.Component {
 	}
 }
 
+CreateEvent.contextTypes = {
+	router: Object
+}
 
 export default CreateEvent

@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
+var Event = require('../models/event');
 var geocoder = NodeGeocoder({
  provider: "google",
  apiKey: process.env.GEOCODING_API_KEY,
@@ -42,6 +43,9 @@ var upload = multer({
     }
   })
 });
+
+
+
 
 
 // POST to `/uploadFile`

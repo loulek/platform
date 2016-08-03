@@ -24,7 +24,7 @@ module.exports = function(passport) {
 		});
 	});
 
-	// POST process login
+	// POST process login 
 	router.post('/login', passport.authenticate('local'), function(req, res, next) {
 				return res.json({status: 'ok', user: req.user});
 	});
@@ -34,8 +34,12 @@ module.exports = function(passport) {
 		req.logout();
 		res.json({success: true});
 	});
+	
+	router.get('/', function(req, res){
 
-	// POST check if user is authenticated
+	})
+
+	// POST check if user is authenticated THIS IS THE WALL
 	router.post('/isauthenticated', function(req, res) {
 		if(req.user) {
 			req.json({auth: true});

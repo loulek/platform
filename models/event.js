@@ -17,12 +17,3 @@ var eventSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Event', eventSchema);
-
-title: null,
-				location: [],
-				startDate: null,
-				endDate: null,
-				startHour: null,
-				endHour: [],
-				workers: null,
-				budget: null

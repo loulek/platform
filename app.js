@@ -17,6 +17,7 @@ var io = require('socket.io')(http);
 var webpack = require('webpack');
 var webpackMiddleware = require("webpack-dev-middleware");
 var webpackConfig = require('./webpack.config');
+var routesUnAuth = require('./routes/unauth');
 var routesAuth = require('./routes/auth');
 var authWall = require('./routes/authWall');
 var routesUser = require('./routes/user');
@@ -64,6 +65,8 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 // routes =====================================================================
+
+app.use('/', routesUnAuth);
 app.use('/', routesAuth(passport));
 app.use('/', authWall);  // routes below this olny for authenticated users
 app.use('/', routesUser);

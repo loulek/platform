@@ -7,28 +7,24 @@ var User = require('../models/user');
 
 passport.serializeUser(function(user, done) {
   console.log("!!user.profile", !!user.profile)
-  done(null, JSON.stringify({id:user._id, type: user.type, hasProfile: !!user.profile}));
+  done(null, JSON.stringify({id:user._id, type: user.type}));
 });
 
 passport.deserializeUser(function(serialized, done) {
     console.log("SERIALIZE", serialized)
   var deserialized = JSON.parse(serialized)
-  if(!deserialized.hasProfile){
-      User.findById(deserialized.id, function(err, user) {
-        done(err, user);
-      });
-    } else {
-      User.findById(deserialized.id)
-          .populate({
-            path:'profile', 
-            model: deserialized.type
-          })
-          .exec(function(err, user){
-            console.log("DESERIALIZED.TYPE", deserialized.type)
-            console.log("USER", user)
-            done(err, user)
-          })
-    }
+
+  User.findById(deserialized.id)
+      .populate({
+        path:'profile', 
+        model: deserialized.type
+      })
+      .exec(function(err, user){
+        console.log("DESERIALIZED.TYPE", deserialized.type)
+        console.log("USER", user)
+        done(err, user)
+      })
+
 });
 
 

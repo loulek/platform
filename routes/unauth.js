@@ -14,9 +14,9 @@ var geocoder = NodeGeocoder({
 
 
 //POST from main to mongoose
-// 
+//
 // This route creates a new event in mongoose
-// 
+//
 // @param: title: title of the event to be created
 // ...
 router.post('/event/new',function(req,res){
@@ -34,7 +34,6 @@ if(!data){
   }
 
     new Event({
-      title: req.body.title,
       address: req.body.address,
       startDate: req.body.startDate,
       endDate: req.body.endDate,

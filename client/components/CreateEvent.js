@@ -18,7 +18,7 @@ class CreateEvent extends React.Component {
 				startHour: null,
 				endHour: null,
 				workerNumber: null,
-				budget: null	
+				budget: null
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -82,8 +82,8 @@ _searchEvent(e) {
 		var that=this
 		e.preventDefault();
 		console.log("tststtst", this.state)
+		// if (typeO$('#workerNumber').val())
 		var neweventData = {
-			title: $('#title').val(),
 			address: $('#address').val(),
 			startDate: $('#startDate').val(),
 			endDate: $('#endDate').val(),
@@ -102,7 +102,6 @@ _searchEvent(e) {
 		      url: '/event/new',
 		      // this is how we pass in the actual file data from the form
 		      data: {
-			title: $('#title').val(),
 			address: $('#address').val(),
 			startDate: $('#startDate').val(),
 			endDate: $('#endDate').val(),
@@ -111,7 +110,7 @@ _searchEvent(e) {
 			workerNumber: $('#workerNumber').val(),
 		},
 		  	  success: function(response){
-		  	  console.log("response", response.event); 
+		  	  console.log("response", response.event);
 		  	  var id=response.event
 		  	  that.context.router.push({
 				  pathname: '/search/'+id,
@@ -123,7 +122,7 @@ _searchEvent(e) {
 		  	  console.log("error", error);
 		  	  if(!error.responseJSON.success){
 		  	  		return alert(error.responseJSON.error)
-		  	  	}	
+		  	  	}
 		  	  }
 		    })
 
@@ -157,11 +156,8 @@ _createEvent(isEnabled) {
 					</div>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<div className="col-sm-4">
-								<input type="text" placeholder="Nom d'événement" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="title"/>
-							</div>
 							<div className="col-sm-6">
-							<Geosuggest inputClassName="form-control" placeholder="Adresse" initialValue={this.state.eventData.address} id="address" />
+							<Geosuggest inputClassName="form-control" placeholder="Adresse/Location" initialValue={this.state.eventData.address} id="address" />
 							</div>
 						</div>
 						<div className="form-group row">
@@ -267,11 +263,6 @@ _createEvent(isEnabled) {
 									<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"Date de fin"} />
 								</div>
 						</div>
-						<div className="form-group row">
-							<div className="col-sm-10">
-								<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="title"/>
-							</div>
-						</div>	
 						<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} to={'/search'} address={that.state.address}>Rechercher des Hôtesses</button>
 					</div>
 				</div>
@@ -306,7 +297,7 @@ class MyDatePicker extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-	    this.setState({ datetime: nextProps.datetime })  
+	    this.setState({ datetime: nextProps.datetime })
 	}
 
 	render() {
@@ -373,7 +364,7 @@ class MyDatePicker extends React.Component {
 						}
 					}}
 				/>
-			</div>			
+			</div>
 
 		)
 	}

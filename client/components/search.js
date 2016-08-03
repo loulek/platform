@@ -75,7 +75,26 @@ var Search = React.createClass({
 
    <div className='panel panel-default'>
           <div className='panel-heading'>
-            <h3 className="panel-title">Hôtesses</h3>
+            <div className="panel-title">
+            <label className="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
+            </label>
+            <label className="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
+            </label>
+            <label className="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
+            </label>
+            <label className="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
+            </label>
+            <label className="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
+            </label>
+            <label className="checkbox-inline">
+              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
+            </label>
+            </div>
           </div>
           <div className='panel-body'>
             <div className="form-group row">

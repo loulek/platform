@@ -27,38 +27,32 @@ var Events = React.createClass({
 
 
  render: function(){
-   console.log("RENDERING");
+   console.log("RENDERING", this.state.events);
 
    var userSquare = [];
    this.state.events.forEach(function(e, i){
      var address = e.address;
-     var id = user._id;
+     var startDate = e.startDate;
+     var endDate=e.endDate;
+     var startHour=e.startHour;
+     var endHour=e.endHour;
+     var id=e._id
        userSquare.push(
-       // <Link to={'/artists/'+id} key = {i} style={{margin:"10px"}}>
-       //   <div className="square" id={user._id}>
-       //     <div className="content bg" style={{backgroundImage: 'url('+img+')'}}>
-       //         <div className="table">
-       //             <div className="table-cell"><span className="backed">{user.name}</span></div>
-       //         </div>
-       //     </div>
-       //   </div>
-       // </Link>
-
-
-       <div className="col-sm-1 col-sm-offset-1" >
-         <div className="img"><img src={user.profileImageUrl} alt="Image" /></div>
-         <div className="text_image"><h4>{user.firstName}</h4>
+       <Link to={'/events/'+id} key = {i} style={{margin:"10px"}}>
+         <div className="square" id={e._id}>
+               <div className="table">
+                   <div className="location"><span className="backed">{address}</span></div>
+                   <div className="time"> <span className="backed"> From {startDate} {startHour} To {endDate} {endHour}</span></div>
+               </div>
          </div>
-       </div>
-
-
+       </Link>
      );
    }.bind(this));
    return <div>
 
    <div className='panel panel-default'>
           <div className='panel-heading'>
-            <h3 className="panel-title">Hôtesses</h3>
+            <h3 className="panel-title">Events</h3>
           </div>
           <div className='panel-body'>
             <div className="form-group row">

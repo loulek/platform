@@ -146,7 +146,13 @@ router.post('/user/profile', function(req, res) {
 	// });
 });
 
-
+router.get('/events',function(req,res){
+  console.log("INSIDE EVENTS ROUTE")
+  Event.find().exec(function(err,events){
+    if (err){res.status(500).send("errrrrr")}
+    res.json(events)
+  })
+})
 
 // update user information
 router.post('/user/update-profile', function(req, res) {

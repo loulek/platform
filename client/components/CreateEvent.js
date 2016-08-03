@@ -29,52 +29,6 @@ class CreateEvent extends React.Component {
 		}
 	}
 
-componentWillMount() {
-		$.ajax({
-			url: '/user/event',
-			type: 'POST',
-			success: function(user) {
-
-				// function variables that hold values for setting react state
-				var title = null;
-				var address = null;
-				var location = [];
-				var startDate = null;
-				var endDate = null;
-				var startHour = null;
-				var endHour = [];
-				var workerNumber = null;
-
-				if(user.event) {
-					title = user.event.title;
-					address = user.event.address;
-					location = user.event.location;
-					startDate = user.event.startDate;
-					endDate = user.event.endDate;
-					startHour = user.event.startHour;
-					endHour = user.event.endHour;
-					workerNumber = user.event.workerNumber;
-				}
-
-				// set react state using values from function variables
-				this.setState({
-					eventData: {
-						title: title,
-						address: address,
-						location: location,
-						startDate: startDate,
-						endDate: endDate,
-						startHour: startHour,
-						endHour: endHour,
-						workerNumber: workerNumber,
-					}
-				});
-			}.bind(this),
-			error: function(err) {
-				console.log(err)
-			}.bind(this)
-		});
-	}
 
 
 
@@ -85,8 +39,8 @@ _searchEvent(e) {
 		// if (typeO$('#workerNumber').val())
 		var neweventData = {
 			address: $('#address').val(),
-			startDate: $('#startDate').val(),
-			endDate: $('#endDate').val(),
+			startDate: that.state.eventData.startDate._d,
+			endDate: that.state.eventData.endDate._d,
 			startHour: $('#startHour').val(),
 			endHour: $('#endHour').val(),
 			workerNumber: $('#workerNumber').val()
@@ -103,8 +57,8 @@ _searchEvent(e) {
 		      // this is how we pass in the actual file data from the form
 		      data: {
 			address: $('#address').val(),
-			startDate: $('#startDate').val(),
-			endDate: $('#endDate').val(),
+			startDate: that.state.eventData.startDate._d,
+			endDate: that.state.eventData.endDate._d,
 			startHour: $('#startHour').val(),
 			endHour: $('#endHour').val(),
 			workerNumber: $('#workerNumber').val(),
@@ -257,10 +211,10 @@ _createEvent(isEnabled) {
 						</div>
 						<div className="form-group row">
 								<div className="col-sm-1">
-									<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Date de début"} />
+									<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Date de début"} id="startDate"/>
 								</div>
 								<div className="col-sm-1 col-sm-offset-3">
-									<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"Date de fin"} />
+									<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"Date de fin"} id="endDate"/>
 								</div>
 						</div>
 						<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} to={'/search'} address={that.state.address}>Rechercher des Hôtesses</button>

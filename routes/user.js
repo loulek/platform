@@ -146,6 +146,8 @@ router.post('/user/profile', function(req, res) {
 	// });
 });
 
+
+
 // update user information
 router.post('/user/update-profile', function(req, res) {
 	if(req.user.profile) {

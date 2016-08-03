@@ -25,7 +25,7 @@ class Login extends React.Component {
 			success: function(data) {
 			if(data.status === 'ok') {
 				sessionStorage.auth = true;
-				this.context.router.push('/');
+				this.context.router.push('/events');
 			} else if(data.status === 'error') {
 				this.setState({
 					message: data.error
@@ -43,7 +43,7 @@ class Login extends React.Component {
 
 	passwordChange(e) {
 		this.setState({password: e.target.value});
-	};	
+	};
 
 	render() {
 

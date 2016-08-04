@@ -11,7 +11,6 @@ class Profile extends React.Component {
 	
 
 	componentDidMount() {
-	console.log("YOOOOOOOOOOOOOOOOOOOOOooooooooooOOOoooooOOoooOOoooOOooO", this.props.params)
 
     $.ajax({
       url: '/profile/' + this.props.params.id,

@@ -148,6 +148,9 @@ router.post('/user/find',function(req,res){
 })
 })
 
+
+
+
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
 	res.json(req.user);

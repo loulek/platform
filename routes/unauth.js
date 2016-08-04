@@ -59,6 +59,25 @@ if(!data){
 });
 
 
+router.post('/findProfile',function(req,res){
+  console.log("INSIDE FIND PROFILE")
+  geocoder.geocode(req.body.address, function(err, data) {
+    var longitude_new = data[0].longitude;
+    var latitude_new = data[0].latitude;
+    Profile.find( { specialty: { $in: [req.body.criteria] },location: {
+             $near: [longitude_new, latitude_new],
+             $maxDistance: 50
+         } }, function(err,users){
+      console.log("USERS,users", users)
+
+      if (err){res.status(500).send("WRONG")}
+      res.send(users)
+    })
+
+  })
+
+})
+
 // GET /event/:id
 //  This route retrieves an event by its Id and all the informations with it.
 router.get('/event/:id',function(req,res){
@@ -87,7 +106,7 @@ router.get('/profile/:id', function(req, res){
     return res.status(200).json({
       "success": true,
       "user": user
-    })  
+    })
   })
 });
 
@@ -102,7 +121,7 @@ router.post('/search', function(req, res){
          Profile.find(
     {location: {
              $near: [longitude_new, latitude_new],
-             $maxDistance: 100
+             $maxDistance: 50
          }},function(err,users){
            if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
            res.send(users)

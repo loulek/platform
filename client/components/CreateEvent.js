@@ -33,6 +33,7 @@ class CreateEvent extends React.Component {
 		}
 	}
 
+
 	handleChange(e) {
 		 this.setState({
 			 value: e.target.value
@@ -116,6 +117,7 @@ class CreateEvent extends React.Component {
 		newState.eventData = Object.assign({}, newState.eventData, { endDate: e })
 		this.setState(newState)
 	}
+
 
 	_createEvent(isEnabled) {
 		return (
@@ -247,6 +249,30 @@ class CreateEvent extends React.Component {
 						);
 			}
 
+			handleClick(e){
+				var that=this
+				console.log("THISHIRHIS",that)
+				var val=e.target.value;
+				console.log("VLALLSLSLSLSLSL",val)
+				$.ajax({
+					url: '/findProfile',
+					dataType: 'json',
+					type: 'POST',
+					data: {criteria: val,address: $('#address').val()},
+					success: function(users){
+						console.log("users", users)
+						that.setState({
+							users:users
+						})
+
+					},
+					error: function(err){
+						console.log("error",err)
+					}
+				})
+			}
+
+
 render() {
 		var contactForm = null;
 		if(this.state.editContact) {
@@ -281,13 +307,13 @@ render() {
 		            </div>
 		            <div className="panel-title">
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="English"> English </input>
+		              <input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"> Italiano </input>
+		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Français"> Français </input>
+		              <input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
 		            </label>
 		            </div>
 		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
@@ -296,11 +322,11 @@ render() {
 			this.state.users.forEach(function(u){
 				usersquare.push(
 
-					
 
-					             
-					          
-					     
+
+
+
+
 
 
 					<div>
@@ -313,7 +339,7 @@ render() {
 						</div>
 					  </div>
 
-								
+
 					)
 			})
 		}

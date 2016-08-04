@@ -39,13 +39,13 @@ const Tabs = React.createClass({
 						onClick={this.handleClick.bind(this, index)}>
 						{child.props.label}
 					</a>
-				</li>	
+				</li>
 			);
 		}
 		return (
 			<ul className="panel-heading tabs__labels">
 				{this.props.children.map(labels.bind(this))}
-			</ul>	
+			</ul>
 		  );
 	},
 	_renderContent() {
@@ -99,7 +99,8 @@ class EditProfile extends React.Component {
 				description: null,
 				profileImageUrl: null,
 				resumeImageUrl: null,
-				address: null
+				address: null,
+				salary:null
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -126,6 +127,7 @@ class EditProfile extends React.Component {
 				var profileImageUrl = null;
 				var resumeImageUrl = null;
 				var address = null;
+				var salary=null
 
 				// populate function variables
 				email = user.email;
@@ -139,7 +141,7 @@ class EditProfile extends React.Component {
 					profileImageUrl = user.profile.profileImageUrl;
 					resumeImageUrl = user.profile.resumeImageUrl;
 					address = user.profile.address;
-
+					salary=user.profile.salary
 
 					if(user.profile.gender) {
 						gender = user.profile.gender;
@@ -166,7 +168,8 @@ class EditProfile extends React.Component {
 						description: description,
 						profileImageUrl: profileImageUrl,
 						resumeImageUrl : resumeImageUrl,
-						address : address
+						address : address,
+						salary:salary
 					}
 				});
 			}.bind(this),
@@ -184,6 +187,7 @@ class EditProfile extends React.Component {
 		profileData.lastName = $('#lastName').val();
 		profileData.gender = $('#genderSelector').val();
 		profileData.address = $('#address').val();
+		profileData.salary = $('#salary').val();
 		console.log("$('#address').val();", $('#address').val())
 		this.setState({
 			profileData: profileData,
@@ -291,7 +295,7 @@ class EditProfile extends React.Component {
 	_saveChanges(e) {
 		e.preventDefault();
 		$.ajax({
-			url: '/user/update-profile', 
+			url: '/user/update-profile',
 			type: 'POST',
 			data: this.state.profileData,
 			success: function(data) {
@@ -330,6 +334,12 @@ class EditProfile extends React.Component {
 						</div>
 						</div>
 						<div className="form-group row">
+							<p className="col-sm-2 form-control-static"><b>Salary:</b></p>
+							<div className="col-sm-10">
+								<input type="text" className="form-control" name="salary" defaultValue={this.state.profileData.salary} id="salary"/>
+							</div>
+						</div>
+						<div className="form-group row">
 							<p className="col-sm-2 form-control-static"><b>Téléphone:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="phone" defaultValue={this.state.profileData.phone} id="phone"/>
@@ -357,6 +367,12 @@ class EditProfile extends React.Component {
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.firstName}</p>
 							</div>
+						</div>
+						<div className="form-group row">
+						<p className="col-sm-2 form-control-static"><b>Salary:</b></p>
+						<div className="col-sm-10">
+							<p className="form-control-static">{this.state.profileData.salary}</p>
+						</div>
 						</div>
 						<div className="form-group row">
 							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>

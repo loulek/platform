@@ -1,112 +1,45 @@
-var React = require('react');
-import { hashHistory, Router, Route, Link, withRouter } from 'react-router'
-var Search = React.createClass({
- getInitialState: function() {
-   return {
-     users: [],
-     event:{}
-   }
- },
+import React from "react"
+import Router from "react-router";
+import {Link} from "react-router";
 
- componentDidMount: function(){
-  var that = this
-  var id =this.props.params.id;
-   $.ajax({
-     url: '/event/'+id,
-     dataType: 'json',
-     type: 'GET',
-     success: function(data) {
-       console.log("got the event", data)
-       that.setState({
-        event:data
-       });
+var Search = React.createClass({
+  getInitialState(){
+    return {
+      list: []
+    }
+  },
+
+  componentDidMount(){
+    var address="philadelphia";
+    console.log("ADDRESSS HERE", address)
     $.ajax({
-      url: '/search',
+      url: '/user/find',
       dataType: 'json',
       type: 'POST',
-      data: {address: data.event.address},
-      success: function(users){
-        that.setState({
-          users:users
-        })
-        console.log("users", users) 
+      data: {address:address},
+      success: function(data) {
+        console.log("success finding users", data)
       },
       error: function(err){
-        console.log("error")
+        console.log(err)
       }
-    })   
-     },
-     error: function(xhr, status, err) {
-      console.log("error")
-     }.bind(this)
-   });
- },
+
+    });
+  },
+
+	render() {
 
 
- render: function(){
-   console.log("RENDERING");
+		return(
+      <div>
+			"SOMETHING"
+      </div>
+		);
+	}
 
-   var userSquare = [];
-   this.state.users.forEach(function(user, i){
-     var img = user.profileImageUrl;
-     var id = user._id;
-       userSquare.push(
-       // <Link to={'/artists/'+id} key = {i} style={{margin:"10px"}}>
-       //   <div className="square" id={user._id}>
-       //     <div className="content bg" style={{backgroundImage: 'url('+img+')'}}>
-       //         <div className="table">
-       //             <div className="table-cell"><span className="backed">{user.name}</span></div>
-       //         </div>
-       //     </div>
-       //   </div>
-       // </Link>
-       
-
-       <div className="col-sm-1 col-sm-offset-1" >              
-         <div className="img"><img src={user.profileImageUrl} alt="Image" /></div>
-         <div className="text_image"><h4>{user.firstName}</h4>
-         </div>
-       </div>
+})
 
 
-     );
-   }.bind(this));
-   return <div>
 
-   <div className='panel panel-default'>
-          <div className='panel-heading'>
-            <div className="panel-title">
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
-            </label>
-            </div>
-          </div>
-          <div className='panel-body'>
-            <div className="form-group row">
 
-   <div className="squaresContainer">{userSquare}</div>
-
-        </div>
-       </div>
-       </div>
-
-   </div>
- }
-});
-
-module.exports = Search
+export default Search;

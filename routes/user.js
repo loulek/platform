@@ -130,6 +130,23 @@ router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
 	// 	});
 });
 
+//TODO: FIND USERS GIVEN USER INPUT
+router.post('/user/find',function(req,res){
+  var address="philadelphia"
+  geocoder.geocode(address, function(err, data) {
+     var longitude_new = data[0].longitude;
+     var latitude_new = data[0].latitude;
+     console.log("nlllllllllllll", longitude_new)
+     Profile.find(
+{location: {
+             $near: [longitude, latitude],
+             $maxDistance: 100
+         }},function(users,err){
+           if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
+           res.send(users)
+         })
+})
+})
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
@@ -145,6 +162,14 @@ router.post('/user/profile', function(req, res) {
 	// });
 });
 
+router.get('/events',function(req,res){
+  console.log("INSIDE EVENTS ROUTE")
+  Event.find().exec(function(err,events){
+    if (err){res.status(500).send("errrrrr")}
+    res.json(events)
+  })
+})
+
 // update user information
 router.post('/user/update-profile', function(req, res) {
 	if(req.user.profile) {
@@ -157,7 +182,9 @@ router.post('/user/update-profile', function(req, res) {
 			lastName: req.body.lastName,
 			phone: req.body.phone,
 			specialty: req.body['specialty[]'],
+
       		location:[longitude_new, latitude_new],
+          salary: req.body.salary,
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,
@@ -179,7 +206,9 @@ router.post('/user/update-profile', function(req, res) {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			phone: req.body.phone,
+
       		location: [longitude, latitude],
+          salary: req.body.salary,
 			specialty: req.body.specialty,
 			image: req.body.image,
 			description: req.body.description,

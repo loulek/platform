@@ -66,7 +66,7 @@ class CreateEvent extends React.Component {
 	          users:users
 	        })
 	        console.log("users", users)
-	      },
+	      }.bind(this),
 	      error: function(err){
 	        console.log("error")
 	      }

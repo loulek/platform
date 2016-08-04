@@ -150,7 +150,6 @@ router.post('/user/find',function(req,res){
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
-	console.log("REQ>USER>PROFILE", req.user.profile)
 	res.json(req.user);
 	// User.findById(req.user._id)
 	// .populate('profile')

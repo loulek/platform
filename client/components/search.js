@@ -37,7 +37,6 @@ var Search = React.createClass({
 		);
 
 
-
 }
 })
 

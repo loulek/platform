@@ -77,6 +77,19 @@ router.get('/event/:id',function(req,res){
 
 });
 
+router.get('/profile/:id', function(req, res){
+  console.log("inside backend")
+  Profile.findById(req.params.id, function(err, user){
+    if(err) return res.status(500).json({
+      "success": false,
+      "error": err
+    })
+    return res.status(200).json({
+      "success": true,
+      "user": user
+    })  
+  })
+});
 
 
 router.post('/search', function(req, res){

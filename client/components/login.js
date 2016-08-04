@@ -25,7 +25,7 @@ class Login extends React.Component {
 			success: function(data) {
 			if(data.status === 'ok') {
 				sessionStorage.auth = true;
-				this.context.router.push('/');
+				this.context.router.push('/events');
 			} else if(data.status === 'error') {
 				this.setState({
 					message: data.error
@@ -43,7 +43,7 @@ class Login extends React.Component {
 
 	passwordChange(e) {
 		this.setState({password: e.target.value});
-	};	
+	};
 
 	render() {
 
@@ -54,7 +54,7 @@ class Login extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"textAlign" : "center"}}>Welcome back</h2>
+			<h2 style={{"text-align" : "center", "color" : "white", "text-shadow": "2px 2px black"}}>Connexion</h2>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">

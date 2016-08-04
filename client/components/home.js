@@ -2,7 +2,7 @@ import React from "react"
 import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
-import CreateEvent from './CreateEvent.js'
+import { CreateEvent } from './CreateEvent.js'
 
 class App extends React.Component {
 
@@ -12,13 +12,12 @@ class App extends React.Component {
 
 	render() {
 
-		var guestContent = <div><h3>Viewing page as guest</h3><CreateEvent /></div>;
+		var guestContent = <div><CreateEvent /></div>;
 
 
 		var userContent = <div>
 							<h3>Bienvenue</h3>
 							<hr />
-
 						  </div>;
 
 		var content = null;

@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
+var Event = require('../models/event');
 var geocoder = NodeGeocoder({
  provider: "google",
  apiKey: process.env.GEOCODING_API_KEY,
@@ -42,6 +43,9 @@ var upload = multer({
     }
   })
 });
+
+
+
 
 
 // POST to `/uploadFile`
@@ -146,16 +150,26 @@ router.post('/user/find',function(req,res){
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
-	User.findById(req.user._id)
-	.populate('profile')
-	.exec(function(err, user) {
-		if(err) {
-			throw err;
-		} else {
-			return res.json(user);
-		}
-	});
+	console.log("REQ>USER>PROFILE", req.user.profile)
+	res.json(req.user);
+	// User.findById(req.user._id)
+	// .populate('profile')
+	// .exec(function(err, user) {
+	// 	if(err) {
+	// 		throw err;
+	// 	} else {
+	// 		return res.json(user);
+	// 	}
+	// });
 });
+
+router.get('/events',function(req,res){
+  console.log("INSIDE EVENTS ROUTE")
+  Event.find().exec(function(err,events){
+    if (err){res.status(500).send("errrrrr")}
+    res.json(events)
+  })
+})
 
 // update user information
 router.post('/user/update-profile', function(req, res) {
@@ -169,10 +183,9 @@ router.post('/user/update-profile', function(req, res) {
 			lastName: req.body.lastName,
 			phone: req.body.phone,
 			specialty: req.body['specialty[]'],
-      location:{
-        longitude:longitude_new,
-        latitude:latitude_new
-      },
+
+      		location:[longitude_new, latitude_new],
+          salary: req.body.salary,
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,
@@ -194,10 +207,9 @@ router.post('/user/update-profile', function(req, res) {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			phone: req.body.phone,
-      location: {
-        longitude: longitude,
-        latitude: latitude
-      },
+
+      		location: [longitude, latitude],
+          salary: req.body.salary,
 			specialty: req.body.specialty,
 			image: req.body.image,
 			description: req.body.description,

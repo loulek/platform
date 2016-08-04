@@ -13,6 +13,7 @@ import EditNotifications from "./components/account/edit-notifications";
 import ChangePassword from "./components/account/change-password";
 import Calendar from "./components/calendar";
 import Search from "./components/search";
+import Events from "./components/event"
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
     replace({
@@ -27,6 +28,8 @@ function render() {
     <Router history={hashHistory}>
     	<Route path="/" component={App}>
 	    	<IndexRoute component={Home}></IndexRoute>
+        <Route path="/search/:id" component={Search}/>
+        <Route path="/events" component={Events}/>
 	    	<Route path="/login" component={Login} />
 	    	<Route path="/signup" component={Signup} />
         <Route path="/account" component={Account} onEnter={requireAuth}>

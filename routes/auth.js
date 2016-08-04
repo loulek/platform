@@ -7,39 +7,26 @@ var path = require('path');
 module.exports = function(passport) {
 
 	// POST process signup
-	router.post('/signup', function(req, res) {
-		passport.authenticate('local-signup', function(err, user, info) {
+	router.post('/signup', function(req, res, next) {
+		if (req.body.password !== req.body.repeatPassword){
+			return next("Passwords did not match")
+		}
+		var user = new User ({
+			email : req.body.email,
+			password : User.generateHash(req.body.password),
+			type: req.body.type
+		})
+		user.save(function(err, user){
 			if(err) {
-				return res.json({status: 'error', error: err.toString()});
+				return next(err)
 			}
-			req.logIn(user, function(err) {
-				if (err) {
-					return res.json({status: 'error', error: err.toString()});
-				}
-				return res.json({status: 'ok'});
-			});
-
-		})(req, res);
+			res.json({status: 'ok', user: user})
+		});
 	});
 
-	// POST process login
-	router.post('/login', function(req, res, next) {
-		passport.authenticate('local-login', function(err, user, info) {
-			if (err) { 
-				return res.json({status: 'error', error: err});
-			}
-
-			if (!user) {
-				return res.json({status: 'error', error: 'Username or password is incorrect.'});
-			}
-
-			req.logIn(user, function(err) {
-				if (err) {
-					return res.json({status: 'error', error: err});
-				}
-				return res.json({status: 'ok', user: user, info: info});
-			});
-		})(req, res);
+	// POST process login 
+	router.post('/login', passport.authenticate('local'), function(req, res, next) {
+				return res.json({status: 'ok', user: req.user});
 	});
 
 	// GET logout user
@@ -47,8 +34,12 @@ module.exports = function(passport) {
 		req.logout();
 		res.json({success: true});
 	});
+	
+	router.get('/', function(req, res){
 
-	// POST check if user is authenticated
+	})
+
+	// POST check if user is authenticated THIS IS THE WALL
 	router.post('/isauthenticated', function(req, res) {
 		if(req.user) {
 			req.json({auth: true});

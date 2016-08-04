@@ -29,9 +29,13 @@ class CreateEvent extends React.Component {
 			dtLabel: "",
 			locale: "",
 			users: [],
-			value:10
+			value:10,
+			filtered:{English:false, Italiano:false,Français:false},
+			oldusers:[],
+			filters:[]
 		}
 	}
+
 
 	handleChange(e) {
 		 this.setState({
@@ -63,7 +67,8 @@ class CreateEvent extends React.Component {
 	      data: {address: $('#address').val()},
 	      success: function(users){
 	        this.setState({
-	          users:users
+	          users:users,
+						oldusers:users
 	        })
 	        console.log("users", users)
 	      }.bind(this),
@@ -116,6 +121,7 @@ class CreateEvent extends React.Component {
 		newState.eventData = Object.assign({}, newState.eventData, { endDate: e })
 		this.setState(newState)
 	}
+
 
 	_createEvent(isEnabled) {
 		return (
@@ -247,6 +253,52 @@ class CreateEvent extends React.Component {
 						);
 			}
 
+			handleClick(e){
+				var val=e.target.value;
+if (!this.state.filtered[val]){
+				var that=this
+				var newfiltered=this.state.filtered;
+				newfiltered[val]=true
+				var filters=this.state.filters;
+				filters.push(val)
+				console.log("FILTERES",filters)
+				$.ajax({
+					url: '/findProfile',
+					dataType: 'json',
+					type: 'POST',
+					data: {
+						criteria: JSON.stringify(filters),
+						address: $('#address').val()},
+					success: function(users){
+						console.log("users", users)
+						that.setState({
+							users:users,
+							filtered:newfiltered,
+							filters:filters
+						})
+
+					},
+					error: function(err){
+						console.log("error",err)
+					}
+				})
+			}
+else{
+	var newfiltered=this.state.filtered;
+	newfiltered[val]=false
+	var newusers=this.state.oldusers;
+	var newfilters=this.state.filters;
+	console.log("newfilters",newfilters)
+	newfilters.splice(newfilters.indexOf(val),1)
+	this.setState({
+		users:newusers,
+		filtered:newfiltered,
+		filters:newfilters
+	})
+}
+}
+
+
 render() {
 		var contactForm = null;
 		if(this.state.editContact) {
@@ -281,13 +333,13 @@ render() {
 		            </div>
 		            <div className="panel-title">
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="English"> English </input>
+		              <input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"> Italiano </input>
+		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Français"> Français </input>
+		              <input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
 		            </label>
 		            </div>
 		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
@@ -296,11 +348,11 @@ render() {
 			this.state.users.forEach(function(u){
 				usersquare.push(
 
-					
 
-					             
-					          
-					     
+
+
+
+
 
 
 					<div>
@@ -313,7 +365,7 @@ render() {
 						</div>
 					  </div>
 
-								
+
 					)
 			})
 		}

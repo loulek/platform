@@ -13,7 +13,9 @@ import EditNotifications from "./components/account/edit-notifications";
 import ChangePassword from "./components/account/change-password";
 import Calendar from "./components/calendar";
 import Search from "./components/search";
-import Events from "./components/event"
+import Events from "./components/event";
+import Profile from "./components/profile";
+
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
     replace({
@@ -30,6 +32,8 @@ function render() {
 	    	<IndexRoute component={Home}></IndexRoute>
         <Route path="/search/:id" component={Search}/>
         <Route path="/events" component={Events}/>
+        <Route path="/profile" component={Profile}/>
+          <Route path="/profile/:id" component={Profile}/>
 	    	<Route path="/login" component={Login} />
 	    	<Route path="/signup" component={Signup} />
         <Route path="/account" component={Account} onEnter={requireAuth}>

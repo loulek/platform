@@ -259,38 +259,50 @@ render() {
 		if (this.state.users.length>0){
 			filters.push(
 				<div className='panel-heading'>
-            <div className="panel-title">
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
-            </label>
-            <label className="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
-            </label>
-            </div>
-          </div>
+		            <div className="panel-title">
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
+		            </label>
+		            </div>
+		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
+	            </div>
 			)
 			this.state.users.forEach(function(u){
 				usersquare.push(
+
+					
+
+					             
+					          
+					     
+
+
 					<div>
 						<div className="img">
-							<img src={u.profileImageUrl} alt="Image" />
+						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
 						</div>
 						<div className="text_image">
-							<h4>{u.firstName}{u.salary}</h4>
+							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
+							<button className="btn btn-success">Contact</button>
 						</div>
-					</div>
+					  </div>
+
+								
 					)
 			})
 		}
@@ -299,9 +311,14 @@ render() {
 			<div>
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
-				<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)}/>
 				{filters}
-				{usersquare}
+				<div className='panel panel-default'>
+					<div className='panel-body'>
+						<div className="form-group row col-sm-offset-1">
+							{usersquare}
+						</div>
+					</div>
+				</div>
 
 
 			</div>

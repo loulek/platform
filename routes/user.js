@@ -184,7 +184,7 @@ router.post('/user/update-profile', function(req, res) {
 			specialty: req.body['specialty[]'],
 
       		location:[longitude_new, latitude_new],
-          salary: req.body.salary,
+            salary: req.body.salary,
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,

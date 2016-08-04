@@ -253,8 +253,9 @@ class CreateEvent extends React.Component {
 						);
 			}
 
-			handleClick(e){
+handleClick(e){
 				var val=e.target.value;
+				var that=this
 if (!this.state.filtered[val]){
 				var that=this
 				var newfiltered=this.state.filtered;
@@ -283,7 +284,7 @@ if (!this.state.filtered[val]){
 					}
 				})
 			}
-else{
+else if(this.state.filtered[val] && this.state.filters.length===1){
 	var newfiltered=this.state.filtered;
 	newfiltered[val]=false
 	var newusers=this.state.oldusers;
@@ -296,6 +297,34 @@ else{
 		filters:newfilters
 	})
 }
+else if (this.state.filtered[val]&& this.state.filters.length>1){
+	var newfiltered=this.state.filtered;
+	newfiltered[val]=false
+	var newfilters=this.state.filters;
+	newfilters.splice(newfilters.indexOf(val),1)
+	$.ajax({
+		url: '/findProfile',
+		dataType: 'json',
+		type: 'POST',
+		data: {
+			criteria: JSON.stringify(newfilters),
+			address: $('#address').val()},
+		success: function(users){
+			console.log("users", users)
+			that.setState({
+				users:users,
+				filtered:newfiltered,
+				filters:newfilters
+			})
+
+		},
+		error: function(err){
+			console.log("error",err)
+		}
+	})
+}
+
+
 }
 
 

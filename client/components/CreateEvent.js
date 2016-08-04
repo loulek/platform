@@ -29,7 +29,10 @@ class CreateEvent extends React.Component {
 			dtLabel: "",
 			locale: "",
 			users: [],
-			value:10
+			value:10,
+			filtered:{English:false, Italiano:false,Français:false},
+			oldusers:[],
+			filters:[]
 		}
 	}
 
@@ -64,7 +67,8 @@ class CreateEvent extends React.Component {
 	      data: {address: $('#address').val()},
 	      success: function(users){
 	        this.setState({
-	          users:users
+	          users:users,
+						oldusers:users
 	        })
 	        console.log("users", users)
 	      }.bind(this),
@@ -250,19 +254,27 @@ class CreateEvent extends React.Component {
 			}
 
 			handleClick(e){
-				var that=this
-				console.log("THISHIRHIS",that)
 				var val=e.target.value;
-				console.log("VLALLSLSLSLSLSL",val)
+if (!this.state.filtered[val]){
+				var that=this
+				var newfiltered=this.state.filtered;
+				newfiltered[val]=true
+				var filters=this.state.filters;
+				filters.push(val)
+				console.log("FILTERES",filters)
 				$.ajax({
 					url: '/findProfile',
 					dataType: 'json',
 					type: 'POST',
-					data: {criteria: val,address: $('#address').val()},
+					data: {
+						criteria: JSON.stringify(filters),
+						address: $('#address').val()},
 					success: function(users){
 						console.log("users", users)
 						that.setState({
-							users:users
+							users:users,
+							filtered:newfiltered,
+							filters:filters
 						})
 
 					},
@@ -271,6 +283,20 @@ class CreateEvent extends React.Component {
 					}
 				})
 			}
+else{
+	var newfiltered=this.state.filtered;
+	newfiltered[val]=false
+	var newusers=this.state.oldusers;
+	var newfilters=this.state.filters;
+	console.log("newfilters",newfilters)
+	newfilters.splice(newfilters.indexOf(val),1)
+	this.setState({
+		users:newusers,
+		filtered:newfiltered,
+		filters:newfilters
+	})
+}
+}
 
 
 render() {

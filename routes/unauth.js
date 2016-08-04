@@ -60,11 +60,12 @@ if(!data){
 
 
 router.post('/findProfile',function(req,res){
-  console.log("INSIDE FIND PROFILE")
+   req.body.criteria=JSON.parse(req.body.criteria)
+  console.log("INSIDE, filters",req.body.criteria)
   geocoder.geocode(req.body.address, function(err, data) {
     var longitude_new = data[0].longitude;
     var latitude_new = data[0].latitude;
-    Profile.find( { specialty: { $in: [req.body.criteria] },location: {
+    Profile.find( { specialty: { $all: req.body.criteria },location: {
              $near: [longitude_new, latitude_new],
              $maxDistance: 50
          } }, function(err,users){

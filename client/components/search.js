@@ -35,10 +35,11 @@ var Search = React.createClass({
 			"SOMETHING"
       </div>
 		);
-	}
 
+
+
+}
 })
-
 
 
 

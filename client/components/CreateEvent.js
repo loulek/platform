@@ -279,6 +279,17 @@ render() {
 		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
 		            </label>
 		            </div>
+		            <div className="panel-title">
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox1" value="English"> English </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"> Italiano </input>
+		            </label>
+		            <label className="checkbox-inline">
+		              <input type="checkbox" id="inlineCheckbox3" value="Français"> Français </input>
+		            </label>
+		            </div>
 		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
 	            </div>
 			)
@@ -312,14 +323,9 @@ render() {
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
 				{filters}
-				<div className='panel panel-default'>
-					<div className='panel-body'>
-						<div className="form-group row col-sm-offset-1">
+						<div className="row col-sm-offset-1">
 							{usersquare}
 						</div>
-					</div>
-				</div>
-
 
 			</div>
 		);

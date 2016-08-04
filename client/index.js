@@ -15,6 +15,7 @@ import Calendar from "./components/calendar";
 import Search from "./components/search";
 import Events from "./components/event";
 import Profile from "./components/profile";
+import CreateEvent from "./components/CreateEvent"
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -30,7 +31,6 @@ function render() {
     <Router history={hashHistory}>
     	<Route path="/" component={App}>
 	    	<IndexRoute component={Home}></IndexRoute>
-        <Route path="/search/:id" component={Search}/>
         <Route path="/events" component={Events}/>
         <Route path="/profile" component={Profile}/>
           <Route path="/profile/:id" component={Profile}/>
@@ -43,7 +43,9 @@ function render() {
           <Route path="/account/change-password" component={ChangePassword} onEnter={requireAuth} />
         </Route>
         <Route path="/calendar" component={Calendar} />
-        <Route path="/search/:address" component={Search}/>
+        <Route path="/search" component={Search}>
+          <Route path="/search/:id" component={Search}/>
+        </Route>
     	</Route>
     </Router>
     ,

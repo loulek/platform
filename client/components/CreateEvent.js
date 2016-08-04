@@ -14,9 +14,9 @@ class CreateEvent extends React.Component {
 			eventData: {
 				title: null,
 				location: [],
-				address: null,
-				startDate: null,
-				endDate: null,
+				address: this.props.address || null,
+				startDate: this.props.startDate ||null,
+				endDate: this.props.endDate ||null,
 				startHour: null,
 				endHour: null,
 				workerNumber: null,

@@ -35,10 +35,7 @@ module.exports = function(passport) {
 		res.json({success: true});
 	});
 	
-	router.get('/', function(req, res){
-
-	})
-
+	
 	// POST check if user is authenticated THIS IS THE WALL
 	router.post('/isauthenticated', function(req, res) {
 		if(req.user) {

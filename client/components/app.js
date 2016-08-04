@@ -21,11 +21,11 @@ class App extends React.Component{
 						return React.cloneElement(child);
 					}.bind(this))}
 				</div>
-				
+
 			</div>
 
 		);
 	}
-};
+}
 
 export default App;

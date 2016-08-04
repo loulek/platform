@@ -60,6 +60,7 @@
     "react-geosuggest": "^1.24.1",
     "react-image-lightbox": "github:ethanlee16/react-image-lightbox",
     "react-kronos": "^1.4.1",
+    "react-rangeslider": "^1.0.3",
     "react-redux": "^4.4.5",
     "react-router": "^2.5.2",
     "redux": "^3.5.2",

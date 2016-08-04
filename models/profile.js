@@ -6,6 +6,8 @@ var profileSchema = mongoose.Schema({
 	phone       	: {type: String, required: false},
 	specialty   	: {type: Array,  required: false},
 	location 		: {type: [Number], index: '2d'},
+	salary: 				{type: Number, required: false},
+	rating: {type:Number, required: false},
     description 	: {type: String, required: false},
     gender        	: {type: String, required: false},
     profileImageUrl : {type: String, required: false},

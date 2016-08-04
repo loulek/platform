@@ -2,11 +2,13 @@ import React from "react"
 import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
-import Kronos from 'react-kronos'
+import Kronos from 'react-kronos';
+
+
 
 class CreateEvent extends React.Component {
-	constructor(props) {
-		super(props);
+	constructor(props, context) {
+		super(props, context);
 
 		this.state = {
 			eventData: {
@@ -26,19 +28,26 @@ class CreateEvent extends React.Component {
 			editLocation: false,
 			dtLabel: "",
 			locale: "",
-			users: []
+			users: [],
+			value:10
 		}
 	}
 
+	handleChange(e) {
+		 this.setState({
+			 value: e.target.value
+		 });
+	 }
+
+
 	_searchEvent(e) {
-			var that=this
 			e.preventDefault();
 			console.log("tststtst", this.state)
 			// if (typeO$('#workerNumber').val())
 			var neweventData = {
 				address: $('#address').val(),
-				startDate: that.state.eventData.startDate._d,
-				endDate: that.state.eventData.endDate._d,
+				startDate: this.state.eventData.startDate._d,
+				endDate: this.state.eventData.endDate._d,
 				startHour: $('#startHour').val(),
 				endHour: $('#endHour').val(),
 				workerNumber: $('#workerNumber').val()
@@ -53,7 +62,7 @@ class CreateEvent extends React.Component {
 	      type: 'POST',
 	      data: {address: $('#address').val()},
 	      success: function(users){
-	        that.setState({
+	        this.setState({
 	          users:users
 	        })
 	        console.log("users", users)
@@ -69,8 +78,8 @@ class CreateEvent extends React.Component {
 			//       // this is how we pass in the actual file data from the form
 			//       data: {
 			// 	address: $('#address').val(),
-			// 	startDate: that.state.eventData.startDate._d,
-			// 	endDate: that.state.eventData.endDate._d,
+			// 	startDate: this.state.eventData.startDate._d,
+			// 	endDate: this.state.eventData.endDate._d,
 			// 	startHour: $('#startHour').val(),
 			// 	endHour: $('#endHour').val(),
 			// 	workerNumber: $('#workerNumber').val(),
@@ -78,7 +87,7 @@ class CreateEvent extends React.Component {
 			//   	  success: function(response){
 			//   	  console.log("response", response.event);
 			//   	  var id=response.event
-			//   	  that.context.router.push({
+			//   	  this.context.router.push({
 			// 		  pathname: '/search/'+id,
 			// 		  query: { modal: true },
 			// 		  state: { fromDashboard: true }
@@ -109,7 +118,6 @@ class CreateEvent extends React.Component {
 	}
 
 	_createEvent(isEnabled) {
-		var that = this
 		return (
 								<div className='panel panel-default'>
 										<div className='panel-heading'>
@@ -233,14 +241,13 @@ class CreateEvent extends React.Component {
 														</div>
 												</div>
 
-												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={that.state.address}>Rechercher des Hôtesses</button>
+												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
 										</div>
 								</div>
 						);
 			}
 
 render() {
-		var that=this
 		var contactForm = null;
 		if(this.state.editContact) {
 			contactForm = this._createEvent(true);
@@ -281,7 +288,7 @@ render() {
 							<img src={u.profileImageUrl} alt="Image" />
 						</div>
 						<div className="text_image">
-							<h4>{u.firstName}</h4>
+							<h4>{u.firstName}{u.salary}</h4>
 						</div>
 					</div>
 					)
@@ -292,12 +299,17 @@ render() {
 			<div>
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
+				<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)}/>
 				{filters}
 				{usersquare}
+
+
 			</div>
 		);
 	}
 }
+
+
 
 class MyDatePicker extends React.Component {
 	constructor(props) {
@@ -368,7 +380,7 @@ class MyDatePicker extends React.Component {
 					        },
 					        week : {
 					            dow : 1, // Monday is the first day of the week.
-					            doy : 4  // The week that contains Jan 4th is the first week of the year.
+					            doy : 4  // The week this contains Jan 4th is the first week of the year.
 					        }
 					    }
 						}
@@ -384,4 +396,4 @@ CreateEvent.contextTypes = {
 	router: Object
 }
 
-export default CreateEvent
+module.exports={CreateEvent:CreateEvent}

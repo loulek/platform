@@ -65,12 +65,12 @@ router.post('/findProfile',function(req,res){
    var c1=req.body.criteria1;
    var c2=req.body.criteria2
    if (c2.length===0){c2=["Accueil événementiel","Accueil entreprise","Animation commerciale","Serveur","Voiturier","Barman"]}
-   if (c1.length==0){c1=["English"]}
+   if (c1.length==0){c1=["English","Italiano","Français"]}
   console.log("INSIDE, filters",c1, c2)
   geocoder.geocode(req.body.address, function(err, data) {
     var longitude_new = data[0].longitude;
     var latitude_new = data[0].latitude;
-    Profile.find( { specialty: { $all: c1 },job: { $in: c2 },location: {
+    Profile.find( { specialty: { $in: c1 },job: { $in: c2 },location: {
              $near: [longitude_new, latitude_new],
              $maxDistance: 50
          } }, function(err,users){

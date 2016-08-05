@@ -3,7 +3,7 @@ import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
-
+var Rcslider = require('rc-slider');
 
 
 class CreateEvent extends React.Component {
@@ -33,17 +33,55 @@ class CreateEvent extends React.Component {
 			users: [],
 			value:10,
 			filter1:[],
-			filter2:[]
+			filter2:[],
+			oldusers:[]
 		}
 	}
 
+componentDidMount(){
+	var neweventData = {
+		address: $('#address').val(),
+		startDate: new Date(this.props.startDate),
+		endDate: new Date(this.props.endDate),
+		startHour: $('#startHour').val(),
+		endHour: $('#endHour').val(),
+		workerNumber: $('#workerNumber').val()
+	};
+	this.setState({
+		eventData: neweventData,
+		editContact: false
+	});
+	$.ajax({
+		url: '/search',
+		dataType: 'json',
+		type: 'POST',
+		data: {address: $('#address').val()},
+		success: function(users){
+			this.setState({
+				users:users,
+				oldusers:users
+			})
+			console.log("users", users)
+		}.bind(this),
+		error: function(err){
+			console.log("error")
+		}
+	})
+}
 
-	handleChange(e) {
+
+handleChange(e) {
 		 this.setState({
 			 value: e.target.value
 		 });
 	 }
 
+reset(e){
+	e.preventDefault(e)
+	$('input:checkbox').removeAttr('checked');
+	var users=this.state.oldusers
+	this.setState({users:users})
+}
 
 	_searchEvent(e) {
 			e.preventDefault();
@@ -51,8 +89,8 @@ class CreateEvent extends React.Component {
 			// if (typeO$('#workerNumber').val())
 			var neweventData = {
 				address: $('#address').val(),
-				startDate: this.state.eventData.startDate._d,
-				endDate: this.state.eventData.endDate._d,
+				startDate: this.state.eventData.startDate,
+        endDate: this.state.eventData.endDate,
 				startHour: $('#startHour').val(),
 				endHour: $('#endHour').val(),
 				workerNumber: $('#workerNumber').val()
@@ -67,9 +105,11 @@ class CreateEvent extends React.Component {
 	      type: 'POST',
 	      data: {address: $('#address').val()},
 	      success: function(users){
-	        this.setState({
+
+					this.setState({
 	          users:users,
-						oldusers:users
+						filter1:[],
+						filter2:[]
 	        })
 	        console.log("users", users)
 	      }.bind(this),
@@ -271,8 +311,17 @@ if (this.state.filter1.indexOf(val)===-1){
 						address: $('#address').val()},
 					success: function(users){
 						console.log("users", users)
+						var newusers=users
+						for(var i=0;i<newusers.length;i++){
+							for (var j=0;j<newusers.length-1;j++){
+								if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+							}
+						}
+						console.log("newusers",newusers)
+
+
 						that.setState({
-							users:users,
+							users:newusers,
 							filter1:filter1
 						})
 
@@ -294,8 +343,16 @@ else{
 			address: $('#address').val()},
 		success: function(users){
 			console.log("users", users)
+			var newusers=users
+			for(var i=0;i<newusers.length;i++){
+				for (var j=0;j<newusers.length-1;j++){
+					if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+				}
+			}
+
+
 			that.setState({
-				users:users,
+				users:newusers,
 				filter1:filter1
 			})
 
@@ -324,8 +381,15 @@ if (this.state.filter2.indexOf(val)===-1){
 					address: $('#address').val()},
 				success: function(users){
 					console.log("users", users)
+					var newusers=users
+					for(var i=0;i<newusers.length;i++){
+						for (var j=0;j<newusers.length-1;j++){
+							if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+						}
+					}
+
 					that.setState({
-						users:users,
+						users:newusers,
 						filter2:filter2
 					})
 
@@ -347,8 +411,15 @@ $.ajax({
 		address: $('#address').val()},
 	success: function(users){
 		console.log("users", users)
+		var newusers=users
+		for(var i=0;i<newusers.length;i++){
+			for (var j=0;j<newusers.length-1;j++){
+				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+			}
+		}
+
 		that.setState({
-			users:users,
+			users:newusers,
 			filter2:filter2
 		})
 
@@ -364,7 +435,7 @@ $.ajax({
 
 
 render() {
-		var contactForm = null;
+	var contactForm = null;
 		if(this.state.editContact) {
 			contactForm = this._createEvent(true);
 		} else {
@@ -372,6 +443,7 @@ render() {
 		}
 		var usersquare=[];
 		var filters=[]
+<<<<<<< HEAD
 		if (this.state.users.length>0){
 			filters.push(
 				<div className='panel-heading'>
@@ -412,6 +484,50 @@ render() {
 			)
 			this.state.users.forEach(function(u){
 				usersquare.push(
+=======
+		filters.push(
+			<div className='panel-heading'>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
+							</label>
+							</div>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
+							</label>
+							</div>
+							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
+						{this.state.value}
+						</div>
+		)
+if (this.state.users.length>0){
+
+		this.state.users.forEach(function(u){
+		usersquare.push(
+>>>>>>> zz
 					<div>
 						<div className="img">
 						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
@@ -420,7 +536,11 @@ render() {
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
 							<button className="btn btn-success">Contact</button>
 						</div>
+<<<<<<< HEAD
 					  </div>
+=======
+					</div>
+>>>>>>> zz
 					)
 			})
 		}

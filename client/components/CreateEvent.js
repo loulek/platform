@@ -37,6 +37,36 @@ class CreateEvent extends React.Component {
 		}
 	}
 
+componentDidMount(){
+	var neweventData = {
+		address: $('#address').val(),
+		startDate: this.state.eventData.startDate._d,
+		endDate: this.state.eventData.endDate._d,
+		startHour: $('#startHour').val(),
+		endHour: $('#endHour').val(),
+		workerNumber: $('#workerNumber').val()
+	};
+	this.setState({
+		eventData: neweventData,
+		editContact: false
+	});
+	$.ajax({
+		url: '/search',
+		dataType: 'json',
+		type: 'POST',
+		data: {address: $('#address').val()},
+		success: function(users){
+			this.setState({
+				users:users
+			})
+			console.log("users", users)
+		}.bind(this),
+		error: function(err){
+			console.log("error")
+		}
+	})
+}
+
 
 	handleChange(e) {
 		 this.setState({
@@ -68,8 +98,7 @@ class CreateEvent extends React.Component {
 	      data: {address: $('#address').val()},
 	      success: function(users){
 	        this.setState({
-	          users:users,
-						oldusers:users
+	          users:users
 	        })
 	        console.log("users", users)
 	      }.bind(this),
@@ -271,8 +300,17 @@ if (this.state.filter1.indexOf(val)===-1){
 						address: $('#address').val()},
 					success: function(users){
 						console.log("users", users)
+						var newusers=users
+						for(var i=0;i<newusers.length;i++){
+							for (var j=0;j<newusers.length-1;j++){
+								if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+							}
+						}
+						console.log("newusers",newusers)
+
+
 						that.setState({
-							users:users,
+							users:newusers,
 							filter1:filter1
 						})
 
@@ -294,8 +332,16 @@ else{
 			address: $('#address').val()},
 		success: function(users){
 			console.log("users", users)
+			var newusers=users
+			for(var i=0;i<newusers.length;i++){
+				for (var j=0;j<newusers.length-1;j++){
+					if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+				}
+			}
+
+
 			that.setState({
-				users:users,
+				users:newusers,
 				filter1:filter1
 			})
 
@@ -324,8 +370,15 @@ if (this.state.filter2.indexOf(val)===-1){
 					address: $('#address').val()},
 				success: function(users){
 					console.log("users", users)
+					var newusers=users
+					for(var i=0;i<newusers.length;i++){
+						for (var j=0;j<newusers.length-1;j++){
+							if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+						}
+					}
+
 					that.setState({
-						users:users,
+						users:newusers,
 						filter2:filter2
 					})
 
@@ -347,8 +400,15 @@ $.ajax({
 		address: $('#address').val()},
 	success: function(users){
 		console.log("users", users)
+		var newusers=users
+		for(var i=0;i<newusers.length;i++){
+			for (var j=0;j<newusers.length-1;j++){
+				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+			}
+		}
+
 		that.setState({
-			users:users,
+			users:newusers,
 			filter2:filter2
 		})
 
@@ -372,43 +432,44 @@ render() {
 		}
 		var usersquare=[];
 		var filters=[]
+		filters.push(
+			<div className='panel-heading'>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
+							</label>
+							</div>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
+							</label>
+							</div>
+						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
+						</div>
+		)
 		if (this.state.users.length>0){
-			filters.push(
-				<div className='panel-heading'>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
-		            </label>
-		            </div>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
-		            </label>
-		            </div>
-		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
-	            </div>
-			)
+
 			this.state.users.forEach(function(u){
 				usersquare.push(
 

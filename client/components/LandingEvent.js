@@ -4,8 +4,6 @@ import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
 
-
-
 class LandingEvent extends React.Component {
 	constructor(props, context) {
 		super(props, context);
@@ -50,15 +48,16 @@ class LandingEvent extends React.Component {
 			pathname: '/search',
 			query: {
 				address: this.state.eventData.address,
-				startDate: this.state.eventData.startDate,
-				endDate: this.state.eventData.endDate
+				startDate: this.state.eventData.startDate.toString(),
+				endDate: this.state.eventData.endDate.toString()
 			},
 		});
 
 	}
 
 	_changeStart(e) {
-		var eventData = Object.assign({}, this.state.eventData, { startDate: e })
+		console.log("EEEEEEEEEEEEE", e)
+		var eventData = Object.assign({}, this.state.eventData, { startDate: e , endDate: e})
 		this.setState({ eventData: eventData })
 	}
 

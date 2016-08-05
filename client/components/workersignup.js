@@ -12,7 +12,7 @@ class Signup extends React.Component {
 			password: null,
 			repeatPassword: null,
 			message: null,
-			type: 'Client'
+			type: 'Profile'
 		};
 	}
 

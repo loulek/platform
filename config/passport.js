@@ -49,16 +49,16 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
       }
       // auth has has succeeded
       user.populate({
-            path:'profile', 
-            model: user.type
-          }, function(err, user){
-            console.log("USER", user)
-            return done(null, user);
-          })
-     
-    });
-  }
-));
+          path:'profile', 
+          model: user.type
+        }, function(err, user){
+          console.log("USER", user)
+          return done(null, user);
+        })
+      
+  });
+
+}));
 
 
 module.exports = passport;

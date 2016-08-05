@@ -482,8 +482,14 @@ render() {
 						</div>
 		)
 if (this.state.users.length>0){
-
-		this.state.users.forEach(function(u){
+		var users=this.state.users
+		var val=this.state.value
+		var returnusers=[];
+		console.log("USERS INSDIE HANDLE CHANGE", users)
+		for (var i=0;i<users.length;i++){
+			if (users[i].salary<=val){returnusers.push(users[i])}
+		}
+		returnusers.forEach(function(u){
 		usersquare.push(
 					<div>
 						<div className="img">

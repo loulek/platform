@@ -3,7 +3,6 @@ import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
-var Rcslider = require('rc-slider');
 
 
 class CreateEvent extends React.Component {

@@ -40,8 +40,8 @@ class CreateEvent extends React.Component {
 componentDidMount(){
 	var neweventData = {
 		address: $('#address').val(),
-		startDate: this.state.eventData.startDate._d,
-		endDate: this.state.eventData.endDate._d,
+		startDate: new Date(this.props.startDate),
+		endDate: new Date(this.props.endDate),
 		startHour: $('#startHour').val(),
 		endHour: $('#endHour').val(),
 		workerNumber: $('#workerNumber').val()
@@ -81,8 +81,8 @@ componentDidMount(){
 			// if (typeO$('#workerNumber').val())
 			var neweventData = {
 				address: $('#address').val(),
-				startDate: this.state.eventData.startDate._d,
-				endDate: this.state.eventData.endDate._d,
+				startDate: new Date(this.props.startDate),
+				endDate: new Date(this.props.endDate),
 				startHour: $('#startHour').val(),
 				endHour: $('#endHour').val(),
 				workerNumber: $('#workerNumber').val()
@@ -98,8 +98,11 @@ componentDidMount(){
 	      data: {address: $('#address').val()},
 	      success: function(users){
 	        this.setState({
-	          users:users
+	          users:users,
+						filter1:[],
+						filter2:[]
 	        })
+					$('input:checkbox').removeAttr('checked');
 	        console.log("users", users)
 	      }.bind(this),
 	      error: function(err){
@@ -277,7 +280,7 @@ componentDidMount(){
 														</div>
 												</div>
 
-												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
+												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses/RESET FILTERS</button>
 										</div>
 								</div>
 						);

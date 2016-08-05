@@ -70,8 +70,7 @@ componentDidMount(){
 }
 
 
-	handleChange(e) {
-		console.log("eeee",e)
+handleChange(e) {
 		 this.setState({
 			 value: e.target.value
 		 });
@@ -436,7 +435,7 @@ $.ajax({
 
 
 render() {
-		var contactForm = null;
+	var contactForm = null;
 		if(this.state.editContact) {
 			contactForm = this._createEvent(true);
 		} else {
@@ -478,21 +477,14 @@ render() {
 							</label>
 							</div>
 							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
-						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} >{this.state.value}</input>
+						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
+						{this.state.value}
 						</div>
 		)
-		if (this.state.users.length>0){
+if (this.state.users.length>0){
 
-			this.state.users.forEach(function(u){
-				usersquare.push(
-
-
-
-
-
-
-
-
+		this.state.users.forEach(function(u){
+		usersquare.push(
 					<div>
 						<div className="img">
 						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
@@ -501,9 +493,7 @@ render() {
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
 							<button className="btn btn-success">Contact</button>
 						</div>
-					  </div>
-
-
+					</div>
 					)
 			})
 		}

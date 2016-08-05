@@ -32,9 +32,8 @@ class CreateEvent extends React.Component {
 			locale: "",
 			users: [],
 			value:10,
-			filtered:{English:false, Italiano:false,Français:false},
-			oldusers:[],
-			filters:[]
+			filter1:[],
+			filter2:[]
 		}
 	}
 
@@ -255,28 +254,26 @@ class CreateEvent extends React.Component {
 						);
 			}
 
-			handleClick(e){
-				var val=e.target.value;
-if (!this.state.filtered[val]){
-				var that=this
-				var newfiltered=this.state.filtered;
-				newfiltered[val]=true
-				var filters=this.state.filters;
-				filters.push(val)
-				console.log("FILTERES",filters)
+handleClick(e){
+		var val=e.target.value;
+		var that=this
+		var filter1=this.state.filter1
+		var filter2=this.state.filter2
+if (this.state.filter1.indexOf(val)===-1){
+				filter1.push(val)
 				$.ajax({
 					url: '/findProfile',
 					dataType: 'json',
 					type: 'POST',
 					data: {
-						criteria: JSON.stringify(filters),
+						criteria2:JSON.stringify(filter2),
+						criteria1: JSON.stringify(filter1),
 						address: $('#address').val()},
 					success: function(users){
 						console.log("users", users)
 						that.setState({
 							users:users,
-							filtered:newfiltered,
-							filters:filters
+							filter1:filter1
 						})
 
 					},
@@ -286,18 +283,83 @@ if (!this.state.filtered[val]){
 				})
 			}
 else{
-	var newfiltered=this.state.filtered;
-	newfiltered[val]=false
-	var newusers=this.state.oldusers;
-	var newfilters=this.state.filters;
-	console.log("newfilters",newfilters)
-	newfilters.splice(newfilters.indexOf(val),1)
-	this.setState({
-		users:newusers,
-		filtered:newfiltered,
-		filters:newfilters
+	filter1.splice(filter1.indexOf(val),1)
+	$.ajax({
+		url: '/findProfile',
+		dataType: 'json',
+		type: 'POST',
+		data: {
+			criteria2:JSON.stringify(filter2),
+			criteria1: JSON.stringify(filter1),
+			address: $('#address').val()},
+		success: function(users){
+			console.log("users", users)
+			that.setState({
+				users:users,
+				filter1:filter1
+			})
+
+		},
+		error: function(err){
+			console.log("error",err)
+		}
 	})
 }
+}
+
+handleClick2(e){
+	var val=e.target.value;
+	var that=this
+	var filter1=this.state.filter1
+	var filter2=this.state.filter2
+if (this.state.filter2.indexOf(val)===-1){
+			filter2.push(val)
+			$.ajax({
+				url: '/findProfile',
+				dataType: 'json',
+				type: 'POST',
+				data: {
+					criteria2:JSON.stringify(filter2),
+					criteria1: JSON.stringify(filter1),
+					address: $('#address').val()},
+				success: function(users){
+					console.log("users", users)
+					that.setState({
+						users:users,
+						filter2:filter2
+					})
+
+				},
+				error: function(err){
+					console.log("error",err)
+				}
+			})
+		}
+else{
+filter2.splice(filter2.indexOf(val),1)
+$.ajax({
+	url: '/findProfile',
+	dataType: 'json',
+	type: 'POST',
+	data: {
+		criteria2:JSON.stringify(filter2),
+		criteria1: JSON.stringify(filter1),
+		address: $('#address').val()},
+	success: function(users){
+		console.log("users", users)
+		that.setState({
+			users:users,
+			filter2:filter2
+		})
+
+	},
+	error: function(err){
+		console.log("error",err)
+	}
+})
+}
+
+
 }
 
 
@@ -315,22 +377,22 @@ render() {
 				<div className='panel-heading'>
 		            <div className="panel-title">
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
+		              <input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
+		              <input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
+		              <input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
+		              <input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
+		              <input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
 		            </label>
 		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
+		              <input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
 		            </label>
 		            </div>
 		            <div className="panel-title">

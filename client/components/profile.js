@@ -8,7 +8,7 @@ class Profile extends React.Component {
 		user:{}
 	}
 	}
-	
+
 
 	componentDidMount() {
 	console.log("YOOOOOOOOOOOOOOOOOOOOOooooooooooOOOoooooOOoooOOoooOOooO", this.props.params)
@@ -16,7 +16,7 @@ class Profile extends React.Component {
     $.ajax({
       url: '/profile/' + this.props.params.id,
       dataType: 'json',
-      type: 'GET',	
+      type: 'GET',
       success: function(user) {
         console.log("success finding users", user)
         this.setState({
@@ -30,6 +30,30 @@ class Profile extends React.Component {
     });
   }
 
+
+handleClick(e){
+	e.preventDefault();
+	var num=this.state.user.phone
+	console.log("thisclick", this)
+	$.ajax({
+		url: '/contact',
+		dataType: 'json',
+		type: 'POST',
+		data: {
+			num:num,
+			message: "hi"},
+		success: function(resp){
+			console.log("resp from twilio", resp)
+			if (resp.success){
+				alert("success!")
+			}
+		},
+		error: function(err){
+			console.log("error",err)
+		}
+	})
+}
+
 	render() {
 		return (
 			<div>
@@ -37,7 +61,7 @@ class Profile extends React.Component {
 				<h2>{this.state.user.firstName} {this.state.user.lastName}</h2>
 				<h2>{this.state.user.salary}€/heure</h2>
 				<img src={this.state.user.profileImageUrl} alt="Image" width="150px"/>
-				<button className="btn btn-success">Contact</button>
+				<button className="btn btn-success" onClick={this.handleClick.bind(this)}>Contact</button>
 
 			</div>
 		);

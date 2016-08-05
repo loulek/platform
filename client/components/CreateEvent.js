@@ -31,7 +31,7 @@ class CreateEvent extends React.Component {
 			dtLabel: "",
 			locale: "",
 			users: [],
-			value:10,
+			value:100,
 			filter1:[],
 			filter2:[],
 			oldusers:[]
@@ -429,12 +429,22 @@ $.ajax({
 	}
 })
 }
-
-
 }
 
+handleClick3(e){
+	e.preventDefault;
+	console.log("starting!")
+	this.context.router.push({
+		query: {
+			address: this.state.eventData.address,
+			startDate: this.state.eventData.startDate.toString(),
+			endDate: this.state.eventData.endDate.toString()
+		},
+	});
+}
 
 render() {
+	var that=this
 	var contactForm = null;
 		if(this.state.editContact) {
 			contactForm = this._createEvent(true);
@@ -493,7 +503,7 @@ if (this.state.users.length>0){
 		usersquare.push(
 					<div>
 						<div className="img">
-						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
+						<Link to={`/profile/${u._id}`} onClick={that.handleClick3}><img src={u.profileImageUrl} alt="Image" /></Link>
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>

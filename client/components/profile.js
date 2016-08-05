@@ -34,7 +34,7 @@ class Profile extends React.Component {
 handleClick(e){
 	e.preventDefault();
 	var num=this.state.user.phone
-	console.log("thisclick", this)
+	console.log("thisclick", this.props)
 	$.ajax({
 		url: '/contact',
 		dataType: 'json',

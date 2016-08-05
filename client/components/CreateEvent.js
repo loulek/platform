@@ -431,10 +431,12 @@ $.ajax({
 }
 }
 
-handleClick3(e){
-	e.preventDefault;
-	console.log("starting!")
+handleClick3(id, e){
+	e.preventDefault();
+	var id=id
+	console.log("starting!", this)
 	this.context.router.push({
+		path:'/profile/'+id,
 		query: {
 			address: this.state.eventData.address,
 			startDate: this.state.eventData.startDate.toString(),
@@ -503,7 +505,7 @@ if (this.state.users.length>0){
 		usersquare.push(
 					<div>
 						<div className="img">
-						<Link to={`/profile/${u._id}`} onClick={that.handleClick3}><img src={u.profileImageUrl} alt="Image" /></Link>
+						<button onClick={that.handleClick3.bind(that, u._id)}><img src={u.profileImageUrl} alt="Image" /></button>
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>

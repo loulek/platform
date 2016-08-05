@@ -3,7 +3,7 @@ import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
-
+var Rcslider = require('rc-slider');
 
 
 class CreateEvent extends React.Component {
@@ -33,7 +33,8 @@ class CreateEvent extends React.Component {
 			users: [],
 			value:10,
 			filter1:[],
-			filter2:[]
+			filter2:[],
+			oldusers:[]
 		}
 	}
 
@@ -57,7 +58,8 @@ componentDidMount(){
 		data: {address: $('#address').val()},
 		success: function(users){
 			this.setState({
-				users:users
+				users:users,
+				oldusers:users
 			})
 			console.log("users", users)
 		}.bind(this),
@@ -69,11 +71,18 @@ componentDidMount(){
 
 
 	handleChange(e) {
+		console.log("eeee",e)
 		 this.setState({
 			 value: e.target.value
 		 });
 	 }
 
+reset(e){
+	e.preventDefault(e)
+	$('input:checkbox').removeAttr('checked');
+	var users=this.state.oldusers
+	this.setState({users:users})
+}
 
 	_searchEvent(e) {
 			e.preventDefault();
@@ -81,8 +90,8 @@ componentDidMount(){
 			// if (typeO$('#workerNumber').val())
 			var neweventData = {
 				address: $('#address').val(),
-				startDate: new Date(this.props.startDate),
-				endDate: new Date(this.props.endDate),
+				startDate: this.state.eventData.startDate,
+        endDate: this.state.eventData.endDate,
 				startHour: $('#startHour').val(),
 				endHour: $('#endHour').val(),
 				workerNumber: $('#workerNumber').val()
@@ -97,12 +106,12 @@ componentDidMount(){
 	      type: 'POST',
 	      data: {address: $('#address').val()},
 	      success: function(users){
-	        this.setState({
+
+					this.setState({
 	          users:users,
 						filter1:[],
 						filter2:[]
 	        })
-					$('input:checkbox').removeAttr('checked');
 	        console.log("users", users)
 	      }.bind(this),
 	      error: function(err){
@@ -280,7 +289,7 @@ componentDidMount(){
 														</div>
 												</div>
 
-												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses/RESET FILTERS</button>
+												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
 										</div>
 								</div>
 						);
@@ -468,7 +477,8 @@ render() {
 								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
 							</label>
 							</div>
-						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
+							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} >{this.state.value}</input>
 						</div>
 		)
 		if (this.state.users.length>0){

@@ -20,25 +20,34 @@ class Signup extends React.Component {
 		e.preventDefault();
 		if(!this.state.email) {
 			return this.setState({
-				message: 'Email is required.'
+				message: 'Email manquant.'
 			});
 		}
 
+		var x = this.state.email;
+	    var atpos = x.indexOf("@");
+	    var dotpos = x.lastIndexOf(".");
+	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+	    	return this.setState({
+	    		message: 'Email invalide.'
+	    	})
+	    }
+
 		if(!this.state.password) {
 			return this.setState({
-				message: 'Password is required.'
+				message: 'Il manque un mot de passe.'
 			});
 		}
 
 		if(!this.state.repeatPassword) {
 			return this.setState({
-				message: 'Repeat password is required.'
+				message: 'Veuillez confirmer le mot de passe.'
 			});
 		}
 
 		if(this.state.password !== this.state.repeatPassword) {
 			return this.setState({
-				message: "Passwords doesn't match"
+				message: "Les mots de passe ne sont pas pareil."
 			});
 		}
 
@@ -93,7 +102,7 @@ class Signup extends React.Component {
 								<fieldset>
 										<div className="form-group">
 											<label>Email</label>
-										<input className="form-control" name="email" type="text" onChange={this.emailChange.bind(this)} />
+										<input className="form-control" name="email" type="email" onChange={this.emailChange.bind(this)} />
 									</div>
 									<div className="form-group">
 										<label>Password</label>

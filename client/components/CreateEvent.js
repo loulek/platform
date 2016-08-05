@@ -407,18 +407,11 @@ render() {
 		            </label>
 		            </div>
 		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
+		          {this.state.value}
 	            </div>
 			)
 			this.state.users.forEach(function(u){
 				usersquare.push(
-
-
-
-
-
-
-
-
 					<div>
 						<div className="img">
 						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
@@ -428,8 +421,6 @@ render() {
 							<button className="btn btn-success">Contact</button>
 						</div>
 					  </div>
-
-
 					)
 			})
 		}
@@ -439,9 +430,9 @@ render() {
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
 				{filters}
-						<div className="row col-sm-offset-1">
-							{usersquare}
-						</div>
+				<div className="row col-sm-offset-1">
+					{usersquare}
+				</div>
 
 			</div>
 		);

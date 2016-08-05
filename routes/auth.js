@@ -5,15 +5,32 @@ var path = require('path');
 var sg = require('sendgrid')(process.env.SENDGRID_APIKEY);
 var helper = require('sendgrid').mail;
 
+
+function makeid()
+{
+	var text = "";
+	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	for (var i=0; i < 7; i++){
+		text += possible.chartAt(Math.floor(Math.random() * possible.length));
+	}
+
+	return text; 
+}
+
+function randomString(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+    return result;
+}
+
 var sendEmail = function(options) {
 	from_email = new helper.Email("louisbiret@gmail.com")
 	to_email = new helper.Email(options.email)
 	subject = "Email de confirmation"
-	content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js")
-	mail = new helper.Mail(from_email, subject, to_email, content)
-	console.log("EMAIL1", options.email)
+	var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+	content = new helper.Content("text/html", "Afin de valider votre inscription, veuillez ouvrir ce lien: <a href='http://localhost:3000/'" + id + ">Link</a>");
 
-	console.log("EMAIL2", options.email)
+	mail = new helper.Mail(from_email, subject, to_email, content)
 
 	var requestBody = mail.toJSON()
 
@@ -57,11 +74,9 @@ module.exports = function(passport) {
 		if (req.body.password !== req.body.repeatPassword){
 			return next("Passwords did not match")
 		}
-
 		sendEmail({
 			email: req.body.email
 		});
-
 		var user = new User ({
 			email : req.body.email,
 			password : User.generateHash(req.body.password),

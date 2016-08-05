@@ -24,6 +24,23 @@ module.exports = function(passport) {
 		});
 	});
 
+	router.post('/workersignup', function(req, res, next) {
+		if (req.body.password !== req.body.repeatPassword){
+			return next("Passwords did not match")
+		}
+		var user = new User ({
+			email : req.body.email,
+			password : User.generateHash(req.body.password),
+			type: req.body.type
+		})
+		user.save(function(err, user){
+			if(err) {
+				return next(err)
+			}
+			res.json({status: 'ok', user: user})
+		});
+	});
+
 	// POST process login 
 	router.post('/login', passport.authenticate('local'), function(req, res, next) {
 				return res.json({status: 'ok', user: req.user});

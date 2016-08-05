@@ -16,6 +16,7 @@ import Search from "./components/search";
 import Events from "./components/event";
 import Profile from "./components/profile";
 import CreateEvent from "./components/CreateEvent"
+import WorkerSignup from "./components/WorkerSignup"
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -36,6 +37,7 @@ function render() {
           <Route path="/profile/:id" component={Profile}/>
 	    	<Route path="/login" component={Login} />
 	    	<Route path="/signup" component={Signup} />
+        <Route path="workersignup" component={WorkerSignup} />
         <Route path="/account" component={Account} onEnter={requireAuth}>
           <IndexRoute component={AccountInfo} />
           <Route path="/account/edit-profile" component={EditProfile} onEnter={requireAuth} />

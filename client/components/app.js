@@ -16,7 +16,6 @@ class App extends React.Component{
 		return (
 			<div className="app">
 				<TopNavBar />
-				<h1> lANDING PAAGE</h1>
 				<div className="container">
 					{React.Children.map(this.props.children, function(child) {
 						return React.cloneElement(child);

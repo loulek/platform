@@ -10,13 +10,15 @@ class CreateEvent extends React.Component {
 	constructor(props, context) {
 		super(props, context);
 
+		console.log("[startDate in CreateEvent]", this.props.startDate)
+
 		this.state = {
 			eventData: {
 				title: null,
 				location: [],
 				address: this.props.address || null,
-				startDate: this.props.startDate ||null,
-				endDate: this.props.endDate ||null,
+				startDate: new Date(this.props.startDate) ||null,
+				endDate: new Date(this.props.endDate) ||null,
 				startHour: null,
 				endHour: null,
 				workerNumber: null,
@@ -390,7 +392,11 @@ class MyDatePicker extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {}
+		console.log("[datetime in MyDatePicker]", this.props.datetime)
+
+		this.state = {
+			datetime: this.props.datetime
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -398,7 +404,7 @@ class MyDatePicker extends React.Component {
 	}
 
 	render() {
-		console.log('{this.state.datetime}',this.state.datetime)
+		console.log('[this.state.datetime]',this.state.datetime)
 		return(
 			<div>
 				<Kronos

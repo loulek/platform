@@ -443,48 +443,6 @@ render() {
 		}
 		var usersquare=[];
 		var filters=[]
-<<<<<<< HEAD
-		if (this.state.users.length>0){
-			filters.push(
-				<div className='panel-heading'>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
-		            </label>
-		            </div>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
-		            </label>
-		            </div>
-		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
-		          {this.state.value}
-	            </div>
-			)
-			this.state.users.forEach(function(u){
-				usersquare.push(
-=======
 		filters.push(
 			<div className='panel-heading'>
 							<div className="panel-title">
@@ -527,7 +485,6 @@ if (this.state.users.length>0){
 
 		this.state.users.forEach(function(u){
 		usersquare.push(
->>>>>>> zz
 					<div>
 						<div className="img">
 						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
@@ -536,11 +493,7 @@ if (this.state.users.length>0){
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
 							<button className="btn btn-success">Contact</button>
 						</div>
-<<<<<<< HEAD
-					  </div>
-=======
 					</div>
->>>>>>> zz
 					)
 			})
 		}
@@ -550,9 +503,9 @@ if (this.state.users.length>0){
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
 				{filters}
-				<div className="row col-sm-offset-1">
-					{usersquare}
-				</div>
+						<div className="row col-sm-offset-1">
+							{usersquare}
+						</div>
 
 			</div>
 		);

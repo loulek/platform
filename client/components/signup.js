@@ -60,12 +60,12 @@ class Signup extends React.Component {
 			success: function(data) {
 				if(data.status === 'ok') {
 					sessionStorage.auth = true;
-					this.context.router.push('/');
+					this.context.router.push('/login');
 				} else if(data.status === 'error') {
 					this.setState({
 						message: data.error
 					});
-				}
+				} 
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err)

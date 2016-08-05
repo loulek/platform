@@ -134,6 +134,37 @@ router.post('/search', function(req, res){
          })
     })
 })
+
+
+
+router.get('/confirmed/:id', function(req, res, next){
+  console.log("I AM IN CONFIRMEEEEDDD GOT HERE YOOOOO")
+
+  var confirmId = req.params.id;
+
+  // find user by token
+  // update them
+  User.findOne({confirmId : confirmId}, function(err, user){
+    console.log("USERRRRRRRCONFIRM", user)
+    user.confirmed = true;
+    user.save(function(err, e){
+      if (err){
+        console.log("error", err);
+        return res.status(500).json({
+          "success" : false,
+          "error" : err});
+      }
+      return res.status(200).json({
+        "success" : true,
+        "event": e._id
+      });
+    });
+    console.log("I AM BOUt TO REDIRECT HERE YOOOOO")
+    res.json({redirect: '/#/login'});
+  })
+  
+})
+
 // //redirecting to search with address
 // router.post('/user/findusers',function(req,res){
 //   console.log("INSIDE FINDDDDDDD", req.body)

@@ -6,17 +6,6 @@ var sg = require('sendgrid')(process.env.SENDGRID_APIKEY);
 var helper = require('sendgrid').mail;
 
 
-function makeid()
-{
-	var text = "";
-	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (var i=0; i < 7; i++){
-		text += possible.chartAt(Math.floor(Math.random() * possible.length));
-	}
-
-	return text; 
-}
-
 function randomString(length, chars) {
     var result = '';
     for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -27,14 +16,11 @@ var sendEmail = function(options) {
 	from_email = new helper.Email("louisbiret@gmail.com")
 	to_email = new helper.Email(options.email)
 	subject = "Email de confirmation"
-	var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-	content = new helper.Content("text/html", "Afin de valider votre inscription, veuillez ouvrir ce lien: <a href='http://localhost:3000/'" + id + ">Link</a>");
-
+	content = new helper.Content("text/html", "Afin de valider votre inscription, veuillez ouvrir ce lien: <a href='http://localhost:3000/confirmed/" + options.id + "'>Cliquer ici</a>");
 	mail = new helper.Mail(from_email, subject, to_email, content)
 
 	var requestBody = mail.toJSON()
 
-	console.log(requestBody)
 	var request = sg.emptyRequest({
 		method: 'POST',
 		path: '/v3/mail/send',
@@ -47,6 +33,8 @@ var sendEmail = function(options) {
 	})
 }
 
+
+
 module.exports = function(passport) {
 
 	// POST process signup
@@ -54,19 +42,23 @@ module.exports = function(passport) {
 		if (req.body.password !== req.body.repeatPassword){
 			return next("Passwords did not match")
 		}
+		var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
 		sendEmail({
-			email: req.body.email
+			email: req.body.email,
+			id: id
 		});
+
 		var user = new User ({
 			email : req.body.email,
 			password : User.generateHash(req.body.password),
-			type: req.body.type
+			type: req.body.type,
+			confirmId: id,
 		})
 		user.save(function(err, user){
 			if(err) {
 				return next(err)
 			}
-			res.json({status: 'ok', user: user})
+			res.json({status: 'ok', user: user, redirect: '/login/'})
 		});
 	});
 
@@ -74,13 +66,16 @@ module.exports = function(passport) {
 		if (req.body.password !== req.body.repeatPassword){
 			return next("Passwords did not match")
 		}
+		var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
 		sendEmail({
-			email: req.body.email
+			email: req.body.email,
+			id: id
 		});
 		var user = new User ({
 			email : req.body.email,
 			password : User.generateHash(req.body.password),
-			type: req.body.type
+			type: req.body.type,
+			confirmId: id
 		})
 		user.save(function(err, user){
 			if(err) {

@@ -8,6 +8,8 @@ var userSchema = mongoose.Schema({
     password : {type: String, required: true},
     profile  : {type: mongoose.Schema.Types.ObjectId},
     type     : {type: String, required: true},
+    confirmId: {type: String, required: false},
+    confirmed: {type: Boolean, default: false, required: true},	
     createdAt: {type: Date, default: Date.now}
 });
 

@@ -47,6 +47,11 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
       if (!user.validPassword(password)) {
         return done(null, false, { message: 'Incorrect password.' });
       }
+
+      if (user.confirmId === false){
+        return done(null, false, {message: 'Merci de confirmer votre adresse email via le mail que nous vous avons envoyé.'})
+      }
+      
       // auth has has succeeded
       user.populate({
           path:'profile', 

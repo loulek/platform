@@ -3,8 +3,6 @@ import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
-var Rcslider = require('rc-slider');
-
 
 class CreateEvent extends React.Component {
 	constructor(props, context) {
@@ -621,4 +619,4 @@ CreateEvent.contextTypes = {
 	router: Object
 }
 
-module.exports={CreateEvent:CreateEvent}
+module.exports=CreateEvent

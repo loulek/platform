@@ -52,6 +52,7 @@ class Signup extends React.Component {
 			});
 		}
 
+
 		$.ajax({
 			url: '/signup',
 			dataType: 'json',
@@ -59,7 +60,6 @@ class Signup extends React.Component {
 			data: this.state,
 			success: function(data) {
 				if(data.status === 'ok') {
-					sessionStorage.auth = true;
 					this.context.router.push('/login');
 				} else if(data.status === 'error') {
 					this.setState({
@@ -69,6 +69,9 @@ class Signup extends React.Component {
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err)
+				this.setState({
+					message: "Cette adresse email est déjà assosiée à un compte!"
+				});
 			}.bind(this)
 		});
 	}

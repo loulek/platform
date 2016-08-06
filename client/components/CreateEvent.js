@@ -4,7 +4,6 @@ import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
 
-
 class CreateEvent extends React.Component {
 	constructor(props, context) {
 		super(props, context);
@@ -608,4 +607,4 @@ CreateEvent.contextTypes = {
 	router: Object
 }
 
-module.exports={CreateEvent:CreateEvent}
+module.exports=CreateEvent

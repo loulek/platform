@@ -58,7 +58,7 @@ class TopNavBar extends React.Component{
 							<span className="icon-bar"></span>
 						</button>
 						<Link to="/" className="navbar-brand">
-							Bolt Data
+							Platform
 						</Link>
 					</div>
 					<div className="collapse navbar-collapse" id="collapsibleTopNavbar">

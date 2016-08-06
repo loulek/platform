@@ -43,11 +43,6 @@ module.exports = function(passport) {
 			return next("Passwords did not match")
 		}
 		var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-		sendEmail({
-			email: req.body.email,
-			id: id
-		});
-
 		var user = new User ({
 			email : req.body.email,
 			password : User.generateHash(req.body.password),
@@ -56,8 +51,14 @@ module.exports = function(passport) {
 		})
 		user.save(function(err, user){
 			if(err) {
-				return next(err)
+			 return res.status(500).json({
+	          "success" : false,
+	          "error" : err});
 			}
+			sendEmail({
+				email: req.body.email,
+				id: id
+			});
 			res.json({status: 'ok', user: user, redirect: '/login/'})
 		});
 	});
@@ -67,10 +68,6 @@ module.exports = function(passport) {
 			return next("Passwords did not match")
 		}
 		var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-		sendEmail({
-			email: req.body.email,
-			id: id
-		});
 		var user = new User ({
 			email : req.body.email,
 			password : User.generateHash(req.body.password),
@@ -81,13 +78,18 @@ module.exports = function(passport) {
 			if(err) {
 				return next(err)
 			}
+			sendEmail({
+				email: req.body.email,
+				id: id
+			});
 			res.json({status: 'ok', user: user})
 		});
 	});
 
 	// POST process login 
 	router.post('/login', passport.authenticate('local'), function(req, res, next) {
-				return res.json({status: 'ok', user: req.user});
+		if (req.user.confirmed) return res.json({status: 'ok', user: req.user});
+		else return res.status(400).json({status: 'ok', user: req.user});
 	});
 
 	// GET logout user

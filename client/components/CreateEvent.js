@@ -3,8 +3,6 @@ import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
-var Rcslider = require('rc-slider');
-
 
 class CreateEvent extends React.Component {
 	constructor(props, context) {
@@ -431,12 +429,10 @@ $.ajax({
 }
 }
 
-handleClick3(id, e){
-	e.preventDefault();
-	var id=id
-	console.log("starting!", this)
+handleClick3(e){
+	e.preventDefault;
+	console.log("starting!")
 	this.context.router.push({
-		path:'/profile/'+id,
 		query: {
 			address: this.state.eventData.address,
 			startDate: this.state.eventData.startDate.toString(),
@@ -505,7 +501,7 @@ if (this.state.users.length>0){
 		usersquare.push(
 					<div>
 						<div className="img">
-						<button onClick={that.handleClick3.bind(that, u._id)}><img src={u.profileImageUrl} alt="Image" /></button>
+						<Link to={`/profile/${u._id}`} onClick={that.handleClick3}><img src={u.profileImageUrl} alt="Image" /></Link>
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
@@ -621,4 +617,4 @@ CreateEvent.contextTypes = {
 	router: Object
 }
 
-module.exports={CreateEvent:CreateEvent}
+module.exports=CreateEvent

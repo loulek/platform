@@ -140,20 +140,46 @@ router.get('/profile/:id', function(req, res){
 router.post('/search', function(req, res){
   console.log("REQUEST>BODY ADDREs", req.body.address);
    geocoder.geocode(req.body.address, function(err, data) {
-
+    if(data){
          var longitude_new = data[0].longitude;
          var latitude_new = data[0].latitude;
+         var location = [longitude, latitude]
+      }
          console.log("nlllllllllllll", longitude_new)
          Profile.find(
-    {location: {
-             $near: [longitude_new, latitude_new],
-             $maxDistance: 50
-         }},function(err,users){
+    {location: location || null},function(err,users){
            if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
            res.send(users)
          })
     })
 })
+
+
+
+router.get('/confirmed/:id', function(req, res, next){
+  console.log("I AM IN CONFIRMEEEEDDD GOT HERE YOOOOO")
+
+  var confirmId = req.params.id;
+
+  // find user by token
+  // update them
+  User.findOne({confirmId : confirmId}, function(err, user){
+    console.log("USERRRRRRRCONFIRM", user)
+    user.confirmed = true;
+    user.save(function(err, e){
+      if (err){
+        console.log("error", err);
+        return res.status(500).json({
+          "success" : false,
+          "error" : err});
+      }
+      return res.redirect('/#/login');
+    });
+    console.log("I AM BOUt TO REDIRECT HERE YOOOOO")
+  })
+  
+})
+
 // //redirecting to search with address
 // router.post('/user/findusers',function(req,res){
 //   console.log("INSIDE FINDDDDDDD", req.body)

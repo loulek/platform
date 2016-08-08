@@ -138,7 +138,7 @@ router.post('/user/update-profile', function(req, res) {
      if(data){
        var longitude_new = data[0].longitude;
        var latitude_new = data[0].latitude;
-       var location = [longitude, latitude]
+       var location = [longitude_new, latitude_new]
 
      }
 

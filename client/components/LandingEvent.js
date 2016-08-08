@@ -79,7 +79,7 @@ class LandingEvent extends React.Component {
 		this.setState({eventData: eventData})
 	}
 
-	
+
 	_createEvent(isEnabled) {
 		return (
 			<div className='panel panel-default'>
@@ -95,7 +95,7 @@ class LandingEvent extends React.Component {
 						</div>
 
 					</div>
-						
+
 					<div className="form-group row">
 
 						{ /*  This is the start date datepicket */ }
@@ -109,9 +109,9 @@ class LandingEvent extends React.Component {
 						</div>
 
 					</div>
-						
 
-					<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
+
+					<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} >Rechercher des Hôtesses</button>
 				</div>
 			</div>
 			);
@@ -176,7 +176,7 @@ class LandingEvent extends React.Component {
 						</div>
 					  </div>
 
-								
+
 					)
 			})
 		}

@@ -10,6 +10,11 @@ var geocoder = NodeGeocoder({
  httpAdapter: "https",
  formatter: null
 });
+var accountSid = "AC6093bbdfa15ca4cefb14aaaf2e2efd0a";
+var authToken = "0046ab3cbc02563247711f02a3f38ca2";
+var fromNumber = "18562834354";
+var twilio=require('twilio')
+var client = new twilio.RestClient(accountSid, authToken);
 
 
 
@@ -84,10 +89,25 @@ router.post('/findProfile',function(req,res){
 
 })
 
+router.post('/contact',function(req,res){
+
+  client.messages.create({
+    body: req.body.message,
+    to: "123"+req.body.num,
+    from: fromNumber
+}, function(err, message) {
+    if (err) {res.send(err)};
+    res.json({success:true})
+});
+
+
+})
+
+
 // GET /event/:id
 //  This route retrieves an event by its Id and all the informations with it.
 router.get('/event/:id',function(req,res){
-  console.log("This is the body I got:", req.body);
+  console.log("This is the body I got2222:", req.body);
 
   Event.findById(req.params.id, function(err, event){
     if(err) return res.status(500).json({
@@ -157,7 +177,7 @@ router.get('/confirmed/:id', function(req, res, next){
     });
     console.log("I AM BOUt TO REDIRECT HERE YOOOOO")
   })
-  
+
 })
 
 // //redirecting to search with address

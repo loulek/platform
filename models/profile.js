@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var profileSchema = mongoose.Schema({
 	firstName   	: {type: String, required: false},
 	lastName   	 	: {type: String, required: false},
-	phone       	: {type: String, required: false},
+	phone       	: {type:String, required: false},
 	specialty   	: {type: Array,  required: false},
 	location 		: {type: [Number], index: '2d'},
 	salary          : {type: Number, required: false},

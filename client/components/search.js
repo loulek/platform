@@ -29,12 +29,12 @@ var Search = React.createClass({
         that.setState({
           users:users
         })
-        console.log("users", users) 
+        console.log("users", users)
       },
       error: function(err){
         console.log("error")
       }
-    })   
+    })
      },
      error: function(xhr, status, err) {
       console.log("error")
@@ -60,9 +60,9 @@ var Search = React.createClass({
        //     </div>
        //   </div>
        // </Link>
-       
 
-       <div className="col-sm-1 col-sm-offset-1" >              
+
+       <div className="col-sm-1 col-sm-offset-1" >
          <div className="img"><img src={user.profileImageUrl} alt="Image" /></div>
          <div className="text_image"><h4>{user.firstName}</h4>
          </div>

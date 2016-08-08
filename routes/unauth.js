@@ -107,7 +107,7 @@ router.post('/contact',function(req,res){
 // GET /event/:id
 //  This route retrieves an event by its Id and all the informations with it.
 router.get('/event/:id',function(req,res){
-  console.log("This is the body I got:", req.body);
+  console.log("This is the body I got2222:", req.body);
 
   Event.findById(req.params.id, function(err, event){
     if(err) return res.status(500).json({
@@ -143,11 +143,14 @@ router.post('/search', function(req, res){
     if(data){
          var longitude_new = data[0].longitude;
          var latitude_new = data[0].latitude;
-         var location = [longitude, latitude]
+         var location = [longitude_new, latitude_new]
       }
          console.log("nlllllllllllll", longitude_new)
          Profile.find(
-    {location: location || null},function(err,users){
+    {location:{
+            $near: [longitude_new, latitude_new],
+            $maxDistance: 50
+        } || null},function(err,users){
            if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
            res.send(users)
          })
@@ -177,7 +180,7 @@ router.get('/confirmed/:id', function(req, res, next){
     });
     console.log("I AM BOUt TO REDIRECT HERE YOOOOO")
   })
-  
+
 })
 
 // //redirecting to search with address

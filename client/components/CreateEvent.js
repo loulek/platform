@@ -430,7 +430,7 @@ $.ajax({
 }
 
 handleClick3(e){
-	e.preventDefault;
+	e.preventDefault();
 	console.log("starting!")
 	this.context.router.push({
 		query: {
@@ -439,6 +439,7 @@ handleClick3(e){
 			endDate: this.state.eventData.endDate.toString()
 		},
 	});
+	console.log("AFTER PUSH")
 }
 
 render() {

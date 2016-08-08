@@ -20,7 +20,7 @@ var multerS3 = require('multer-s3');
 // require s3
 var options = {
   accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_KEY,
+  secretAccessKey: process.env.S3_SECRET_KEY
 };
 
 // create s3 client

@@ -139,6 +139,7 @@ router.get('/profile/:id', function(req, res){
 
 router.post('/search', function(req, res){
   console.log("REQUEST>BODY ADDREs", req.body.address);
+  if (req.body.address){
    geocoder.geocode(req.body.address, function(err, data) {
          var longitude_new = data[0].longitude;
          var latitude_new = data[0].latitude;
@@ -151,7 +152,10 @@ router.post('/search', function(req, res){
            if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
            res.send(users)
          })
-    })
+    })}
+    else{
+      res.send({error:"invalid address"})
+    }
 })
 
 

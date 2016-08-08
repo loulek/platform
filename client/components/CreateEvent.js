@@ -39,8 +39,8 @@ class CreateEvent extends React.Component {
 componentDidMount(){
 	var neweventData = {
 		address: $('#address').val(),
-		startDate: new Date(this.props.startDate),
-		endDate: new Date(this.props.endDate),
+		startDate: new Date(this.props.startDate)||$('#startDate').val(),
+		endDate: new Date(this.props.endDate)||$('#endDate').val(),
 		startHour: $('#startHour').val(),
 		endHour: $('#endHour').val(),
 		workerNumber: $('#workerNumber').val()

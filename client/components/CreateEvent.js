@@ -287,7 +287,46 @@ reset(e){
 														</div>
 												</div>
 
-												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
+												
+			<div className='panel-heading'>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
+							</label>
+							</div>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
+							</label>
+							<label className="checkbox-inline">
+								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
+							</label>
+							</div>
+							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
+						{this.state.value}
+						</div>
+						<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
+
+		
 										</div>
 								</div>
 						);
@@ -451,45 +490,7 @@ render() {
 			contactForm = this._createEvent(false);
 		}
 		var usersquare=[];
-		var filters=[]
-		filters.push(
-			<div className='panel-heading'>
-							<div className="panel-title">
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
-							</label>
-							</div>
-							<div className="panel-title">
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
-							</label>
-							</div>
-							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
-						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
-						{this.state.value}
-						</div>
-		)
+		
 if (this.state.users.length>0){
 		var users=this.state.users
 		var val=this.state.value
@@ -514,15 +515,13 @@ if (this.state.users.length>0){
 		}
 
 		return (
-			<div>
-				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
-				{contactForm}
-				{filters}
-						<div className="row col-sm-offset-1">
+				<div className="container">
+					<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
+					{contactForm}
+						<div className="row col-sm-1 bg-result">
 							{usersquare}
 						</div>
-
-			</div>
+				</div>
 		);
 	}
 }

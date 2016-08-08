@@ -147,7 +147,7 @@ router.post('/search', function(req, res){
            Profile.find(
       {location: {
                $near: [longitude_new, latitude_new],
-               $maxDistance: 50
+               $maxDistance: 1
            } || null},function(err,users){
              if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
              res.send(users)

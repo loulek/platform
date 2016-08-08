@@ -82,7 +82,7 @@ class LandingEvent extends React.Component {
 
 	_createEvent(isEnabled) {
 		return (
-			<div className='panel panel-default'>
+			<div className='panel panel-default videoland'>
 				<div className='panel-heading'>
 					<h3 className="panel-title">Créez votre événement</h3>
 				</div>
@@ -186,12 +186,17 @@ class LandingEvent extends React.Component {
 		console.log("USERSQUARE", usersquare);
 		return (
 			<div>
+			<video id="background-video" loop autoPlay>
+  			<source src="https://s3.eu-central-1.amazonaws.com/parisbucket/video720p.mp4" type="video/mp4" />
+  			</video>
+			<div className="container">
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
 				{filters}
 				<div className="row col-sm-offset-1">
 					{usersquare}
 				</div>
+			</div>
 			</div>
 		);
 	}

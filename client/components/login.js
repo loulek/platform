@@ -23,9 +23,9 @@ class Login extends React.Component {
 			type: 'POST',
 			data: this.state,
 			success: function(data) {
-			if(data.status === 'ok') {
+			if(data.status === 'ok' && data.user.confirmed === true) {
 				sessionStorage.auth = true;
-				this.context.router.push('/');
+				this.context.router.push('/events');
 			} else if(data.status === 'error') {
 				this.setState({
 					message: data.error
@@ -33,6 +33,9 @@ class Login extends React.Component {
 			}
 			}.bind(this),
 			error: function(xhr, status, err) {
+				this.setState({
+					message: "Merci de valider votre adresse email via l'email que nous vous avons envoyé."
+				});
 			}.bind(this)
 		});
 	}
@@ -43,7 +46,7 @@ class Login extends React.Component {
 
 	passwordChange(e) {
 		this.setState({password: e.target.value});
-	};	
+	};
 
 	render() {
 

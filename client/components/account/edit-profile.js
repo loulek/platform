@@ -39,13 +39,13 @@ const Tabs = React.createClass({
 						onClick={this.handleClick.bind(this, index)}>
 						{child.props.label}
 					</a>
-				</li>	
+				</li>
 			);
 		}
 		return (
 			<ul className="panel-heading tabs__labels">
 				{this.props.children.map(labels.bind(this))}
-			</ul>	
+			</ul>
 		  );
 	},
 	_renderContent() {
@@ -99,12 +99,13 @@ class EditProfile extends React.Component {
 				description: null,
 				profileImageUrl: null,
 				resumeImageUrl: null,
-				address: null
+				address: null,
+				salary:null
 			},
 			tempSpecialty: [],
 			editContact: false,
 			editBio: false,
-			editLocation: false
+			editCalendar: false
 		}
 	}
 
@@ -126,6 +127,7 @@ class EditProfile extends React.Component {
 				var profileImageUrl = null;
 				var resumeImageUrl = null;
 				var address = null;
+				var salary=null
 
 				// populate function variables
 				email = user.email;
@@ -139,7 +141,7 @@ class EditProfile extends React.Component {
 					profileImageUrl = user.profile.profileImageUrl;
 					resumeImageUrl = user.profile.resumeImageUrl;
 					address = user.profile.address;
-
+					salary=user.profile.salary
 
 					if(user.profile.gender) {
 						gender = user.profile.gender;
@@ -166,7 +168,8 @@ class EditProfile extends React.Component {
 						description: description,
 						profileImageUrl: profileImageUrl,
 						resumeImageUrl : resumeImageUrl,
-						address : address
+						address : address,
+						salary:salary
 					}
 				});
 			}.bind(this),
@@ -188,6 +191,17 @@ class EditProfile extends React.Component {
 		this.setState({
 			profileData: profileData,
 			editContact: false
+		});
+		this._saveChanges(e);
+	}
+
+	_updateCalendar(e) {
+		e.preventDefault();
+		var profileData = this.state.profileData;
+		profileData.salary = $('#salary').val();
+		this.setState({
+			profileData: profileData,
+			editCalendar: false
 		});
 		this._saveChanges(e);
 	}
@@ -291,7 +305,7 @@ class EditProfile extends React.Component {
 	_saveChanges(e) {
 		e.preventDefault();
 		$.ajax({
-			url: '/user/update-profile', 
+			url: '/user/update-profile',
 			type: 'POST',
 			data: this.state.profileData,
 			success: function(data) {
@@ -451,9 +465,6 @@ class EditProfile extends React.Component {
 
 			return (
 				<div className='panel panel-default'>
-					<div className='panel-heading'>
-						<h3 className="panel-title">Bio</h3>
-					</div>
 					<div className='panel-body'>
 						<div className="form-group row">
 							<p className="col-sm-2 form-control-static"><b>Sexe:</b></p>
@@ -552,6 +563,39 @@ class EditProfile extends React.Component {
 		}
 	}
 
+	_editCalendar(isEnabled) {
+		if(isEnabled) {
+			return (
+				<div className='panel panel-default'>
+					<div className='panel-body'>		
+						<div className="form-group row">
+							<p className="col-sm-2 form-control-static"><b>Salaire:</b></p>
+							<div className="col-sm-10">
+								<input type="text" className="form-control" name="salary" defaultValue={this.state.profileData.salary} id="salary"/>
+							</div>
+						</div>
+						<button className="btn btn-success margin5 float-right" onClick={this._updateCalendar.bind(this)}>Save</button>
+						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editCalendar: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
+					</div>
+				</div>
+			);
+		} else {
+			return (
+				<div className='panel panel-default'>
+					<div className='panel-body'>
+						<div className="form-group row">
+						<p className="col-sm-2 form-control-static"><b>Salaire:</b></p>
+						<div className="col-sm-10">
+							<p className="form-control-static">{this.state.profileData.salary}</p>
+						</div>
+						</div>
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar: true})}.bind(this)}>Modifier</button>
+					</div>
+				</div>
+			);
+		}
+	}
+
 
 	render() {
 
@@ -569,6 +613,13 @@ class EditProfile extends React.Component {
 			bioForm = this._editBio(false);
 		}
 
+		var calendarForm = null;
+		if(this.state.editCalendar) {
+			calendarForm = this._editCalendar(true);
+		} else {
+			calendarForm = this._editCalendar(false);
+		}
+
 
 		return (
 
@@ -583,8 +634,8 @@ class EditProfile extends React.Component {
 		          <Pane label="Profil">
 		            <div>{bioForm}</div>
 		          </Pane>
-		          <Pane label="Calendrier">
-		            <div>This is my tab 3 contents!</div>
+		          <Pane label="Calendrier / Salaire">
+		            <div>{calendarForm}</div>
 		          </Pane>
 		        </Tabs>
 		      </div>

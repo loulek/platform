@@ -12,7 +12,7 @@ class Signup extends React.Component {
 			password: null,
 			repeatPassword: null,
 			message: null,
-			type: 'Client'
+			type: 'Profile'
 		};
 	}
 
@@ -20,11 +20,11 @@ class Signup extends React.Component {
 		e.preventDefault();
 		if(!this.state.email) {
 			return this.setState({
-				message: 'Email manquant'
+				message: 'Email manquant.'
 			});
 		}
 
-	    var x = this.state.email;
+		var x = this.state.email;
 	    var atpos = x.indexOf("@");
 	    var dotpos = x.lastIndexOf(".");
 	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
@@ -32,7 +32,6 @@ class Signup extends React.Component {
 	    		message: 'Email invalide.'
 	    	})
 	    }
-    
 
 		if(!this.state.password) {
 			return this.setState({
@@ -52,26 +51,24 @@ class Signup extends React.Component {
 			});
 		}
 
-
 		$.ajax({
 			url: '/signup',
 			dataType: 'json',
 			type: 'POST',
 			data: this.state,
 			success: function(data) {
-				if(data.status === 'ok') {
-					this.context.router.push('/login');
+				console.log("DATAAAA LOGGG", data)
+				if(data.status === 'ok' ) {
+					sessionStorage.auth = true;
+					this.context.router.push('/login')
 				} else if(data.status === 'error') {
 					this.setState({
 						message: data.error
 					});
-				} 
+				}
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err)
-				this.setState({
-					message: "Cette adresse email est déjà assosiée à un compte!"
-				});
 			}.bind(this)
 		});
 	}
@@ -106,7 +103,7 @@ class Signup extends React.Component {
 								<fieldset>
 										<div className="form-group">
 											<label>Email</label>
-										<input className="form-control" name="email" type="email" onChange={this.emailChange.bind(this)}/>
+										<input className="form-control" name="email" type="email" onChange={this.emailChange.bind(this)} />
 									</div>
 									<div className="form-group">
 										<label>Password</label>

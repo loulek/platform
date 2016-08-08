@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var Client = require('../models/client')
 var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
@@ -20,12 +21,6 @@ var multerS3 = require('multer-s3');
 var options = {
   accessKeyId: process.env.S3_ACCESS_KEY,
   secretAccessKey: process.env.S3_SECRET_KEY,
-  logger: console
-  // region: "oregon",
-  // NEEDED for Buckets in Frankfurt (and change region)
-  // signatureVersion: 'v4',
-  // s3DisableBodySigning: true
-  // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
 };
 
 // create s3 client
@@ -58,13 +53,6 @@ var upload = multer({
 // @note: the`multer` package saves the file to the filesystem for you already,
 // using `upload.single`
 router.post('/url/to/upload/to', upload.single('img'), function(req, res, next) {
-	// Receive file that was uploaded
-
-	// Here, if you choose, you can send file to S3/filesystem/wherever
-	console.log("Files that were uploaded: ", req.file);
-
-	// Path of the file that was sent to server
-	console.log("Relative path of the new file: ", req.file.location);
 
 	if (req.user.profile) {
 		Profile.findByIdAndUpdate(req.user.profile, {
@@ -77,30 +65,9 @@ router.post('/url/to/upload/to', upload.single('img'), function(req, res, next) 
 			}
 		});
 	}
-	// User.findById(req.user._id)
-	// 	.populate('profile')
-	// 	.exec(function(err, user){
-	// 	  	if(err) res.status(400).json({success: false})
-
-	// 	  	user.profile.profileImageUrl = req.file.location
-
-	// 	  	user.save(function(err, u){
-	// 	  		if(err) res.status(400).json({success: false})
-	// 			res.status(200).json({
-	// 			    success: true,
-	// 			    message: req.file.location
-	// 			 })
-	// 	  	})
-	// 	});
 });
+
 router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
-	// Receive file that was uploaded
-
-	// Here, if you choose, you can send file to S3/filesystem/wherever
-	console.log("Files that were uploaded: ", req.file);
-
-	// Path of the file that was sent to server
-	console.log("Relative path of the new file: ", req.file.location);
 
 	if (req.user.profile) {
 		Profile.findByIdAndUpdate(req.user.profile, {
@@ -113,27 +80,31 @@ router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
 			}
 		});
 	}
-	// User.findById(req.user._id)
-	// 	.populate('profile')
-	// 	.exec(function(err, user){
-	// 	  	if(err) res.status(400).json({success: false})
-
-	// 	  	user.profile.profileImageUrl = req.file.location
-
-	// 	  	user.save(function(err, u){
-	// 	  		if(err) res.status(400).json({success: false})
-	// 			res.status(200).json({
-	// 			    success: true,
-	// 			    message: req.file.location
-	// 			 })
-	// 	  	})
-	// 	});
 });
+
+//TODO: FIND USERS GIVEN USER INPUT
+router.post('/user/find',function(req,res){
+  var address="philadelphia"
+  geocoder.geocode(address, function(err, data) {
+     var longitude_new = data[0].longitude;
+     var latitude_new = data[0].latitude;
+     console.log("nlllllllllllll", longitude_new)
+     Profile.find(
+     	{location: {
+             $near: [longitude, latitude],
+             $maxDistance: 100
+         }},function(users,err){
+           if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
+           res.send(users)
+         })
+	})
+})
+
+
 
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
-	console.log("REQ>USER>PROFILE", req.user.profile)
 	res.json(req.user);
 	// User.findById(req.user._id)
 	// .populate('profile')
@@ -146,19 +117,38 @@ router.post('/user/profile', function(req, res) {
 	// });
 });
 
+router.get('/events',function(req,res){
+  console.log("INSIDE EVENTS ROUTE")
+  Event.find().exec(function(err,events){
+    if (err){res.status(500).send("errrrrr")}
+    res.json(events)
+  })
+})
+
 // update user information
 router.post('/user/update-profile', function(req, res) {
+	console.log("USERRRR OBJECT", req.user)
+	console.log("USERRRR OBJECT PROFILE", req.user.profile)
+	console.log("USERRRR OBJECT CLIENT", req.user.client)
+
+
+
 	if(req.user.profile) {
     geocoder.geocode(req.body.address, function(err, data) {
+     if(data){
        var longitude_new = data[0].longitude;
        var latitude_new = data[0].latitude;
+       var location = [longitude_new, latitude_new]
+
+     }
 
 		Profile.findByIdAndUpdate(req.user.profile, {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			phone: req.body.phone,
 			specialty: req.body['specialty[]'],
-      		location:[longitude_new, latitude_new],
+      		location:location || null,
+            salary: req.body.salary,
 			image: req.body.image,
 			description: req.body.description,
 			gender: req.body.gender,
@@ -173,40 +163,56 @@ router.post('/user/update-profile', function(req, res) {
   });
 	} else {
     geocoder.geocode(req.body.address, function(err, data) {
-       var longitude = data[0].longitude;
-       var latitude = data[0].latitude;
+    	if(data){
+	       var longitude = data[0].longitude;
+	       var latitude = data[0].latitude;
+	       var location = [longitude, latitude]
+	    }
 
-		var newProfile = new Profile({
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
-			phone: req.body.phone,
-      		location: [longitude, latitude],
-			specialty: req.body.specialty,
-			image: req.body.image,
-			description: req.body.description,
-			gender: req.body.gender,
-			address: req.body.address
+		    if(req.user.type === "Profile") {
+		    	console.log("PROFILE", Profile);
+		       	var profile = new Profile({
+					firstName: req.body.firstName,
+					lastName: req.body.lastName,
+					phone: req.body.phone,
+		      		location: location || null,
+		            salary: req.body.salary,
+					specialty: req.body.specialty,
+					image: req.body.image,
+					description: req.body.description,
+					gender: req.body.gender,
+					address: req.body.address
+			    })
+		    } if (req.user.type === "Client") {
+		    	console.log("CLIENT", Client);
 
-	    })
+		       	var profile = new Client({
+		       		firstName: req.body.firstName,
+		       		lastName: req.body.lastName,
+		       		phone: req.body.phone,
+		       		location: req.body.location,
+		       		description: req.body.description,
+		       		profileImageUrl: req.body.profileImageUrl,
+		       		address: req.body.address
+		       	});
+		   }
+		   	profile.save(function(err, client) {
+				if(err) {
+					return res.json({status: 'error', error: err.toString()});
+				} else {
 
-		console.log('new profile: ', newProfile);
-		newProfile.save(function(err, profile) {
-			if(err) {
-				return res.json({status: 'error', error: err.toString()});
-			} else {
-
-				User.findByIdAndUpdate(req.user._id, {
-					profile: profile
-				}, function(err) {
-					if(err) {
-						return res.json({status: 'error', error: err.toString()});
-					} else {
-						return res.json({status: 'ok'});
-					}
-				});
-			}
+					User.findByIdAndUpdate(req.user._id, {
+						profile: profile
+					}, function(err) {
+						if(err) {
+							return res.json({status: 'error', error: err.toString()});
+						} else {
+							return res.json({status: 'ok'});
+						}
+					});
+				}
+		  	});
 		});
-	  })
 	}
 });
 

@@ -13,6 +13,10 @@ import EditNotifications from "./components/account/edit-notifications";
 import ChangePassword from "./components/account/change-password";
 import Calendar from "./components/calendar";
 import Search from "./components/search";
+import Events from "./components/event";
+import Profile from "./components/profile";
+import CreateEvent from "./components/CreateEvent"
+import WorkerSignup from "./components/WorkerSignup"
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -28,9 +32,12 @@ function render() {
     <Router history={hashHistory}>
     	<Route path="/" component={App}>
 	    	<IndexRoute component={Home}></IndexRoute>
-        <Route path="/search/:id" component={Search}/>
+        <Route path="/events" component={Events}/>
+        <Route path="/profile" component={Profile}/>
+          <Route path="/profile/:id" component={Profile}/>
 	    	<Route path="/login" component={Login} />
 	    	<Route path="/signup" component={Signup} />
+        <Route path="workersignup" component={WorkerSignup} />
         <Route path="/account" component={Account} onEnter={requireAuth}>
           <IndexRoute component={AccountInfo} />
           <Route path="/account/edit-profile" component={EditProfile} onEnter={requireAuth} />
@@ -38,6 +45,9 @@ function render() {
           <Route path="/account/change-password" component={ChangePassword} onEnter={requireAuth} />
         </Route>
         <Route path="/calendar" component={Calendar} />
+        <Route path="/search" component={Search}>
+          <Route path="/search/:id" component={Search}/>
+        </Route>
     	</Route>
     </Router>
     ,

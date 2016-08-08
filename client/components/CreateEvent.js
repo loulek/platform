@@ -626,8 +626,5 @@ CreateEvent.contextTypes = {
 	router: Object
 }
 
-<<<<<<< HEAD
-module.exports = CreateEvent
-=======
+
 module.exports=CreateEvent
->>>>>>> zz

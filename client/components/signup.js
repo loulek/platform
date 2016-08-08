@@ -33,7 +33,6 @@ class Signup extends React.Component {
 	    	})
 	    }
     
-
 		if(!this.state.password) {
 			return this.setState({
 				message: 'Il manque un mot de passe.'
@@ -51,7 +50,6 @@ class Signup extends React.Component {
 				message: "Les mots de passe ne sont pas pareil."
 			});
 		}
-
 
 		$.ajax({
 			url: '/signup',

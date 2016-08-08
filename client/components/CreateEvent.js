@@ -113,6 +113,7 @@ reset(e){
 	      }.bind(this),
 	      error: function(err){
 	        console.log("error")
+	        if (err.error){alert("invalid address")}
 	      }
 	    })
 			// $.ajax({

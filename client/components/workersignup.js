@@ -57,18 +57,19 @@ class Signup extends React.Component {
 			type: 'POST',
 			data: this.state,
 			success: function(data) {
-				console.log("DATAAAA LOGGG", data)
-				if(data.status === 'ok' ) {
-					sessionStorage.auth = true;
-					this.context.router.push('/login')
+				if(data.status === 'ok') {
+					this.context.router.push('/login');
 				} else if(data.status === 'error') {
 					this.setState({
 						message: data.error
 					});
-				}
+				} 
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err)
+				this.setState({
+					message: "Cette adresse email est déjà assosiée à un compte!"
+				});
 			}.bind(this)
 		});
 	}

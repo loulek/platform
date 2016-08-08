@@ -76,13 +76,15 @@ module.exports = function(passport) {
 		})
 		user.save(function(err, user){
 			if(err) {
-				return next(err)
+			 return res.status(500).json({
+	          "success" : false,
+	          "error" : err});
 			}
 			sendEmail({
 				email: req.body.email,
 				id: id
 			});
-			res.json({status: 'ok', user: user})
+			res.json({status: 'ok', user: user, redirect: '/login/'})
 		});
 	});
 

@@ -43,6 +43,8 @@ class LandingEvent extends React.Component {
 
 		console.log("INFO THAT GETS PASSED IN", this.state);
 		console.log("INFO THAT GETS PASSED IN", this.state.eventData.address)
+		console.log("THIS>STATE>EVENTDATA", this.state.eventData);
+		console.log("THIS>STATE>EVENTDATA>STARTDATE", this.state.eventData.startDate);
 		this.context.router.push({
 
 			pathname: '/search',
@@ -164,13 +166,6 @@ class LandingEvent extends React.Component {
 			this.state.users.forEach(function(u){
 				usersquare.push(
 
-
-
-
-
-
-
-
 					<div>
 						<div className="img">
 						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
@@ -186,15 +181,17 @@ class LandingEvent extends React.Component {
 			})
 		}
 
+		console.log("CONTACTFORM", contactForm);
+		console.log("FILTERS", filters);
+		console.log("USERSQUARE", usersquare);
 		return (
 			<div>
 				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
 				{contactForm}
 				{filters}
-						<div className="row col-sm-offset-1">
-							{usersquare}
-						</div>
-
+				<div className="row col-sm-offset-1">
+					{usersquare}
+				</div>
 			</div>
 		);
 	}

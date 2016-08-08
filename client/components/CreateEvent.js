@@ -112,7 +112,7 @@ reset(e){
 	        console.log("users", users)
 	      }.bind(this),
 	      error: function(err){
-	        console.log("error", err)
+	        console.log("error")
 	      }
 	    })
 			// $.ajax({

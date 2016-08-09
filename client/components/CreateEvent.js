@@ -32,7 +32,8 @@ class CreateEvent extends React.Component {
 			value:100,
 			filter1:[],
 			filter2:[],
-			oldusers:[]
+			oldusers:[],
+			eventId:null
 		}
 	}
 
@@ -116,39 +117,88 @@ reset(e){
 	        if (err.error){alert("invalid address")}
 	      }
 	    })
-			// $.ajax({
-			//       type: "POST",
-			//       // specify the url we want to upload our file to
-			//       url: '/event/new',
-			//       // this is how we pass in the actual file data from the form
-			//       data: {
-			// 	address: $('#address').val(),
-			// 	startDate: this.state.eventData.startDate._d,
-			// 	endDate: this.state.eventData.endDate._d,
-			// 	startHour: $('#startHour').val(),
-			// 	endHour: $('#endHour').val(),
-			// 	workerNumber: $('#workerNumber').val(),
-			// },
-			//   	  success: function(response){
-			//   	  console.log("response", response.event);
-			//   	  var id=response.event
-			//   	  this.context.router.push({
-			// 		  pathname: '/search/'+id,
-			// 		  query: { modal: true },
-			// 		  state: { fromDashboard: true }
-			// 		})
-			//   	  },
-			//   	  error: function(error){
-			//   	  console.log("error", error);
-			//   	  if(!error.responseJSON.success){
-			//   	  		return alert(error.responseJSON.error)
-			//   	  	}
-			//   	  }
-			//     })
-
-
 		}
 
+_createNewEventOrUpdate(e){
+	e.preventDefault();
+	var that=this
+	$.ajax({
+		type: "GET",
+		url:'/checkLoggedIn',
+		success:function(resp){
+			if (resp.authenticated===true){
+				if (!that.state.eventId){
+				$.ajax({
+							type: "POST",
+							// specify the url we want to upload our file to
+							url: '/event/new',
+							// this is how we pass in the actual file data from the form
+							data: {
+								title: $('#title').val(),
+								address: $('#address').val(),
+								startDate: $('#startDate').val(),
+								endDate: $('#endDate').val(),
+								startHour: $('#startHour').val(),
+								endHour: $('#endHour').val(),
+								workerNumber: $('#workerNumber').val(),
+								description:$('#description').val()
+				},
+							success: function(response){
+							console.log("response", response.event);
+							var id=response.event
+							that.setState({eventId: id})
+							alert("SUCCESS CREATING A NEW EVENT!")
+						//   this.context.router.push({
+						//   pathname: '/search/'+id,
+						//   query: { modal: true },
+						//   state: { fromDashboard: true }
+						// })
+							},
+							error: function(error){
+							console.log("error", error);
+							if(!error.responseJSON.success){
+									return alert(error.responseJSON.error)
+								}
+							}
+						})
+					}
+			else{
+					console.log("something here")
+					var id=that.state.eventId
+					$.ajax({
+								type: "POST",
+								// specify the url we want to upload our file to
+								url: '/updateEvent/'+id,
+								// this is how we pass in the actual file data from the form
+								data: {
+									title: $('#title').val(),
+									address: $('#address').val(),
+									startDate: $('#startDate').val(),
+									endDate: $('#endDate').val(),
+									startHour: $('#startHour').val(),
+									endHour: $('#endHour').val(),
+									workerNumber: $('#workerNumber').val(),
+									description:$('#description').val()
+					},
+								success: function(response){
+								alert("SUCCESS UPDATING EVENT!")
+								},
+								error: function(error){
+								console.log("error", error);
+							}
+						})
+			}
+		}
+			else{
+				alert("PLEASE LOG IN FIRST!")
+			}
+		},
+		error:function(err){
+			if (err){console.log("error in creating event",err); alert("PLESASE LOG IN FIRST!")}
+		}
+	})
+
+}
 
 	_changeStart(e) {
 		var newState = Object.assign({}, this.state);
@@ -283,11 +333,11 @@ reset(e){
 												</div>
 												<div className="form-group row">
 														<div className="col-sm-10">
-																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="title"/>
+																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="description"/>
 														</div>
 												</div>
 
-												
+
 									<div className='panel-heading'>
 													<div className="panel-title">
 													<label className="checkbox-inline">
@@ -320,13 +370,14 @@ reset(e){
 														<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
 													</label>
 													</div>
-													<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
 												<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
 												{this.state.value}
+												<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+
 												</div>
 												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
+												<button className="btn btn-success margin5 float-right" onClick={this._createNewEventOrUpdate.bind(this)} address={this.state.address}>Create Event or Update</button>
 
-		
 										</div>
 								</div>
 						);
@@ -490,7 +541,55 @@ render() {
 			contactForm = this._createEvent(false);
 		}
 		var usersquare=[];
-		
+		var filters=[]
+		filters.push(
+			<div className='panel-heading'>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								Accueil événementiel
+								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Accueil entreprise
+								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Animation commerciale
+								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Serveur
+								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Voiturier
+								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Barman
+								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)} />
+							</label>
+							</div>
+							<div className="panel-title">
+							<label className="checkbox-inline">
+								English
+								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Italiano
+								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)} />
+							</label>
+							<label className="checkbox-inline">
+								Français
+								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)} />
+							</label>
+							</div>
+							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
+						{this.state.value}
+						</div>
+		)
+
 if (this.state.users.length>0){
 		var users=this.state.users
 		var val=this.state.value
@@ -557,13 +656,13 @@ class MyDatePicker extends React.Component {
 						moment: {
 							lang: 'fr',
 							settings: {
-					        // months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
-					        // monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
-					        // monthsParseExact : true,
-					        // weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
-					        // weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-					        // weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
-					        // weekdaysParseExact : true,
+					        months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+					        monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+					        monthsParseExact : true,
+					        weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+					        weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+					        weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
+					        weekdaysParseExact : true,
 					        longDateFormat : {
 					            LT : 'HH:mm',
 					            LTS : 'HH:mm:ss',
@@ -616,5 +715,6 @@ class MyDatePicker extends React.Component {
 CreateEvent.contextTypes = {
 	router: Object
 }
+
 
 module.exports=CreateEvent

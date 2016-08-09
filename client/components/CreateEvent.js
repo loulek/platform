@@ -35,6 +35,7 @@ class CreateEvent extends React.Component {
 			oldusers:[],
 			eventId:null
 		}
+		this.invite = this.invite.bind(this);
 	}
 
 componentDidMount(){
@@ -68,8 +69,11 @@ componentDidMount(){
 	})
 }
 
-addToList(e){
-	
+invite(e){
+	e.preventDefault();
+	var id=this.state.eventId;
+	var link='/event/'+id;
+	console.log("inside invite", link)
 }
 
 handleChange(e) {
@@ -609,7 +613,7 @@ if (this.state.users.length>0){
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
-							<button className="btn btn-success" onClick={that.addToList}>Add to list</button>
+							<button className="btn btn-success" onClick={that.invite}>Send invite link</button>
 						</div>
 					</div>
 					)

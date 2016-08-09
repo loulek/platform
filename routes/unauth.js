@@ -65,7 +65,6 @@ router.post('/event/new',function(req,res){
 });
 
 router.post('/updateEvent/:id',function(req,res){
-
   geocoder.geocode(req.body.address, function(err, data) {
     console.log("data", data)
     if(!data){

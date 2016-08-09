@@ -68,6 +68,9 @@ componentDidMount(){
 	})
 }
 
+addToList(e){
+	
+}
 
 handleChange(e) {
 		 this.setState({
@@ -606,7 +609,7 @@ if (this.state.users.length>0){
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
-							<button className="btn btn-success">Contact</button>
+							<button className="btn btn-success" onClick={that.addToList}>Add to list</button>
 						</div>
 					</div>
 					)

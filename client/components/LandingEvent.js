@@ -82,16 +82,16 @@ class LandingEvent extends React.Component {
 
 	_createEvent(isEnabled) {
 		return (
-			<div className='panel panel-default'>
+			<div className='panel panel-default videoland'>
 				<div className='panel-heading'>
-					<h3 className="panel-title">Créez votre événement</h3>
+					<h3 className="panel-title">Create Event</h3>
 				</div>
 				<div className='panel-body'>
 					<div className="form-group row">
 
 						{ /*  This is the location autocompleter */ }
-						<div className="col-sm-6">
-							<Geosuggest inputClassName="form-control" placeholder="Adresse" initialValue={this.state.eventData.address} onSuggestSelect={this.suggestSelect.bind(this)} id="address" />
+						<div className="col-sm-8">
+							<Geosuggest inputClassName="form-control" placeholder="Address" initialValue={this.state.eventData.address} onSuggestSelect={this.suggestSelect.bind(this)} id="address" />
 						</div>
 
 					</div>
@@ -100,23 +100,19 @@ class LandingEvent extends React.Component {
 
 						{ /*  This is the start date datepicket */ }
 						<div className="col-sm-1">
-							<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Date de début"} />
+							<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Start Date"} />
 						</div>
 
 						{ /*  This is the end date datepicket */ }
 						<div className="col-sm-1 col-sm-offset-3">
-							<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"Date de fin"} />
+							<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"End Date"} />
 						</div>
-
 					</div>
-
-
-					<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} >Rechercher des Hôtesses</button>
+					<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} >Find Hosts</button>
 				</div>
 			</div>
 			);
 	}
-
 	render() {
 		var contactForm = null;
 		if(this.state.editContact) {
@@ -124,74 +120,16 @@ class LandingEvent extends React.Component {
 		} else {
 			contactForm = this._createEvent(false);
 		}
-		var usersquare=[];
-		var filters=[]
-		if (this.state.users.length>0){
-			filters.push(
-				<div className='panel-heading'>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
-		            </label>
-		            </div>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="English"> English </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"> Italiano </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Français"> Français </input>
-		            </label>
-		            </div>
-		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
-	            </div>
-			)
-			this.state.users.forEach(function(u){
-				usersquare.push(
-
-					<div>
-						<div className="img">
-						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
-						</div>
-						<div className="text_image">
-							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
-							<button className="btn btn-success">Contact</button>
-						</div>
-					  </div>
-
-
-					)
-			})
-		}
-
-		console.log("CONTACTFORM", contactForm);
-		console.log("FILTERS", filters);
-		console.log("USERSQUARE", usersquare);
+		
 		return (
 			<div>
-				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
+			<video id="background-video" loop autoPlay >
+  			<source src="https://s3-us-west-2.amazonaws.com/joshmagic/landingg.mp4" type="video/mp4" />
+  			</video>
+			<div className="container">
+				<h3 className='landcenter'>Find your independent event hosts</h3>
 				{contactForm}
-				{filters}
-				<div className="row col-sm-offset-1">
-					{usersquare}
-				</div>
+			</div>
 			</div>
 		);
 	}
@@ -222,7 +160,7 @@ class MyDatePicker extends React.Component {
 						font: "helvetica",
 						color: "black",
 						moment: {
-							lang: 'fr',
+							lang: 'en',
 							settings: {
 					        months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
 					        monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),

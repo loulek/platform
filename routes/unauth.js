@@ -5,10 +5,10 @@ var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
 var geocoder = NodeGeocoder({
- provider: "google",
- apiKey: process.env.GEOCODING_API_KEY,
- httpAdapter: "https",
- formatter: null
+  provider: "google",
+  apiKey: process.env.GEOCODING_API_KEY,
+  httpAdapter: "https",
+  formatter: null
 });
 var accountSid = "AC6093bbdfa15ca4cefb14aaaf2e2efd0a";
 var authToken = "0046ab3cbc02563247711f02a3f38ca2";
@@ -26,26 +26,28 @@ var client = new twilio.RestClient(accountSid, authToken);
 // ...
 router.post('/event/new',function(req,res){
   console.log("This is the body I got:", req.body);
-
   geocoder.geocode(req.body.address, function(err, data) {
-console.log("data", data)
-if(!data){
+    console.log("data", data)
+    if(!data){
       return res.status(500).json({
-          "success" : false,
-          "error" : "Merci d'indiquer une adresse"});
+        "success" : false,
+        "error" : "Merci d'indiquer une adresse"});
     } else {
-    var longitude_new = data[0].longitude;
-    var latitude_new = data[0].latitude;
-  }
+      var longitude_new = data[0].longitude;
+      var latitude_new = data[0].latitude;
 
-    new Event({
-      address: req.body.address,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      startHour: req.body.startHour,
-      endHour: req.body.endHour,
-      workerNumber: req.body.workerNumber,
-    })
+      new Event({
+        organizer: req.user._id,
+        title:req.body.title,
+        address: req.body.address,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        startHour: req.body.startHour,
+        endHour: req.body.endHour,
+        workerNumber: req.body.workerNumber,
+        description:req.body.description,
+        location: [longitude_new,latitude_new]
+      })
     .save(function(err, e){
       if (err){
         console.log("error", err);
@@ -58,57 +60,81 @@ if(!data){
         "event": e._id
       });
     });
-
+    }
   });
-
 });
 
+router.post('/updateEvent/:id',function(req,res){
+
+  geocoder.geocode(req.body.address, function(err, data) {
+    console.log("data", data)
+    if(!data){
+      return res.status(500).json({
+        "success" : false,
+        "error" : "Merci d'indiquer une adresse"});
+    } else {
+      var longitude_new = data[0].longitude;
+      var latitude_new = data[0].latitude;
+      Event.findByIdAndUpdate(req.params.id, {
+        organizer: req.user._id,
+        title:req.body.title,
+        address: req.body.address,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        startHour: req.body.startHour,
+        endHour: req.body.endHour,
+        workerNumber: req.body.workerNumber,
+        description:req.body.description,
+        location: [longitude_new,latitude_new]
+      }, function(err){
+        if (err){res.json({success: false, err: err})}
+        else{res.json({success: true})}
+      }
+
+    )
+
+    }
+  });
+
+})
 
 router.post('/findProfile',function(req,res){
-   req.body.criteria1=JSON.parse(req.body.criteria1)
-   req.body.criteria2=JSON.parse(req.body.criteria2)
-   var c1=req.body.criteria1;
-   var c2=req.body.criteria2
-   if (c2.length===0){c2=["Accueil événementiel","Accueil entreprise","Animation commerciale","Serveur","Voiturier","Barman"]}
-   if (c1.length==0){c1=["English","Italiano","Français"]}
+  req.body.criteria1=JSON.parse(req.body.criteria1)
+  req.body.criteria2=JSON.parse(req.body.criteria2)
+  var c1=req.body.criteria1;
+  var c2=req.body.criteria2
+  if (c2.length===0){c2=["Accueil événementiel","Accueil entreprise","Animation commerciale","Serveur","Voiturier","Barman"]}
+  if (c1.length===0){c1=["English","Italiano","Français"]}
   console.log("INSIDE, filters",c1, c2)
   geocoder.geocode(req.body.address, function(err, data) {
     var longitude_new = data[0].longitude;
     var latitude_new = data[0].latitude;
     Profile.find( { specialty: { $in: c1 },job: { $in: c2 },location: {
-             $near: [longitude_new, latitude_new],
-             $maxDistance: 50
-         } }, function(err,users){
+      $near: [longitude_new, latitude_new],
+      $maxDistance: 50
+    } }, function(err,users){
       console.log("USERS,users", users)
-
       if (err){res.status(500).send("WRONG")}
       res.send(users)
     })
-
   })
-
 })
 
 router.post('/contact',function(req,res){
-
   client.messages.create({
     body: req.body.message,
     to: "123"+req.body.num,
     from: fromNumber
-}, function(err, message) {
-    if (err) {res.send(err)};
+  }, function(err, message) {
+    if (err) {res.send(err)}
     res.json({success:true})
-});
-
-
+  });
 })
-
 
 // GET /event/:id
 //  This route retrieves an event by its Id and all the informations with it.
 router.get('/event/:id',function(req,res){
   console.log("This is the body I got2222:", req.body);
-
   Event.findById(req.params.id, function(err, event){
     if(err) return res.status(500).json({
       "success": false,
@@ -119,7 +145,6 @@ router.get('/event/:id',function(req,res){
       "event": event
     })
   })
-
 });
 
 router.get('/profile/:id', function(req, res){
@@ -139,22 +164,24 @@ router.get('/profile/:id', function(req, res){
 
 router.post('/search', function(req, res){
   console.log("REQUEST>BODY ADDREs", req.body.address);
-   geocoder.geocode(req.body.address, function(err, data) {
-    if(data){
-         var longitude_new = data[0].longitude;
-         var latitude_new = data[0].latitude;
-         var location = [longitude_new, latitude_new]
-      }
-         console.log("nlllllllllllll", longitude_new)
-         Profile.find(
-    {location: location || null},function(err,users){
-           if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
-           res.send(users)
-         })
-    })
+  if (req.body.address){
+    geocoder.geocode(req.body.address, function(err, data) {
+      var longitude_new = data[0].longitude;
+      var latitude_new = data[0].latitude;
+      console.log("nlllllllllllll", longitude_new)
+      Profile.find(
+      {location: {
+        $near: [longitude_new, latitude_new],
+        $maxDistance: 1
+      } || null},function(err,users){
+        if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
+        res.send(users)
+      })
+    })}
+     else{
+    res.send({error:"invalid address"})
+  }
 })
-
-
 
 router.get('/confirmed/:id', function(req, res, next){
   console.log("I AM IN CONFIRMEEEEDDD GOT HERE YOOOOO")

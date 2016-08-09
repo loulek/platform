@@ -5,7 +5,6 @@ var path = require('path');
 var sg = require('sendgrid')(process.env.SENDGRID_APIKEY);
 var helper = require('sendgrid').mail;
 
-
 function randomString(length, chars) {
     var result = '';
     for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -76,29 +75,36 @@ module.exports = function(passport) {
 		})
 		user.save(function(err, user){
 			if(err) {
-				return next(err)
+			 return res.status(500).json({
+	          "success" : false,
+	          "error" : err});
 			}
 			sendEmail({
 				email: req.body.email,
 				id: id
 			});
-			res.json({status: 'ok', user: user})
+			res.json({status: 'ok', user: user, redirect: '/login/'})
 		});
 	});
 
-	// POST process login 
+	// POST process login
 	router.post('/login', passport.authenticate('local'), function(req, res, next) {
-		if (req.user.confirmed) return res.json({status: 'ok', user: req.user});
+		if (req.user.confirmed) { return res.json({status: 'ok', user: req.user});}
 		else return res.status(400).json({status: 'ok', user: req.user});
 	});
+
+  router.get('/checkLoggedIn', function(req,res,next){
+    if (req.user){res.send({authenticated:true})}
+    else{res.send({authenticated:false})}
+  })
 
 	// GET logout user
 	router.post('/logout', function(req, res) {
 		req.logout();
 		res.json({success: true});
 	});
-	
-	
+
+
 	// POST check if user is authenticated THIS IS THE WALL
 	router.post('/isauthenticated', function(req, res) {
 		if(req.user) {

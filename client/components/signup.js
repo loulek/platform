@@ -68,7 +68,7 @@ class Signup extends React.Component {
 			error: function(xhr, status, err) {
 				console.log(err)
 				this.setState({
-					message: "Cette adresse email est déjà assosiée à un compte!"
+					message: "Email already exists!"
 				});
 			}.bind(this)
 		});
@@ -94,7 +94,10 @@ class Signup extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"textAlign" : "center"}}>Sign Up</h2>
+			<video id="background-video" loop autoPlay >
+  			<source src="https://s3-us-west-2.amazonaws.com/joshmagic/registerr.mp4" type="video/mp4" />
+  			</video>
+  			<h3 className='center'>Sign Up</h3>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">

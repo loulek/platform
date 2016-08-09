@@ -57,18 +57,20 @@ class Signup extends React.Component {
 			type: 'POST',
 			data: this.state,
 			success: function(data) {
-				if(data.status === 'ok') {
-					this.context.router.push('/login');
+				console.log("DATAAAA LOGGG", data)
+				if(data.status === 'ok' ) {
+					sessionStorage.auth = true;
+					this.context.router.push('/login')
 				} else if(data.status === 'error') {
 					this.setState({
 						message: data.error
 					});
-				} 
+				}
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(err)
 				this.setState({
-					message: "Cette adresse email est déjà assosiée à un compte!"
+					message: "Email already exists!"
 				});
 			}.bind(this)
 		});
@@ -94,7 +96,10 @@ class Signup extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"textAlign" : "center"}}>Sign Up</h2>
+			<video id="background-video" loop autoPlay >
+  			<source src="https://s3-us-west-2.amazonaws.com/joshmagic/registerr.mp4" type="video/mp4" />
+  			</video>
+  			<h3 className='center'>Sign Up</h3>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">

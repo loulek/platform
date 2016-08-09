@@ -287,51 +287,50 @@ reset(e){
 														</div>
 												</div>
 
-												
-			<div className='panel-heading'>
-							<div className="panel-title">
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
-							</label>
-							</div>
-							<div className="panel-title">
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
-							</label>
-							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
-							</label>
-							</div>
-							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
-						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
-						{this.state.value}
-						</div>
-						<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
-
-		
+									<div className='panel-heading'>
+													<div className="panel-title">
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Greeting host(ess) </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Receptionist  </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Street marketing </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Valet parking</input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Server </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Artist </input>
+													</label>
+													</div>
+													<div className="panel-title">
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
+													</label>
+													<label className="checkbox-inline">
+														<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
+													</label>
+													</div>
+													<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+												<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
+												{this.state.value}
+												</div>
+												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
 										</div>
 								</div>
 						);
 			}
-
 handleClick(e){
 		var val=e.target.value;
 		var that=this
@@ -387,13 +386,10 @@ else{
 					if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
 				}
 			}
-
-
 			that.setState({
 				users:newusers,
 				filter1:filter1
 			})
-
 		},
 		error: function(err){
 			console.log("error",err)
@@ -401,7 +397,6 @@ else{
 	})
 }
 }
-
 handleClick2(e){
 	var val=e.target.value;
 	var that=this
@@ -425,12 +420,10 @@ if (this.state.filter2.indexOf(val)===-1){
 							if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
 						}
 					}
-
 					that.setState({
 						users:newusers,
 						filter2:filter2
 					})
-
 				},
 				error: function(err){
 					console.log("error",err)
@@ -455,12 +448,10 @@ $.ajax({
 				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
 			}
 		}
-
 		that.setState({
 			users:newusers,
 			filter2:filter2
 		})
-
 	},
 	error: function(err){
 		console.log("error",err)
@@ -468,7 +459,6 @@ $.ajax({
 })
 }
 }
-
 handleClick3(e){
 	e.preventDefault;
 	console.log("starting!")
@@ -480,7 +470,6 @@ handleClick3(e){
 		},
 	});
 }
-
 render() {
 	var that=this
 	var contactForm = null;
@@ -513,7 +502,6 @@ if (this.state.users.length>0){
 					)
 			})
 		}
-
 		return (
 				<div className="container">
 					<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
@@ -525,9 +513,6 @@ if (this.state.users.length>0){
 		);
 	}
 }
-
-
-
 class MyDatePicker extends React.Component {
 	constructor(props) {
 		super(props);
@@ -557,13 +542,13 @@ class MyDatePicker extends React.Component {
 						moment: {
 							lang: 'fr',
 							settings: {
-					        months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
-					        monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
-					        monthsParseExact : true,
-					        weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
-					        weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-					        weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
-					        weekdaysParseExact : true,
+					        // months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+					        // monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+					        // monthsParseExact : true,
+					        // weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+					        // weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+					        // weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
+					        // weekdaysParseExact : true,
 					        longDateFormat : {
 					            LT : 'HH:mm',
 					            LTS : 'HH:mm:ss',

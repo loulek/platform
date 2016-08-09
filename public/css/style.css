@@ -9,6 +9,8 @@ body {
 }
 .videoland{
   margin-top: 200px;
+  margin-right: 220px;
+  margin-left:220px;
 }
 #background-video{
   background-size: cover;
@@ -45,7 +47,14 @@ body {
 .float-left {
 	float: left;
 }
-
+.landcenter {
+  text-align: center;
+  color: white;
+  font-size: 35px;
+  text-shadow: 2px 2px black;
+  margin-top: 150px;
+  margin-bottom:0px;
+}
 .center {
 	text-align: center;
   color: white;

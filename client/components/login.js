@@ -34,7 +34,7 @@ class Login extends React.Component {
 			}.bind(this),
 			error: function(xhr, status, err) {
 				this.setState({
-					message: "Merci de valider votre adresse email via l'email que nous vous avons envoyé."
+					message: "Please check your inbox and confirm your email address."
 				});
 			}.bind(this)
 		});

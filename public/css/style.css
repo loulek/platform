@@ -1,8 +1,32 @@
 body {
   margin-top: 50px;
-/*  background-image: url("http://www.premierehostess.com/wp-content/uploads/2014/09/Premiere-Hostess-Dubai-9.jpg");
-*/  background-size: cover;
-  background-repeat: repeat-x;
+}
+
+.bg-image {
+  background-image: url("");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.videoland{
+  margin-top: 200px;
+  min-width: 200px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#background-video{
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  padding: none;
+  position: fixed;
+  z-index: -6;
+  }
+.bg-result{
+  width: 100%;
+  background-color: white;
+  opacity: 0.97;
 }
 .panel-default {
    opacity: 0.97 
@@ -10,6 +34,8 @@ body {
 
 .panel-heading {
   width: 100%;
+  background-color: white;
+  opacity: 0.97;
 }
 
 .margin5 {
@@ -23,7 +49,14 @@ body {
 .float-left {
 	float: left;
 }
-
+.landcenter {
+  text-align: center;
+  color: white;
+  font-size: 35px;
+  text-shadow: 2px 2px black;
+  margin-top: 150px;
+  margin-bottom:0px;
+}
 .center {
 	text-align: center;
   color: white;
@@ -58,6 +91,7 @@ body {
 
 #root{
 	position: absolute;
+  width: 100%;
 }
 
 #overlay{

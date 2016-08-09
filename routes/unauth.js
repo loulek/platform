@@ -140,22 +140,23 @@ router.get('/profile/:id', function(req, res){
 router.post('/search', function(req, res){
   console.log("REQUEST>BODY ADDREs", req.body.address);
   if (req.body.address){
-   geocoder.geocode(req.body.address, function(err, data) {
-    if(data){
-         var longitude_new = data[0].longitude;
-         var latitude_new = data[0].latitude;
-         var location = [longitude_new, latitude_new]
-      }
-         console.log("nlllllllllllll", longitude_new)
-         Profile.find(
-    {location: location || null},function(err,users){
-           if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
-           res.send(users)
-         })
-    })}
-    else{
+     geocoder.geocode(req.body.address, function(err, data) {
+           var longitude_new = data[0].longitude;
+           var latitude_new = data[0].latitude;
+           console.log("nlllllllllllll", longitude_new)
+           Profile.find(
+      {location: {
+               $near: [longitude_new, latitude_new],
+               $maxDistance: 1
+           } || null},function(err,users){
+             if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
+             res.send(users)
+           })
+      })}
+     else{
       res.send({error:"invalid address"})
-    }
+     }
+
 })
 
 

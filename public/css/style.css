@@ -9,8 +9,10 @@ body {
 }
 .videoland{
   margin-top: 200px;
-  margin-right: 220px;
-  margin-left:220px;
+  min-width: 200px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 #background-video{
   background-size: cover;

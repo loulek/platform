@@ -287,28 +287,26 @@ reset(e){
 														</div>
 												</div>
 
+												
 									<div className='panel-heading'>
 													<div className="panel-title">
 													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Greeting host(ess) </input>
+														<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
 													</label>
 													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Receptionist  </input>
+														<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
 													</label>
 													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Street marketing </input>
+														<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
 													</label>
 													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Valet parking</input>
+														<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
 													</label>
 													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Server </input>
+														<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
 													</label>
 													<label className="checkbox-inline">
 														<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Artist </input>
 													</label>
 													</div>
 													<div className="panel-title">
@@ -327,10 +325,13 @@ reset(e){
 												{this.state.value}
 												</div>
 												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
+
+		
 										</div>
 								</div>
 						);
 			}
+
 handleClick(e){
 		var val=e.target.value;
 		var that=this
@@ -386,10 +387,13 @@ else{
 					if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
 				}
 			}
+
+
 			that.setState({
 				users:newusers,
 				filter1:filter1
 			})
+
 		},
 		error: function(err){
 			console.log("error",err)
@@ -397,6 +401,7 @@ else{
 	})
 }
 }
+
 handleClick2(e){
 	var val=e.target.value;
 	var that=this
@@ -420,10 +425,12 @@ if (this.state.filter2.indexOf(val)===-1){
 							if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
 						}
 					}
+
 					that.setState({
 						users:newusers,
 						filter2:filter2
 					})
+
 				},
 				error: function(err){
 					console.log("error",err)
@@ -448,10 +455,12 @@ $.ajax({
 				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
 			}
 		}
+
 		that.setState({
 			users:newusers,
 			filter2:filter2
 		})
+
 	},
 	error: function(err){
 		console.log("error",err)
@@ -459,8 +468,9 @@ $.ajax({
 })
 }
 }
+
 handleClick3(e){
-	e.preventDefault();
+	e.preventDefault;
 	console.log("starting!")
 	this.context.router.push({
 		query: {
@@ -469,8 +479,8 @@ handleClick3(e){
 			endDate: this.state.eventData.endDate.toString()
 		},
 	});
-	console.log("AFTER PUSH")
 }
+
 render() {
 	var that=this
 	var contactForm = null;
@@ -503,6 +513,7 @@ if (this.state.users.length>0){
 					)
 			})
 		}
+
 		return (
 				<div className="container">
 					<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
@@ -514,6 +525,9 @@ if (this.state.users.length>0){
 		);
 	}
 }
+
+
+
 class MyDatePicker extends React.Component {
 	constructor(props) {
 		super(props);

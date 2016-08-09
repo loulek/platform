@@ -456,33 +456,42 @@ render() {
 			<div className='panel-heading'>
 							<div className="panel-title">
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
+								Accueil événementiel 
+								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
+								Accueil entreprise
+								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
+								Animation commerciale
+								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
+								Serveur
+								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
+								Voiturier
+								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
+								Barman
+								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)} />
 							</label>
 							</div>
 							<div className="panel-title">
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
+								English
+								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
+								Italiano
+								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)} />
 							</label>
 							<label className="checkbox-inline">
-								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
+								Français
+								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)} />
 							</label>
 							</div>
 							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
@@ -617,5 +626,6 @@ class MyDatePicker extends React.Component {
 CreateEvent.contextTypes = {
 	router: Object
 }
+
 
 module.exports=CreateEvent

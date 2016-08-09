@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 
 var eventSchema = mongoose.Schema({
 	organizer   	: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	creator	 		: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	title		    : String,
 	location	 	: Array,
 	startDate 	    : { type: Date},

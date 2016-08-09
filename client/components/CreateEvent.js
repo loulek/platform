@@ -32,7 +32,8 @@ class CreateEvent extends React.Component {
 			value:100,
 			filter1:[],
 			filter2:[],
-			oldusers:[]
+			oldusers:[],
+			eventId:null
 		}
 	}
 
@@ -116,39 +117,88 @@ reset(e){
 	        if (err.error){alert("invalid address")}
 	      }
 	    })
-			// $.ajax({
-			//       type: "POST",
-			//       // specify the url we want to upload our file to
-			//       url: '/event/new',
-			//       // this is how we pass in the actual file data from the form
-			//       data: {
-			// 	address: $('#address').val(),
-			// 	startDate: this.state.eventData.startDate._d,
-			// 	endDate: this.state.eventData.endDate._d,
-			// 	startHour: $('#startHour').val(),
-			// 	endHour: $('#endHour').val(),
-			// 	workerNumber: $('#workerNumber').val(),
-			// },
-			//   	  success: function(response){
-			//   	  console.log("response", response.event);
-			//   	  var id=response.event
-			//   	  this.context.router.push({
-			// 		  pathname: '/search/'+id,
-			// 		  query: { modal: true },
-			// 		  state: { fromDashboard: true }
-			// 		})
-			//   	  },
-			//   	  error: function(error){
-			//   	  console.log("error", error);
-			//   	  if(!error.responseJSON.success){
-			//   	  		return alert(error.responseJSON.error)
-			//   	  	}
-			//   	  }
-			//     })
-
-
 		}
 
+_createNewEventOrUpdate(e){
+	e.preventDefault();
+	var that=this
+	$.ajax({
+		type: "GET",
+		url:'/checkLoggedIn',
+		success:function(resp){
+			if (resp.authenticated===true){
+				if (!that.state.eventId){
+				$.ajax({
+							type: "POST",
+							// specify the url we want to upload our file to
+							url: '/event/new',
+							// this is how we pass in the actual file data from the form
+							data: {
+								title: $('#title').val(),
+								address: $('#address').val(),
+								startDate: $('#startDate').val(),
+								endDate: $('#endDate').val(),
+								startHour: $('#startHour').val(),
+								endHour: $('#endHour').val(),
+								workerNumber: $('#workerNumber').val(),
+								description:$('#description').val()
+				},
+							success: function(response){
+							console.log("response", response.event);
+							var id=response.event
+							that.setState({eventId: id})
+							alert("SUCCESS CREATING A NEW EVENT!")
+						//   this.context.router.push({
+						//   pathname: '/search/'+id,
+						//   query: { modal: true },
+						//   state: { fromDashboard: true }
+						// })
+							},
+							error: function(error){
+							console.log("error", error);
+							if(!error.responseJSON.success){
+									return alert(error.responseJSON.error)
+								}
+							}
+						})
+					}
+			else{
+					console.log("something here")
+					var id=that.state.eventId
+					$.ajax({
+								type: "POST",
+								// specify the url we want to upload our file to
+								url: '/updateEvent/'+id,
+								// this is how we pass in the actual file data from the form
+								data: {
+									title: $('#title').val(),
+									address: $('#address').val(),
+									startDate: $('#startDate').val(),
+									endDate: $('#endDate').val(),
+									startHour: $('#startHour').val(),
+									endHour: $('#endHour').val(),
+									workerNumber: $('#workerNumber').val(),
+									description:$('#description').val()
+					},
+								success: function(response){
+								alert("SUCCESS UPDATING EVENT!")
+								},
+								error: function(error){
+								console.log("error", error);
+							}
+						})
+			}
+		}
+			else{
+				alert("PLEASE LOG IN FIRST!")
+			}
+		},
+		error:function(err){
+			if (err){console.log("error in creating event",err); alert("PLESASE LOG IN FIRST!")}
+		}
+	})
+
+}
 
 	_changeStart(e) {
 		var newState = Object.assign({}, this.state);
@@ -283,7 +333,7 @@ reset(e){
 												</div>
 												<div className="form-group row">
 														<div className="col-sm-10">
-																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="title"/>
+																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="description"/>
 														</div>
 												</div>
 
@@ -325,7 +375,7 @@ reset(e){
 												{this.state.value}
 												</div>
 												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
-
+												<button className="btn btn-success margin5 float-right" onClick={this._createNewEventOrUpdate.bind(this)} address={this.state.address}>Create Event or Update</button>
 
 										</div>
 								</div>

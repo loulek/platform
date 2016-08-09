@@ -370,9 +370,10 @@ _createNewEventOrUpdate(e){
 														<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
 													</label>
 													</div>
-													<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
 												<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
 												{this.state.value}
+												<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+
 												</div>
 												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
 												<button className="btn btn-success margin5 float-right" onClick={this._createNewEventOrUpdate.bind(this)} address={this.state.address}>Create Event or Update</button>

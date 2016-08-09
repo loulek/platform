@@ -6,10 +6,10 @@ var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
 var geocoder = NodeGeocoder({
- provider: "google",
- apiKey: process.env.GEOCODING_API_KEY,
- httpAdapter: "https",
- formatter: null
+  provider: "google",
+  apiKey: process.env.GEOCODING_API_KEY,
+  httpAdapter: "https",
+  formatter: null
 });
 var aws = require('aws-sdk');
 
@@ -40,9 +40,6 @@ var upload = multer({
 });
 
 
-
-
-
 // POST to `/uploadFile`
 //
 // Upload a file to this url
@@ -53,59 +50,55 @@ var upload = multer({
 // @note: the`multer` package saves the file to the filesystem for you already,
 // using `upload.single`
 router.post('/url/to/upload/to', upload.single('img'), function(req, res, next) {
-
-	if (req.user.profile) {
-		Profile.findByIdAndUpdate(req.user.profile, {
-			profileImageUrl: req.file.location
-		}, function(err) {
-			if(err) {
-				return res.json({success: false, error: err.toString()});
-			} else {
-				return res.json({success: true, message: req.file.location});
-			}
-		});
-	}
+  if (req.user.profile) {
+    Profile.findByIdAndUpdate(req.user.profile, {
+      profileImageUrl: req.file.location
+    }, function(err) {
+      if(err) {
+        return res.json({success: false, error: err.toString()});
+      } else {
+        return res.json({success: true, message: req.file.location});
+      }
+    });
+  }
 });
 
 router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
-
-	if (req.user.profile) {
-		Profile.findByIdAndUpdate(req.user.profile, {
-			resumeImageUrl: req.file.location
-		}, function(err) {
-			if(err) {
-				return res.json({success: false, error: err.toString()});
-			} else {
-				return res.json({success: true, message: req.file.location});
-			}
-		});
-	}
+  if (req.user.profile) {
+    Profile.findByIdAndUpdate(req.user.profile, {
+      resumeImageUrl: req.file.location
+    }, function(err) {
+      if(err) {
+        return res.json({success: false, error: err.toString()});
+      } else {
+        return res.json({success: true, message: req.file.location});
+      }
+    });
+  }
 });
 
 //TODO: FIND USERS GIVEN USER INPUT
 router.post('/user/find',function(req,res){
   var address="philadelphia"
   geocoder.geocode(address, function(err, data) {
-     var longitude_new = data[0].longitude;
-     var latitude_new = data[0].latitude;
-     console.log("nlllllllllllll", longitude_new)
-     Profile.find(
-     	{location: {
-             $near: [longitude, latitude],
-             $maxDistance: 100
-         }},function(users,err){
-           if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
-           res.send(users)
-         })
-	})
+    var longitude_new = data[0].longitude;
+    var latitude_new = data[0].latitude;
+    console.log("nlllllllllllll", longitude_new)
+    Profile.find(
+     {location: {
+       $near: [longitude_new, latitude_new],
+       $maxDistance: 100
+     }},function(users,err){
+      if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
+      res.send(users)
+    })
+  })
 })
-
-
 
 
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
-	res.json(req.user);
+  res.json(req.user);
 	// User.findById(req.user._id)
 	// .populate('profile')
 	// .exec(function(err, user) {
@@ -127,128 +120,127 @@ router.get('/events',function(req,res){
 
 // update user information
 router.post('/user/update-profile', function(req, res) {
-	console.log("USERRRR OBJECT", req.user)
-	console.log("USERRRR OBJECT PROFILE", req.user.profile)
-	console.log("USERRRR OBJECT CLIENT", req.user.client)
+  console.log("USERRRR OBJECT", req.user)
+  console.log("USERRRR OBJECT PROFILE", req.user.profile)
+  console.log("USERRRR OBJECT CLIENT", req.user.client)
 
 
 
-	if(req.user.profile) {
+  if(req.user.profile) {
     geocoder.geocode(req.body.address, function(err, data) {
-     if(data){
-       var longitude_new = data[0].longitude;
-       var latitude_new = data[0].latitude;
-       var location = [longitude_new, latitude_new]
+      if(data){
+        var longitude_new = data[0].longitude;
+        var latitude_new = data[0].latitude;
+        var location = [longitude_new, latitude_new]
 
-     }
+      }
 
-		Profile.findByIdAndUpdate(req.user.profile, {
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
-			phone: req.body.phone,
-			specialty: req.body['specialty[]'],
-      		location:location || null,
-            salary: req.body.salary,
-			image: req.body.image,
-			description: req.body.description,
-			gender: req.body.gender,
-			address: req.body.address
-		}, function(err) {
-			if(err) {
-				return res.json({status: 'error', error: err.toString()});
-			} else {
-				return res.json({status: 'ok'});
-			}
-		})
-  });
-	} else {
+      Profile.findByIdAndUpdate(req.user.profile, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phone: req.body.phone,
+        specialty: req.body['specialty[]'],
+        location:location || null,
+        salary: req.body.salary,
+        image: req.body.image,
+        description: req.body.description,
+        gender: req.body.gender,
+        address: req.body.address
+      }, function(err) {
+        if(err) {
+          return res.json({status: 'error', error: err.toString()});
+        } else {
+          return res.json({status: 'ok'});
+        }
+      })
+    });
+  } else {
     geocoder.geocode(req.body.address, function(err, data) {
-    	if(data){
-	       var longitude = data[0].longitude;
-	       var latitude = data[0].latitude;
-	       var location = [longitude, latitude]
-	    }
+      if(data){
+        var longitude = data[0].longitude;
+        var latitude = data[0].latitude;
+        var location = [longitude, latitude]
+      }
 
-		    if(req.user.type === "Profile") {
-		    	console.log("PROFILE", Profile);
-		       	var profile = new Profile({
-					firstName: req.body.firstName,
-					lastName: req.body.lastName,
-					phone: req.body.phone,
-		      		location: location || null,
-		            salary: req.body.salary,
-					specialty: req.body.specialty,
-					image: req.body.image,
-					description: req.body.description,
-					gender: req.body.gender,
-					address: req.body.address
-			    })
-		    } if (req.user.type === "Client") {
-		    	console.log("CLIENT", Client);
+      if(req.user.type === "Profile") {
+        console.log("PROFILE", Profile);
+        var profile = new Profile({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          phone: req.body.phone,
+          location: location || null,
+          salary: req.body.salary,
+          specialty: req.body.specialty,
+          image: req.body.image,
+          description: req.body.description,
+          gender: req.body.gender,
+          address: req.body.address
+        })
+      } if (req.user.type === "Client") {
+        console.log("CLIENT", Client);
 
-		       	var profile = new Client({
-		       		firstName: req.body.firstName,
-		       		lastName: req.body.lastName,
-		       		phone: req.body.phone,
-		       		location: req.body.location,
-		       		description: req.body.description,
-		       		profileImageUrl: req.body.profileImageUrl,
-		       		address: req.body.address
-		       	});
-		   }
-		   	profile.save(function(err, client) {
-				if(err) {
-					return res.json({status: 'error', error: err.toString()});
-				} else {
-
-					User.findByIdAndUpdate(req.user._id, {
-						profile: profile
-					}, function(err) {
-						if(err) {
-							return res.json({status: 'error', error: err.toString()});
-						} else {
-							return res.json({status: 'ok'});
-						}
-					});
-				}
-		  	});
-		});
-	}
+        var clientProfile = new Client({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          phone: req.body.phone,
+          location: req.body.location,
+          description: req.body.description,
+          profileImageUrl: req.body.profileImageUrl,
+          address: req.body.address
+        });
+      }
+      clientProfile.save(function(err, client) {
+        if(err) {
+          return res.json({status: 'error', error: err.toString()});
+        } else {
+          User.findByIdAndUpdate(req.user._id, {
+            profile: profile
+          }, function(err) {
+            if(err) {
+              return res.json({status: 'error', error: err.toString()});
+            } else {
+              return res.json({status: 'ok'});
+            }
+          });
+        }
+      });
+    });
+  }
 });
 
 // change user password
 router.post('/user/change-password', function(req, res) {
 
-	if(!req.body.oldPassword) {
-		return res.json({status: 'error', error:'Old password cannot be empty.'});
-	}
+  if(!req.body.oldPassword) {
+    return res.json({status: 'error', error:'Old password cannot be empty.'});
+  }
 
-	if(!req.body.newPassword) {
-		return res.json({status: 'error', error:'New password cannot be empty.'});
-	}
+  if(!req.body.newPassword) {
+    return res.json({status: 'error', error:'New password cannot be empty.'});
+  }
 
-	if(!req.body.repeatNewPassword) {
-		return res.json({status: 'error', error:'Repeat new password cannot be empty.'});
-	}
+  if(!req.body.repeatNewPassword) {
+    return res.json({status: 'error', error:'Repeat new password cannot be empty.'});
+  }
 
-	if(!req.user.validPassword(req.body.oldPassword)) {
-		return res.json({status: 'error', error:'Old password is not correct.'});
-	}
+  if(!req.user.validPassword(req.body.oldPassword)) {
+    return res.json({status: 'error', error:'Old password is not correct.'});
+  }
 
-	if(req.body.newPassword !== req.body.repeatNewPassword) {
-		return res.json({status: 'error', error: "New password and repeat new password don't match"});
-	}
+  if(req.body.newPassword !== req.body.repeatNewPassword) {
+    return res.json({status: 'error', error: "New password and repeat new password don't match"});
+  }
 
-	var newPassword = req.user.generateHash(req.body.newPassword);
-	User.findByIdAndUpdate(req.user._id, {
-		password: newPassword
-	}, function(err) {
-		if(err) {
-			return res.json({status: 'error', error: err.toString()});
-		} else {
-			return res.json({status: 'ok'});
-		}
-	})
+  var newPassword = req.user.generateHash(req.body.newPassword);
+  User.findByIdAndUpdate(req.user._id, {
+    password: newPassword
+  }, function(err) {
+    if(err) {
+      return res.json({status: 'error', error: err.toString()});
+    } else {
+      return res.json({status: 'ok'});
+    }
+  })
 });
 
 module.exports = router;

@@ -41,29 +41,35 @@ var Events = React.createClass({
        <Link to={'/events/'+id} key = {i} style={{margin:"10px"}}>
          <div className="square" id={e._id}>
                <div className="table">
-                   <div className="location"><span className="backed">{address}</span></div>
-                   <div className="time"> <span className="backed"> From {startDate} {startHour} To {endDate} {endHour}</span></div>
+                   <div className="location">
+                    <span className="backed">{address}
+                    </span>
+                   </div>
+                   <div className="time"> 
+                    <span className="backed"> From {startDate} {startHour} To {endDate} {endHour}
+                    </span>
+                     <button className="btn btn-success float-right" margin="5">Edit event</button>
+                     <button className="btn btn-success float-right" margin="5">See Hosts</button>
+                   </div>
                </div>
          </div>
        </Link>
      );
    }.bind(this));
    return <div>
-
-   <div className='panel panel-default'>
-          <div className='panel-heading'>
-            <h3 className="panel-title">Events</h3>
+            <div className="container events">
+              <div className='panel panel-default'>
+                <div className='panel-heading'>
+                  <h3 className="panel-title">Events</h3>
+                </div>
+                  <div className='panel-body'>
+                    <div className="form-group row">
+                      <div className="squaresContainer">{userSquare}</div>
+                    </div>
+                  </div>
+              </div>
+            </div>
           </div>
-          <div className='panel-body'>
-            <div className="form-group row">
-
-   <div className="squaresContainer">{userSquare}</div>
-
-        </div>
-       </div>
-       </div>
-
-   </div>
  }
 });
 

@@ -229,3 +229,11 @@ body {
 .tabs__content {
   margin-bottom: -20px;
 }
+.squaresContainer{
+  margin-left: 5px;
+  max-width: 700px;
+  min-width: 300px;
+}
+.events{
+  margin-top: 20px;
+}

@@ -23,8 +23,10 @@ class TopNavBar extends React.Component{
 	render() {
 
 		var optionsGuest = <ul className="nav navbar-nav navbar-right">
-								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Sign Up</Link></li>
-								<li><Link to="login"><span className="glyphicon glyphicon-log-in"></span> Log In</Link></li>
+								<li><Link to="workersignup"><span className="glyphicon glyphicon-user"></span> Find Jobs</Link></li>
+								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Find Hosts</Link></li>
+								<li><Link to="login"><span className="glyphicon glyphicon-log-in"></span> Login</Link></li>
+
 								</ul>;
 
 		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
@@ -56,7 +58,7 @@ class TopNavBar extends React.Component{
 							<span className="icon-bar"></span>
 						</button>
 						<Link to="/" className="navbar-brand">
-							Bolt Data
+							Platform
 						</Link>
 					</div>
 					<div className="collapse navbar-collapse" id="collapsibleTopNavbar">

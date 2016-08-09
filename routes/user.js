@@ -5,6 +5,7 @@ var Client = require('../models/client')
 var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
+var Availability=require('../models/availability');
 var geocoder = NodeGeocoder({
   provider: "google",
   apiKey: process.env.GEOCODING_API_KEY,
@@ -95,7 +96,64 @@ router.post('/user/find',function(req,res){
   })
 })
 
-
+router.post("/sendDayAndTime",function(req,res){
+	req.body.time =JSON.parse(req.body.time)
+	var day = req.body.day;
+	var time = req.body.time;
+	var user = req.user._id;
+	console.log("INSIDE AJAX SEND DAY AND TIME", time)
+	Availability.findOne({user:req.user.profile},function(err,a){
+		console.log("AAAAAAAAA",req.user.profile)
+		if(!a){
+			var aa = new Availability({
+				times: [
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				],
+				user: req.user.profile
+			})
+			aa.save(function(err,aa){
+				if (err){
+					console.log("creation error", err);
+					res.json({success:false,error:err})
+				}
+				console.log("aa",aa)
+				var id = aa._id
+				var newModel = aa 
+				console.log(newModel.times[day])
+				var timesInThatDay=newModel.times[day];
+				console.log("timesInThatDay",timesInThatDay)
+				for (var i=0;i<time.length;i++){
+					console.log("timesiii",time[i]);
+					console.log("timeiiiiii2",timesInThatDay)
+					newModel.times[day][time[i]] = 1;
+				}
+				Availability.findByIdAndUpdate(id, newModel,function(err){
+					if (err){res.json({success:false,error:err})}
+					else{res.json({success:true})}
+				})
+			})
+		}
+		else{
+		
+				var id=a._id
+				var newModel = a
+				for (var i=0;i<time.length;i++){
+					console.log("timesiii",time[i]);
+					newModel.times[day][time[i]] = 1;
+				}
+				Availability.findByIdAndUpdate(id, newModel,function(err){
+					if (err){res.json({success:false,error:err})}
+					else{res.json({success:true})}
+				})
+			}
+		});
+})
 // returns user object with profile information
 router.post('/user/profile', function(req, res) {
   res.json(req.user);

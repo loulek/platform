@@ -37,87 +37,88 @@ class CreateEvent extends React.Component {
 		}
 	}
 
-componentDidMount(){
-	var neweventData = {
-		address: $('#address').val(),
-		startDate: new Date(this.props.startDate)||$('#startDate').val(),
-		endDate: new Date(this.props.endDate)||$('#endDate').val(),
-		startHour: $('#startHour').val(),
-		endHour: $('#endHour').val(),
-		workerNumber: $('#workerNumber').val()
-	};
-	this.setState({
-		eventData: neweventData,
-		editContact: false
-	});
-	$.ajax({
-		url: '/search',
-		dataType: 'json',
-		type: 'POST',
-		data: {address: $('#address').val()},
-		success: function(users){
-			this.setState({
-				users:users,
-				oldusers:users
-			})
-			console.log("users", users)
-		}.bind(this),
-		error: function(err){
-			console.log("error")
-		}
-	})
-}
+	componentDidMount(){
+		var neweventData = {
+			address: this.state.eventData.address,
+			startDate: new Date(this.props.startDate)|| this.state.eventData.startDate,
+			endDate: new Date(this.props.endDate)|| this.state.eventData.endDate,
+			startHour: this.state.eventData.startHour,
+			endHour: this.state.eventData.endHour,
+			workerNumber: this.state.eventData.workerNumber
+		};
+		this.setState({
+			eventData: neweventData,
+			editContact: false
+		});
+		$.ajax({
+			url: '/search',
+			dataType: 'json',
+			type: 'POST',
+			data: {address: $('#address').val()},
+			success: function(users){
+				this.setState({
+					users:users,
+					oldusers:users
+				})
+				console.log("users", users)
+			}.bind(this),
+			error: function(err){
+				console.log("error")
+			}
+		})
+	}
 
 
-handleChange(e) {
-		 this.setState({
-			 value: e.target.value
-		 });
-	 }
+	handleChange(e) {
+		this.setState({
+			value: e.target.value
+		});
+	}
 
-reset(e){
-	e.preventDefault(e)
-	$('input:checkbox').removeAttr('checked');
-	var users=this.state.oldusers
-	this.setState({users:users})
-}
+	reset(e){
+		e.preventDefault(e)
+		$('input:checkbox').removeAttr('checked');
+		var users=this.state.oldusers
+		this.setState({users:users})
+	}
 
 	_searchEvent(e) {
-			e.preventDefault();
-			console.log("tststtst", this.state)
-			// if (typeO$('#workerNumber').val())
-			var neweventData = {
-				address: $('#address').val(),
-				startDate: this.state.eventData.startDate,
-        endDate: this.state.eventData.endDate,
-				startHour: $('#startHour').val(),
-				endHour: $('#endHour').val(),
-				workerNumber: $('#workerNumber').val()
-			};
-			this.setState({
-				eventData: neweventData,
-				editContact: false
-			});
-			$.ajax({
-	      url: '/search',
-	      dataType: 'json',
-	      type: 'POST',
-	      data: {address: $('#address').val()},
-	      success: function(users){
-
-					this.setState({
-	          users:users,
-						filter1:[],
-						filter2:[]
-	        })
-	        console.log("users", users)
-	      }.bind(this),
-	      error: function(err){
-	        console.log("error")
-	        if (err.error){alert("invalid address")}
-	      }
-	    })
-		}
+		e.preventDefault();
+		console.log("tststtst", this.state)
+		// if (typeO$('#workerNumber').val())
+		var neweventData = {
+			address: this.state.eventData.address,
+			startDate: this.state.eventData.startDate,
+			endDate: this.state.eventData.endDate,
+			startHour: this.state.eventData.startHour,
+			endHour: this.state.eventData.endHour,
+			workerNumber: this.state.eventData.workerNumber,
+		};
+		this.setState({
+			eventData: neweventData,
+			editContact: false
+		});
+		$.ajax({
+			url: '/search',
+			dataType: 'json',
+			type: 'POST',
+			data: {address: $('#address').val()},
+			success: (users) => {
+				this.setState({
+					users:users,
+					filter1:[],
+					filter2:[]
+				})
+				console.log("users", users)
+			},
+			error: function(err){
+				console.log("error")
+				if (err.error) {
+					alert("invalid address")
+				}
+			}
+		})
+	}
 
 _createNewEventOrUpdate(e){
 	e.preventDefault();
@@ -125,75 +126,78 @@ _createNewEventOrUpdate(e){
 	$.ajax({
 		type: "GET",
 		url:'/checkLoggedIn',
-		success:function(resp){
+		success:(resp) => {
+
+
 			if (resp.authenticated===true){
 				if (!that.state.eventId){
-				$.ajax({
-							type: "POST",
-							// specify the url we want to upload our file to
-							url: '/event/new',
-							// this is how we pass in the actual file data from the form
-							data: {
-								title: $('#title').val(),
-								address: $('#address').val(),
-								startDate: $('#startDate').val(),
-								endDate: $('#endDate').val(),
-								startHour: $('#startHour').val(),
-								endHour: $('#endHour').val(),
-								workerNumber: $('#workerNumber').val(),
-								description:$('#description').val()
-				},
-							success: function(response){
-							console.log("response", response.event);
-							var id=response.event
-							that.setState({eventId: id})
-							alert("SUCCESS CREATING A NEW EVENT!")
-						//   this.context.router.push({
-						//   pathname: '/search/'+id,
-						//   query: { modal: true },
-						//   state: { fromDashboard: true }
-						// })
-							},
-							error: function(error){
+					console.log("Data I'm sending: ", this.state.eventData);
+					$.ajax({
+						type: "POST",
+						// specify the url we want to upload our file to
+						url: '/event/new',
+						// this is how we pass in the actual file data from the form
+						data: {
+							title: this.state.eventData.title,
+							address: this.state.eventData.address,
+							startDate: this.state.eventData.startDate,
+							endDate: this.state.eventData.endDate,
+							startHour: this.state.eventData.startHour,
+							endHour: this.state.eventData.endHour,
+							workerNumber: this.state.eventData.workerNumber,
+							description: this.state.eventData.description
+						},
+						success: function(response){
+						console.log("response", response.event);
+						var id=response.event
+						that.setState({eventId: id})
+						alert("SUCCESS CREATING A NEW EVENT!")
+					//   this.context.router.push({
+					//   pathname: '/search/'+id,
+					//   query: { modal: true },
+					//   state: { fromDashboard: true }
+					// })
+						},
+						error: function(error){
 							console.log("error", error);
 							if(!error.responseJSON.success){
-									return alert(error.responseJSON.error)
-								}
+								return alert(error.responseJSON.error)
 							}
-						})
-					}
+						}
+					})
+				}
 			else{
-					console.log("something here")
-					var id=that.state.eventId
-					$.ajax({
-								type: "POST",
-								// specify the url we want to upload our file to
-								url: '/updateEvent/'+id,
-								// this is how we pass in the actual file data from the form
-								data: {
-									title: $('#title').val(),
-									address: $('#address').val(),
-									startDate: $('#startDate').val(),
-									endDate: $('#endDate').val(),
-									startHour: $('#startHour').val(),
-									endHour: $('#endHour').val(),
-									workerNumber: $('#workerNumber').val(),
-									description:$('#description').val()
+				console.log("something here")
+				var id = that.state.eventId;
+				$.ajax({
+					type: "POST",
+					// specify the url we want to upload our file to
+					url: '/updateEvent/'+id,
+					// this is how we pass in the actual file data from the form
+					data: {
+						title: this.state.eventData.title,
+						address: this.state.eventData.address,
+						startDate: this.state.eventData.startDate,
+						endDate: this.state.eventData.endDate,
+						startHour: this.state.eventData.startHour,
+						endHour: this.state.eventData.endHour,
+						workerNumber: this.state.eventData.workerNumber,
+						description: this.state.eventData.description
 					},
-								success: function(response){
-								alert("SUCCESS UPDATING EVENT!")
-								},
-								error: function(error){
-								console.log("error", error);
-							}
-						})
+					success: function(response){
+						alert("SUCCESS UPDATING EVENT!")
+					},
+					error: function(error){
+						console.log("error", error);
+					}
+				})
 			}
 		}
 			else{
 				alert("PLEASE LOG IN FIRST!")
 			}
 		},
-		error:function(err){
+		error:(err) =>{
 			if (err){console.log("error in creating event",err); alert("PLESASE LOG IN FIRST!")}
 		}
 	})
@@ -202,7 +206,7 @@ _createNewEventOrUpdate(e){
 
 	_changeStart(e) {
 		var newState = Object.assign({}, this.state);
-		newState.eventData = Object.assign({}, newState.eventData, { startDate: e })
+		newState.eventData = Object.assign({}, newState.eventData, { startDate: e , endDate: e})
 		this.setState(newState)
 	}
 
@@ -210,6 +214,32 @@ _createNewEventOrUpdate(e){
 		var newState = Object.assign({}, this.state);
 		newState.eventData = Object.assign({}, newState.eventData, { endDate: e })
 		this.setState(newState)
+	}
+
+	suggestSelect(e) {
+		var eventData = Object.assign({}, this.state.eventData, { address: e.label })
+		this.setState({eventData: eventData})
+	}
+
+	startHourchange(e) {
+		var eventData = Object.assign({}, this.state.eventData, { startHour: e.target.value })
+		this.setState({eventData: eventData})
+	}
+	endHourchange(e) {
+		var eventData = Object.assign({}, this.state.eventData, { endHour: e.target.value })
+		this.setState({eventData: eventData})
+	}
+	titlechange(e) {
+		var eventData = Object.assign({}, this.state.eventData, { title: e.target.value })
+		this.setState({eventData: eventData})
+	}
+	workerNumberchange(e) {
+		var eventData = Object.assign({}, this.state.eventData, {workerNumber: e.target.value})
+		this.setState({eventData: eventData})
+	}
+	descriptionchange(e) {
+		var eventData = Object.assign({}, this.state.eventData, {description: e.target.value})
+		this.setState({eventData: eventData})
 	}
 
 
@@ -222,15 +252,15 @@ _createNewEventOrUpdate(e){
 										<div className='panel-body'>
 												<div className="form-group row">
 														<div className="col-sm-4">
-																<input type="text" placeholder="Nom d'événement" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="title"/>
+																<input type="text" placeholder="Nom d'événement" className="form-control" name="title" onChange={this.titlechange.bind(this)} value={this.state.eventData.title} />
 														</div>
 														<div className="col-sm-6">
-														<Geosuggest inputClassName="form-control" placeholder="Adresse" initialValue={this.state.eventData.address} id="address" />
+														<Geosuggest inputClassName="form-control" placeholder="Adresse" initialValue={this.state.eventData.address} onSuggestSelect={this.suggestSelect.bind(this)} />
 														</div>
 												</div>
 												<div className="form-group row">
 														<div className="col-sm-4">
-																<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="workerNumber">
+																<select className="form-control" value={this.state.eventData.workerNumber} name="workerNumber" onChange={this.workerNumberchange.bind(this)}>
 																		<option value="" selected disabled>Nombre dHôtes(ses)</option>
 																		<option value='1'>1</option>
 																		<option value='2'>2</option>
@@ -241,11 +271,11 @@ _createNewEventOrUpdate(e){
 																		<option value='7'>7</option>
 																		<option value='8'>8</option>
 																		<option value='9'>9</option>
-																		<option value='10+'>10+</option>
+																		<option value='10'>10</option>
 																</select>
 														</div>
 														<div className="col-sm-3">
-																<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="startHour">
+																<select className="form-control" value={this.state.eventData.startHour}  name="startHour" onChange={this.startHourchange.bind(this)}>
 																		<option value="" selected disabled>Heure de début</option>
 																		<option value='7:00'>7:00</option>
 																		<option value='7:30'>7:30</option>
@@ -284,7 +314,7 @@ _createNewEventOrUpdate(e){
 																</select>
 														</div>
 														<div className="col-sm-3">
-																<select className="form-control" defaultValue={this.state.eventData.workerNumber} id="endHour">
+																<select className="form-control" value={this.state.eventData.endHour} name="endHour" onChange={this.endHourchange.bind(this)}>
 																		<option value="" selected disabled>Heure de fin</option>
 																		<option value='7:30'>7:30</option>
 																		<option value='8:00'>8:00</option>
@@ -333,7 +363,7 @@ _createNewEventOrUpdate(e){
 												</div>
 												<div className="form-group row">
 														<div className="col-sm-10">
-																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="firstName" defaultValue={this.state.eventData.title} id="description"/>
+																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="description" value={this.state.eventData.description} onChange={this.descriptionchange.bind(this)} />
 														</div>
 												</div>
 
@@ -639,7 +669,7 @@ class MyDatePicker extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-	    this.setState({ datetime: nextProps.datetime })
+		this.setState({ datetime: nextProps.datetime })
 	}
 
 	render() {
@@ -656,53 +686,53 @@ class MyDatePicker extends React.Component {
 						moment: {
 							lang: 'fr',
 							settings: {
-					        months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
-					        monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
-					        monthsParseExact : true,
-					        weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
-					        weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-					        weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
-					        weekdaysParseExact : true,
-					        longDateFormat : {
-					            LT : 'HH:mm',
-					            LTS : 'HH:mm:ss',
-					            L : 'DD/MM/YYYY',
-					            LL : 'D MMMM YYYY',
-					            LLL : 'D MMMM YYYY HH:mm',
-					            LLLL : 'dddd D MMMM YYYY HH:mm'
-					        },
-					        calendar : {
-					            sameDay: '[Aujourd\'hui à] LT',
-					            nextDay: '[Demain à] LT',
-					            nextWeek: 'dddd [à] LT',
-					            lastDay: '[Hier à] LT',
-					            lastWeek: 'dddd [dernier à] LT',
-					            sameElse: 'L'
-					        },
-					        relativeTime : {
-					            future : 'dans %s',
-					            past : 'il y a %s',
-					            s : 'quelques secondes',
-					            m : 'une minute',
-					            mm : '%d minutes',
-					            h : 'une heure',
-					            hh : '%d heures',
-					            d : 'un jour',
-					            dd : '%d jours',
-					            M : 'un mois',
-					            MM : '%d mois',
-					            y : 'un an',
-					            yy : '%d ans'
-					        },
-					        ordinalParse: /\d{1,2}(er|)/,
-					        ordinal : function (number) {
-					            return number + (number === 1 ? 'er' : '');
-					        },
-					        week : {
-					            dow : 1, // Monday is the first day of the week.
-					            doy : 4  // The week this contains Jan 4th is the first week of the year.
-					        }
-					    }
+							months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+							monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+							monthsParseExact : true,
+							weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+							weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+							weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
+							weekdaysParseExact : true,
+							longDateFormat : {
+								LT : 'HH:mm',
+								LTS : 'HH:mm:ss',
+								L : 'DD/MM/YYYY',
+								LL : 'D MMMM YYYY',
+								LLL : 'D MMMM YYYY HH:mm',
+								LLLL : 'dddd D MMMM YYYY HH:mm'
+							},
+							calendar : {
+								sameDay: '[Aujourd\'hui à] LT',
+								nextDay: '[Demain à] LT',
+								nextWeek: 'dddd [à] LT',
+								lastDay: '[Hier à] LT',
+								lastWeek: 'dddd [dernier à] LT',
+								sameElse: 'L'
+							},
+							relativeTime : {
+								future : 'dans %s',
+								past : 'il y a %s',
+								s : 'quelques secondes',
+								m : 'une minute',
+								mm : '%d minutes',
+								h : 'une heure',
+								hh : '%d heures',
+								d : 'un jour',
+								dd : '%d jours',
+								M : 'un mois',
+								MM : '%d mois',
+								y : 'un an',
+								yy : '%d ans'
+							},
+							ordinalParse: /\d{1,2}(er|)/,
+							ordinal : function (number) {
+								return number + (number === 1 ? 'er' : '');
+							},
+							week : {
+								dow : 1, // Monday is the first day of the week.
+								doy : 4  // The week this contains Jan 4th is the first week of the year.
+							}
+						}
 						}
 					}}
 				/>

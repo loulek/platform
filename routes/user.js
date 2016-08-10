@@ -112,20 +112,87 @@ router.post('/user/profile', function(req, res) {
 
 router.get('/events',function(req,res){
   console.log("INSIDE EVENTS ROUTE")
-  Event.find().exec(function(err,events){
+  Event.find({
+    organizer: req.user._id
+  }).exec(function(err,events){
     if (err){res.status(500).send("errrrrr")}
     res.json(events)
   })
 })
 
+// update event information
+router.post('/user/update-event', function(req, res) {
+  console.log("EVEEEEEENNTTTTTTTTTTTTTTTTTTT OBJECT", req.body)
+ 
+  if(req.body) {
+    geocoder.geocode(req.body.address, function(err, data) {
+      if(data){
+        var longitude_new = data[0].longitude;
+        var latitude_new = data[0].latitude;
+        var location = [longitude_new, latitude_new]
+      }
+       Event.findByIdAndUpdate(req.body._id, {
+        title: req.body.title,
+        address: req.body.address,
+        location:location || null,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        description: req.body.description,
+        startHour: req.body.startHour,
+        endHour: req.body.endHour,
+        workerNumber: req.body.workerNumber
+      }, function(err) {
+        if(err) {
+          console.log("THIS IS THE ERROR HAHAHA", err)
+          return res.json({status: 'error', error: err.toString()});
+        } else {
+          return res.json({status: 'ok'});
+        }
+      })
+    });
+  } else {
+    geocoder.geocode(req.body.address, function(err, data) {
+      if(data){
+        var longitude = data[0].longitude;
+        var latitude = data[0].latitude;
+        var location = [longitude, latitude]
+      }
+
+        var eventProfile = new Event({
+          title: req.body.title,
+          address: req.body.address,
+          startDate: req.body.startDate,
+          endDate: req.body.endDate,
+          startHour: req.body.startHour,
+          endHour: req.body.endHour,
+          description: req.body.description,
+          workerNumber: req.body.workerNumber,
+          location:location || null,
+
+        });
+      })
+      eventProfile.save(function(err, event) {
+        if(err) {
+          return res.json({status: 'error', error: err.toString()});
+        } else {
+          Event.findByIdAndUpdate(req.event._id, {
+            event: event
+          }, function(err) {
+            if(err) {
+              return res.json({status: 'error', error: err.toString()});
+            } else {
+              return res.json({status: 'ok'});
+            }
+          });
+        }
+      });
+    }
+  });
+
+
 // update user information
 router.post('/user/update-profile', function(req, res) {
-  console.log("USERRRR OBJECT", req.user)
-  console.log("USERRRR OBJECT PROFILE", req.user.profile)
-  console.log("USERRRR OBJECT CLIENT", req.user.client)
-
-
-
+ 
   if(req.user.profile) {
     geocoder.geocode(req.body.address, function(err, data) {
       if(data){

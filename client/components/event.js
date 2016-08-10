@@ -1,5 +1,6 @@
 var React = require('react');
 import { hashHistory, Router, Route, Link, withRouter } from 'react-router'
+
 var Events = React.createClass({
  getInitialState: function() {
    return {
@@ -25,6 +26,18 @@ var Events = React.createClass({
    });
  },
 
+handleClick3(e){
+  e.preventDefault;
+  console.log("starting!")
+  this.context.router.push({
+    query: {
+      id: e._id,
+      startDate: e.startDate,
+      endDate: e.endDate
+    },
+  });
+},
+
 
  render: function(){
    console.log("RENDERING", this.state.events);
@@ -38,25 +51,27 @@ var Events = React.createClass({
      var endHour=e.endHour;
      var id=e._id
        userSquare.push(
-       <Link to={'/events/'+id} key = {i} style={{margin:"10px"}}>
+        
          <div className="square" id={e._id}>
                <div className="table">
+               <Link to={`/event/${id}`} onClick={this.handleClick3}>
                    <div className="location">
-                    <span className="backed">{address}
+                    <span className="backed">
+                     {address}
                     </span>
                    </div>
                    <div className="time"> 
                     <span className="backed"> From {startDate} {startHour} To {endDate} {endHour}
                     </span>
-                     <button className="btn btn-success float-right" margin="5">Edit event</button>
-                     <button className="btn btn-success float-right" margin="5">See Hosts</button>
+                     <button className="btn btn-success float-right">See Hosts</button>
                    </div>
+                   </Link>
                </div>
          </div>
-       </Link>
      );
-   }.bind(this));
-   return <div>
+   }.bind(this))
+
+   return (<div>
             <div className="container events">
               <div className='panel panel-default'>
                 <div className='panel-heading'>
@@ -69,8 +84,16 @@ var Events = React.createClass({
                   </div>
               </div>
             </div>
-          </div>
- }
+          </div>);
+
+
+ },
+
+        
 });
+
+Events.contextTypes = {
+  router: Object
+}
 
 module.exports = Events

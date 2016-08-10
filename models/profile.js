@@ -13,7 +13,7 @@ var profileSchema = mongoose.Schema({
     profileImageUrl : {type: String, required: false},
     resumeImageUrl  : {type: String, required: false},
     address			: {type: String, required: false},
-    availability 	: {type: mongoose.Schema.Types.ObjectId, ref: "availability"},
+    availability 	: {type: mongoose.Schema.Types.ObjectId, ref: "Availability"},
 	job          	: {type: Array,  required: false},
     createdAt		: {type: Date, default: Date.now}
 });

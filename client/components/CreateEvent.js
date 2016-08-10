@@ -20,7 +20,8 @@ class CreateEvent extends React.Component {
 				startHour: null,
 				endHour: null,
 				workerNumber: null,
-				budget: null
+				budget: null, 
+				hostess: null
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -38,6 +39,9 @@ class CreateEvent extends React.Component {
 	}
 
 	componentDidMount(){
+		var user = this.context.getUser();
+		console.log("Do I have the user?", user);
+		console.log("user type:", user.type);
 		var neweventData = {
 			address: this.state.eventData.address,
 			startDate: new Date(this.props.startDate)|| this.state.eventData.startDate,
@@ -54,7 +58,8 @@ class CreateEvent extends React.Component {
 			url: '/search',
 			dataType: 'json',
 			type: 'POST',
-			data: {address: $('#address').val()},
+			data: {	address: this.state.eventData.address
+			},
 			success: function(users){
 				this.setState({
 					users:users,
@@ -92,7 +97,7 @@ class CreateEvent extends React.Component {
 			endDate: this.state.eventData.endDate,
 			startHour: this.state.eventData.startHour,
 			endHour: this.state.eventData.endHour,
-			workerNumber: this.state.eventData.workerNumber,
+			workerNumber: this.state.eventData.workerNumber
 		};
 		this.setState({
 			eventData: neweventData,
@@ -102,7 +107,8 @@ class CreateEvent extends React.Component {
 			url: '/search',
 			dataType: 'json',
 			type: 'POST',
-			data: {address: $('#address').val()},
+			data: {	address: this.state.eventData.address
+			},
 			success: (users) => {
 				this.setState({
 					users:users,
@@ -631,6 +637,8 @@ if (this.state.users.length>0){
 		for (var i=0;i<users.length;i++){
 			if (users[i].salary<=val){returnusers.push(users[i])}
 		}
+	var user = this.context.getUser()
+	if(user.type === "Profile" || user.type === "Client"){
 		returnusers.forEach(function(u){
 		usersquare.push(
 					<div>
@@ -644,6 +652,22 @@ if (this.state.users.length>0){
 					</div>
 					)
 			})
+		} else {
+		returnusers.forEach(function(u){
+		usersquare.push(
+					<div>
+						<div className="img">
+						<Link to={`/signup`} onClick={that.handleClick3}><img src={u.profileImageUrl} alt="Image" /></Link>
+						</div>
+						<div className="text_image">
+							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
+							<button className="btn btn-success">Contact</button>
+						</div>
+					</div>
+					)
+			})	
+
+		}
 		}
 
 		return (
@@ -746,7 +770,8 @@ class MyDatePicker extends React.Component {
 }
 
 CreateEvent.contextTypes = {
-	router: Object
+	router: Object,
+	getUser: Object
 }
 
 

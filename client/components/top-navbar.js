@@ -35,6 +35,8 @@ class TopNavBar extends React.Component{
 									<ul className="dropdown-menu">
 										<li><Link to="/account"><i className="fa fa-cog"></i> Account Settings</Link></li>
 										<li role="separator" className="divider"></li>
+										<li><Link to="/events"><i className="fa fa-cog"></i> Events</Link></li>
+										<li role="separator" className="divider"></li>
 										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
 									</ul>
 								</li>

@@ -1,8 +1,20 @@
 import React from "react";
 import Geosuggest from 'react-geosuggest';
+import BigCalendar from 'react-big-calendar';
+import moment from 'moment';
+
 var Lightbox = require('react-image-lightbox');
 
+// Using moment.js as the localizer instead of globalize.js
+BigCalendar.setLocalizer(
+	BigCalendar.momentLocalizer(moment)
+);
+
 //TABS
+	Date.prototype.getWeek = function() {
+	    var onejan = new Date(this.getFullYear(),0,1);
+	    return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+	} 
 
 const Tabs = React.createClass({
 	displayName: "Tabs",
@@ -560,7 +572,45 @@ class EditProfile extends React.Component {
 		}
 	}
 
+	onSelectSlot(data){
+		var arrayOfTimes = [];
+		var dayOfWeek = data.slots[0].getDay();
+		console.log(data.slots[0].getWeek());
+		if(data.start.getDay() === data.end.getDay())
+		{
+				for(var i = 0; i < data.slots.length-1; i++)
+				{
+					arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
+				}
+				console.log(arrayOfTimes)
+				$.ajax("/sendDayAndTime",{
+					type: "POST",
+					data: {
+						day: dayOfWeek,
+						time: JSON.stringify(arrayOfTimes)
+					},
+					success:function(resp){
+						console.log("success",resp)
+						alert("success")
+					},
+					error:function(err){
+						console.log("EEEEEE",err)
+					}
+				})
+		}
+	}
+
 	_editCalendar(isEnabled) {
+		var calendar = <BigCalendar
+								events={[{
+								    'title': 'DTS ENDS',
+								    'start': new Date(),
+								    'end': new Date(2016, 7, 10, 12, 0, 0)
+								}]}
+								defaultDate={new Date()}
+							    selectable={true}
+							    onSelectSlot={this.onSelectSlot}
+						/>
 		if(isEnabled) {
 			return (
 				<div className='panel panel-default'>
@@ -570,7 +620,9 @@ class EditProfile extends React.Component {
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="salary" defaultValue={this.state.profileData.salary} id="salary"/>
 							</div>
+							
 						</div>
+						{calendar}
 						<button className="btn btn-success margin5 float-right" onClick={this._updateCalendar.bind(this)}>Save</button>
 						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editCalendar: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
 					</div>
@@ -585,7 +637,9 @@ class EditProfile extends React.Component {
 						<div className="col-sm-10">
 							<p className="form-control-static">{this.state.profileData.salary}</p>
 						</div>
+							
 						</div>
+						{calendar}
 						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar: true})}.bind(this)}>Modifier</button>
 					</div>
 				</div>

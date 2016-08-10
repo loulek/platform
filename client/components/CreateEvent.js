@@ -120,6 +120,7 @@ class CreateEvent extends React.Component {
 		})
 	}
 
+
 _createNewEventOrUpdate(e){
 	e.preventDefault();
 	var that=this
@@ -204,17 +205,18 @@ _createNewEventOrUpdate(e){
 
 }
 
-	_changeStart(e) {
-		var newState = Object.assign({}, this.state);
-		newState.eventData = Object.assign({}, newState.eventData, { startDate: e , endDate: e})
-		this.setState(newState)
-	}
+_changeStart(e) {
+	var newState = Object.assign({}, this.state);
+	newState.eventData = Object.assign({}, newState.eventData, { startDate: e })
+	this.setState(newState)
+}
 
-	_changeEnd(e) {
-		var newState = Object.assign({}, this.state);
-		newState.eventData = Object.assign({}, newState.eventData, { endDate: e })
-		this.setState(newState)
-	}
+
+_changeEnd(e) {
+	var newState = Object.assign({}, this.state);
+	newState.eventData = Object.assign({}, newState.eventData, { endDate: e })
+	this.setState(newState)
+}
 
 	suggestSelect(e) {
 		var eventData = Object.assign({}, this.state.eventData, { address: e.label })
@@ -413,8 +415,9 @@ _createNewEventOrUpdate(e){
 						);
 			}
 
+
 handleClick(e){
-		var val=e.target.value;
+	var val=e.target.value;
 		var that=this
 		var filter1=this.state.filter1
 		var filter2=this.state.filter2

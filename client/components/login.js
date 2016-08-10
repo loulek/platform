@@ -25,6 +25,7 @@ class Login extends React.Component {
 			success: function(data) {
 			if(data.status === 'ok' && data.user.confirmed === true) {
 				sessionStorage.auth = true;
+				this.context.setUser(data.user);
 				this.context.router.push('/events');
 			} else if(data.status === 'error') {
 				this.setState({
@@ -89,7 +90,8 @@ class Login extends React.Component {
 }
 
 Login.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    setUser: Object
 };
 
 export default Login;

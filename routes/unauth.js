@@ -46,7 +46,8 @@ router.post('/event/new',function(req,res){
         endHour: req.body.endHour,
         workerNumber: req.body.workerNumber,
         description:req.body.description,
-        location: [longitude_new,latitude_new]
+        location: [longitude_new,latitude_new],
+        hostess: []
       })
     .save(function(err, e){
       if (err){
@@ -107,6 +108,14 @@ router.post('/findProfile',function(req,res){
   if (c1.length===0){c1=["English","Italiano","Français"]}
   console.log("INSIDE, filters",c1, c2)
   geocoder.geocode(req.body.address, function(err, data) {
+    if(err){
+      console.log("err", err);
+      return err
+    }
+    if(data.length === 0){
+      console.log("data is undefined")
+      return;
+    }
     var longitude_new = data[0].longitude;
     var latitude_new = data[0].latitude;
     Profile.find( { specialty: { $in: c1 },job: { $in: c2 },location: {
@@ -134,7 +143,6 @@ router.post('/contact',function(req,res){
 // GET /event/:id
 //  This route retrieves an event by its Id and all the informations with it.
 router.get('/event/:id',function(req,res){
-  console.log("This is the body I got2222:", req.body);
   Event.findById(req.params.id, function(err, event){
     if(err) return res.status(500).json({
       "success": false,
@@ -144,6 +152,35 @@ router.get('/event/:id',function(req,res){
       "success": true,
       "event": event
     })
+  })
+});
+
+router.post('/event/:id', function(req, res){
+  console.log("EVENTTTTT OBJECT")
+  Event.findById(req.params.id, 
+    function(err, event){
+      if(err) return res.status(500).json({
+        "success": false,
+        "error": err
+      })
+        var arr = event.hostess
+        console.log("EVENT HOSTESS", arr);
+        console.log("req.user._id", req.user._id);
+        arr.push(req.user._id);
+        Event.findByIdAndUpdate(req.params.id,{
+          hostess: arr
+        }, function(err,event){
+            if(err) return res.status(500).json({
+              "success": false,
+              "error": err
+            })
+            res.status(200).json({
+              "success": true,
+              "event": event
+            })
+        })
+        console.log("EVENT HOSTESS 2", arr)
+        
   })
 });
 
@@ -184,14 +221,12 @@ router.post('/search', function(req, res){
 })
 
 router.get('/confirmed/:id', function(req, res, next){
-  console.log("I AM IN CONFIRMEEEEDDD GOT HERE YOOOOO")
 
   var confirmId = req.params.id;
 
   // find user by token
   // update them
   User.findOne({confirmId : confirmId}, function(err, user){
-    console.log("USERRRRRRRCONFIRM", user)
     user.confirmed = true;
     user.save(function(err, e){
       if (err){
@@ -202,7 +237,6 @@ router.get('/confirmed/:id', function(req, res, next){
       }
       return res.redirect('/#/login');
     });
-    console.log("I AM BOUt TO REDIRECT HERE YOOOOO")
   })
 
 })

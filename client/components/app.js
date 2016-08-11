@@ -8,8 +8,31 @@ import {Link} from "react-router";
 
 class App extends React.Component{
 
+	
+
+	setUser(user) {
+		console.log("[setting the user]");
+		this.setState({user: user});
+	}
+
+	getUser(user) {
+		console.log("[getting the user]");
+		return this.state.user;
+	}
+
+	getChildContext() {
+		return {
+			getUser: this.getUser.bind(this),
+			setUser: this.setUser.bind(this)
+		}
+	}
+
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			user: {}
+		};
 	}
 	componentWillMount(){
 		$.ajax({
@@ -44,4 +67,9 @@ App.contextTypes = {
     router: React.PropTypes.object.isRequired
 };
 
+
+App.childContextTypes = {
+    getUser: Object,
+    setUser: Object
+}
 export default App;

@@ -25,6 +25,7 @@ class Login extends React.Component {
 			success: function(data) {
 			if(data.status === 'ok' && data.user.confirmed === true) {
 				sessionStorage.auth = true;
+				this.context.setUser(data.user);
 				this.context.router.push('/events');
 			} else if(data.status === 'error') {
 				this.setState({
@@ -57,7 +58,7 @@ class Login extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"text-align" : "center", "color" : "white", "text-shadow": "2px 2px black"}}>Connexion</h2>
+			<h2 style={{"textAlign" : "center", "color" : "white", "textShadow": "2px 2px black"}}>Connexion</h2>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">
@@ -89,7 +90,8 @@ class Login extends React.Component {
 }
 
 Login.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    setUser: Object
 };
 
 export default Login;

@@ -32,6 +32,27 @@ var sendEmail = function(options) {
 	})
 }
 
+var sendForgetEmail = function(options) {
+	from_email = new helper.Email("louisbiret@gmail.com")
+	to_email = new helper.Email(options.email)
+	subject = "New password"
+	content = new helper.Content("text/html", "Afin de changer votre email, veuillez ouvrir ce lien: <a href='http://localhost:3000/#/change/" + options.id + "'>Cliquer ici</a>");
+	mail = new helper.Mail(from_email, subject, to_email, content)
+
+	var requestBody = mail.toJSON()
+
+	var request = sg.emptyRequest({
+		method: 'POST',
+		path: '/v3/mail/send',
+		body: requestBody
+	})
+	sg.API(request, function (error, response) {
+	  console.log(response.statusCode)
+	  console.log(response.body)
+	  console.log(response.headers)
+	})
+
+}
 
 
 module.exports = function(passport) {
@@ -87,9 +108,57 @@ module.exports = function(passport) {
 		});
 	});
 
+	router.post('/forgot', function(req, res){
+		var id = randomString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+		User.findOne({ 'email' : req.body.email}, function(err, user){
+			if (err) {
+				console.log("error", err)
+				 return res.status(500).json({
+		          "success" : false,
+		          "error" : err
+		      });
+			}
+			sendForgetEmail({
+				email: req.body.email,
+				id: id
+			});
+			user.blocked = true;
+			user.confirmId = id;
+			user.save(function(err, e){
+				if(err){
+					console.log("error", err);
+					return res.status(500).json({
+						"success" : false,
+						"error" : err
+					})
+				}
+			})
+			res.json({status: 'ok', user: user, redirect: '/login/'})
+		})	
+	});
+
+	router.post("/newpass", function(req, res){
+		console.log("req.body", req.body)		
+		User.findOne({confirmId: req.body.id}, function(err, user){
+			user.blocked = false;
+			user.password = User.generateHash(req.body.password);
+			user.save(function(err, e){
+				
+				if(err){
+					console.log("error", err);
+					return res.status(500).json({
+						"success": false,
+						"error": err
+					})
+				}
+			})
+			res.json({status: 'ok', user: user, redirect: '/login/'})
+		})
+	})
+
 	// POST process login
 	router.post('/login', passport.authenticate('local'), function(req, res, next) {
-		if (req.user.confirmed) { return res.json({status: 'ok', user: req.user});}
+		if (req.user.confirmed && !req.user.blocked) { return res.json({status: 'ok', user: req.user});}
 		else return res.status(400).json({status: 'ok', user: req.user});
 	});
 

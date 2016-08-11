@@ -169,6 +169,13 @@ router.post('/user/profile', function(req, res) {
 	// });
 });
 
+router.get('/user/calendar',function(req,res){
+  Availability.findOne({user:req.user.profile},function(err,calendar){
+    if (err){res.status(500).json("something wrong in calendar", err)}
+    res.json(calendar)
+  })
+})
+
 router.get('/events',function(req,res){
   console.log("INSIDE EVENTS ROUTE")
   Event.find({

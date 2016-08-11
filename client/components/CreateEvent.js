@@ -638,7 +638,10 @@ if (this.state.users.length>0){
 			if (users[i].salary<=val){returnusers.push(users[i])}
 		}
 	var user = this.context.getUser()
-	if(user.type === "Profile" || "Client"){
+	console.log("USERRRRR", user);
+	console.log("USERRRRR type", user.type);
+	if(user.type === "Profile" || user.type === "Client"){
+		console.log("I AM LOGED IN");
 		returnusers.forEach(function(u){
 		usersquare.push(
 					<div>
@@ -653,6 +656,7 @@ if (this.state.users.length>0){
 					)
 			})
 		} else {
+		console.log("I AM NOOOOT LOGED IN");
 		returnusers.forEach(function(u){
 		usersquare.push(
 					<div>

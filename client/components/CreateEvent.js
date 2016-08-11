@@ -641,12 +641,11 @@ if (this.state.users.length>0){
 		{returnusers2.push(returnusers[k])}
 	}
 
-		console.log("ARRR2",returnusers2,filter1)
+
 		for (var p=0;p<returnusers2.length;p++){
 		if (_.intersection(returnusers2[p].job, filter2).length > 0)
 		{returnusers3.push(returnusers2[p])}
 	}
-	console.log("ARRR3",filter2)
 }
 
 // for(var j=0;j<returnusers.length;j++){
@@ -662,8 +661,8 @@ if (this.state.users.length>0){
 
 	console.log("RETURNUSERS BEFORE FOR EACH", returnusers)
 	var user = this.context.getUser()
-	if(user.type === "Profile" || "Client"){
-		returnusers3.forEach(function(u){
+	if(user.type === "Profile" || user.type === "Client"){
+		returnusers.forEach(function(u){
 		usersquare.push(
 					<div>
 						<div className="img">
@@ -677,6 +676,7 @@ if (this.state.users.length>0){
 					)
 			})
 		} else {
+
 		returnusers3.forEach(function(u){
 		usersquare.push(
 					<div>
@@ -692,7 +692,6 @@ if (this.state.users.length>0){
 			})
 
 		}
-
 
 		return (
 				<div className="container">

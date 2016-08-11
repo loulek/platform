@@ -14,7 +14,7 @@ BigCalendar.setLocalizer(
 	Date.prototype.getWeek = function() {
 	    var onejan = new Date(this.getFullYear(),0,1);
 	    return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
-	} 
+	}
 
 const Tabs = React.createClass({
 	displayName: "Tabs",
@@ -117,8 +117,24 @@ class EditProfile extends React.Component {
 			tempSpecialty: [],
 			editContact: false,
 			editBio: false,
-			editCalendar: false
+			editCalendar: false,
+			availability:[]
 		}
+	}
+
+	componentDidMount(){
+		var that=this
+		$.ajax({
+			url:'/user/calendar',
+			type:"GET",
+			success:function(calendar){
+				console.log("calendar success",calendar)
+				that.setState({availability:calendar})
+			},
+			error:function(err){
+				if (err){console.log("error in calendar",err)}
+			}
+		})
 	}
 
 	componentWillMount() {
@@ -614,13 +630,13 @@ class EditProfile extends React.Component {
 		if(isEnabled) {
 			return (
 				<div className='panel panel-default'>
-					<div className='panel-body'>		
+					<div className='panel-body'>
 						<div className="form-group row">
 							<p className="col-sm-2 form-control-static"><b>Salaire:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="salary" defaultValue={this.state.profileData.salary} id="salary"/>
 							</div>
-							
+
 						</div>
 						{calendar}
 						<button className="btn btn-success margin5 float-right" onClick={this._updateCalendar.bind(this)}>Save</button>
@@ -637,7 +653,7 @@ class EditProfile extends React.Component {
 						<div className="col-sm-10">
 							<p className="form-control-static">{this.state.profileData.salary}</p>
 						</div>
-							
+
 						</div>
 						{calendar}
 						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar: true})}.bind(this)}>Modifier</button>

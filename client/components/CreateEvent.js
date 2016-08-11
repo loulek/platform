@@ -3,6 +3,7 @@ import Router from "react-router";
 import {Link} from "react-router";
 import Geosuggest from 'react-geosuggest';
 import Kronos from 'react-kronos';
+import _ from "underscore"
 
 class CreateEvent extends React.Component {
 	constructor(props, context) {
@@ -20,7 +21,7 @@ class CreateEvent extends React.Component {
 				startHour: null,
 				endHour: null,
 				workerNumber: null,
-				budget: null, 
+				budget: null,
 				hostess: null
 			},
 			tempSpecialty: [],
@@ -34,9 +35,12 @@ class CreateEvent extends React.Component {
 			filter1:[],
 			filter2:[],
 			oldusers:[],
-			eventId:null
+			eventId:null,
+			showFilters:false
 		}
+		this.invite = this.invite.bind(this);
 	}
+
 
 	componentDidMount(){
 		var user = this.context.getUser();
@@ -73,6 +77,12 @@ class CreateEvent extends React.Component {
 		})
 	}
 
+invite(e){
+	e.preventDefault();
+	var id=this.state.eventId;
+	var link='/event/'+id;
+	console.log("inside invite", link)
+}
 
 	handleChange(e) {
 		this.setState({
@@ -88,8 +98,8 @@ class CreateEvent extends React.Component {
 	}
 
 	_searchEvent(e) {
+		var that=this;
 		e.preventDefault();
-		console.log("tststtst", this.state)
 		// if (typeO$('#workerNumber').val())
 		var neweventData = {
 			address: this.state.eventData.address,
@@ -99,6 +109,7 @@ class CreateEvent extends React.Component {
 			endHour: this.state.eventData.endHour,
 			workerNumber: this.state.eventData.workerNumber
 		};
+		console.log("tststtst", neweventData)
 		this.setState({
 			eventData: neweventData,
 			editContact: false
@@ -107,13 +118,14 @@ class CreateEvent extends React.Component {
 			url: '/search',
 			dataType: 'json',
 			type: 'POST',
-			data: {	address: this.state.eventData.address
-			},
+			data: {address: that.state.eventData.address},
 			success: (users) => {
 				this.setState({
 					users:users,
 					filter1:[],
-					filter2:[]
+					filter2:[],
+					showFilters:true,
+					oldusers:users
 				})
 				console.log("users", users)
 			},
@@ -252,6 +264,49 @@ _changeEnd(e) {
 
 
 	_createEvent(isEnabled) {
+		var filters=[];
+		if (this.state.showFilters){
+			filters.push(
+				<div className='panel-heading'>
+								<div className="panel-title">
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
+								</label>
+								</div>
+								<div className="panel-title">
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
+								</label>
+								<label className="checkbox-inline">
+									<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
+								</label>
+								</div>
+							<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
+							{this.state.value}
+							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
+
+							</div>
+			)
+		}
+
 		return (
 								<div className='panel panel-default'>
 										<div className='panel-heading'>
@@ -374,45 +429,7 @@ _changeEnd(e) {
 																<input type="text" placeholder="Détails du poste (ex: hôtes(ses) d’accueil, street marketeurs, animateurs, serveurs, barmans, voituriers...)" className="form-control" name="description" value={this.state.eventData.description} onChange={this.descriptionchange.bind(this)} />
 														</div>
 												</div>
-
-
-									<div className='panel-heading'>
-													<div className="panel-title">
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)}> Accueil événementiel </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)}> Accueil entreprise </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)}> Animation commerciale </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)}> Serveur </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)}> Voiturier </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)}> Barman </input>
-													</label>
-													</div>
-													<div className="panel-title">
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)}> English </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)}> Italiano </input>
-													</label>
-													<label className="checkbox-inline">
-														<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)}> Français </input>
-													</label>
-													</div>
-												<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
-												{this.state.value}
-												<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
-
-												</div>
+												{filters}
 												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
 												<button className="btn btn-success margin5 float-right" onClick={this._createNewEventOrUpdate.bind(this)} address={this.state.address}>Create Event or Update</button>
 
@@ -424,139 +441,160 @@ _changeEnd(e) {
 
 handleClick(e){
 	var val=e.target.value;
-		var that=this
-		var filter1=this.state.filter1
-		var filter2=this.state.filter2
-if (this.state.filter1.indexOf(val)===-1){
-				filter1.push(val)
-				$.ajax({
-					url: '/findProfile',
-					dataType: 'json',
-					type: 'POST',
-					data: {
-						criteria2:JSON.stringify(filter2),
-						criteria1: JSON.stringify(filter1),
-						address: $('#address').val()},
-					success: function(users){
-						console.log("users", users)
-						var newusers=users
-						for(var i=0;i<newusers.length;i++){
-							for (var j=0;j<newusers.length-1;j++){
-								if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
-							}
-						}
-						console.log("newusers",newusers)
+	var that=this
+	var filter1=this.state.filter1
+	if (filter1.indexOf(val)===-1){
+		filter1.push(val)
+		// var users=this.state.users;
+		// var returnusers=[];
+		// users.forEach(function(u){
+		// 	var speciality=u.specialty
+		// 	for (var i=0;i<filter1.length;i++){
+		// 		if (speciality.indexOf(filter1[i])){
+		// 			returnusers.push(u)
+		// 		}
+		// 	}
+		// })
 
-
-						that.setState({
-							users:newusers,
-							filter1:filter1
-						})
-
-					},
-					error: function(err){
-						console.log("error",err)
-					}
-				})
-			}
-else{
-	filter1.splice(filter1.indexOf(val),1)
-	$.ajax({
-		url: '/findProfile',
-		dataType: 'json',
-		type: 'POST',
-		data: {
-			criteria2:JSON.stringify(filter2),
-			criteria1: JSON.stringify(filter1),
-			address: $('#address').val()},
-		success: function(users){
-			console.log("users", users)
-			var newusers=users
-			for(var i=0;i<newusers.length;i++){
-				for (var j=0;j<newusers.length-1;j++){
-					if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
-				}
-			}
-
-
-			that.setState({
-				users:newusers,
-				filter1:filter1
-			})
-
-		},
-		error: function(err){
-			console.log("error",err)
-		}
-	})
-}
+		that.setState({
+			filter1:filter1
+		})
+	}else{
+		filter1.splice(filter1.indexOf(val),1)
+		that.setState({filter1:filter1})
+	}
+// 	var filter2=this.state.filter2
+// if (this.state.filter1.indexOf(val)===-1){
+// 				filter1.push(val)
+// 				$.ajax({
+// 					url: '/findProfile',
+// 					dataType: 'json',
+// 					type: 'POST',
+// 					data: {
+// 						criteria2:JSON.stringify(filter2),
+// 						criteria1: JSON.stringify(filter1),
+// 						address: $('#address').val()},
+// 					success: function(users){
+// 						console.log("users", users)
+// 						var newusers=users
+// 						for(var i=0;i<newusers.length;i++){
+// 							for (var j=0;j<newusers.length-1;j++){
+// 								if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+// 							}
+// 						}
+// 						console.log("newusers",newusers)
+//
+//
+// 						that.setState({
+// 							users:newusers,
+// 							filter1:filter1
+// 						})
+//
+// 					},
+// 					error: function(err){
+// 						console.log("error",err)
+// 					}
+// 				})
+// 			}
+// else{
+// 	filter1.splice(filter1.indexOf(val),1)
+// 	$.ajax({
+// 		url: '/findProfile',
+// 		dataType: 'json',
+// 		type: 'POST',
+// 		data: {
+// 			criteria2:JSON.stringify(filter2),
+// 			criteria1: JSON.stringify(filter1),
+// 			address: $('#address').val()},
+// 		success: function(users){
+// 			console.log("users", users)
+// 			var newusers=users
+// 			for(var i=0;i<newusers.length;i++){
+// 				for (var j=0;j<newusers.length-1;j++){
+// 					if (newusers[j]["specialty"].length<newusers[j+1]["specialty"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+// 				}
+// 			}
+//
+//
+// 			that.setState({
+// 				users:newusers,
+// 				filter1:filter1
+// 			})
+//
+// 		},
+// 		error: function(err){
+// 			console.log("error",err)
+// 		}
+// 	})
+// }
 }
 
 handleClick2(e){
 	var val=e.target.value;
 	var that=this
-	var filter1=this.state.filter1
 	var filter2=this.state.filter2
 if (this.state.filter2.indexOf(val)===-1){
 			filter2.push(val)
-			$.ajax({
-				url: '/findProfile',
-				dataType: 'json',
-				type: 'POST',
-				data: {
-					criteria2:JSON.stringify(filter2),
-					criteria1: JSON.stringify(filter1),
-					address: $('#address').val()},
-				success: function(users){
-					console.log("users", users)
-					var newusers=users
-					for(var i=0;i<newusers.length;i++){
-						for (var j=0;j<newusers.length-1;j++){
-							if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
-						}
-					}
-
-					that.setState({
-						users:newusers,
-						filter2:filter2
-					})
-
-				},
-				error: function(err){
-					console.log("error",err)
-				}
-			})
-		}
-else{
-filter2.splice(filter2.indexOf(val),1)
-$.ajax({
-	url: '/findProfile',
-	dataType: 'json',
-	type: 'POST',
-	data: {
-		criteria2:JSON.stringify(filter2),
-		criteria1: JSON.stringify(filter1),
-		address: $('#address').val()},
-	success: function(users){
-		console.log("users", users)
-		var newusers=users
-		for(var i=0;i<newusers.length;i++){
-			for (var j=0;j<newusers.length-1;j++){
-				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
-			}
-		}
-
-		that.setState({
-			users:newusers,
-			filter2:filter2
-		})
-
-	},
-	error: function(err){
-		console.log("error",err)
-	}
-})
+			that.setState({filter2:filter2})
+			// $.ajax({
+			// 	url: '/findProfile',
+			// 	dataType: 'json',
+			// 	type: 'POST',
+			// 	data: {
+			// 		criteria2:JSON.stringify(filter2),
+			// 		criteria1: JSON.stringify(filter1),
+			// 		address: $('#address').val()},
+			// 	success: function(users){
+			// 		console.log("users", users)
+			// 		var newusers=users
+			// 		for(var i=0;i<newusers.length;i++){
+			// 			for (var j=0;j<newusers.length-1;j++){
+			// 				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+			// 			}
+			// 		}
+			//
+			// 		that.setState({
+			// 			users:newusers,
+			// 			filter2:filter2
+			// 		})
+			//
+			// 	},
+			// 	error: function(err){
+			// 		console.log("error",err)
+			// 	}
+			// })
 }
+else{
+	filter2.splice(filter2.indexOf(val),1)
+	that.setState({filter2:filter2})
+// $.ajax({
+// 	url: '/findProfile',
+// 	dataType: 'json',
+// 	type: 'POST',
+// 	data: {
+// 		criteria2:JSON.stringify(filter2),
+// 		criteria1: JSON.stringify(filter1),
+// 		address: $('#address').val()},
+// 	success: function(users){
+// 		console.log("users", users)
+// 		var newusers=users
+// 		for(var i=0;i<newusers.length;i++){
+// 			for (var j=0;j<newusers.length-1;j++){
+// 				if (newusers[j]["job"].length<newusers[j+1]["job"].length){var temp=newusers[j]; newusers[j]=newusers[j+1]; newusers[j+1]=temp}
+// 			}
+// 		}
+//
+// 		that.setState({
+// 			users:newusers,
+// 			filter2:filter2
+// 		})
+//
+// 	},
+// 	error: function(err){
+// 		console.log("error",err)
+// 	}
+// })
+ }
 }
 
 handleClick3(e){
@@ -567,82 +605,64 @@ handleClick3(e){
 			address: this.state.eventData.address,
 			startDate: this.state.eventData.startDate.toString(),
 			endDate: this.state.eventData.endDate.toString()
-		},
+		}
 	});
 }
 
 render() {
 	var that=this
 	var contactForm = null;
+	var filter1=this.state.filter1;
+	var filter2=this.state.filter2;
+	if (filter1.length===0){filter1=["English","Italiano","Français"]}
+	if (filter2.length===0){filter2=["Accueil événementiel","Accueil entreprise","Animation commerciale","Serveur","Voiturier","Barman"]}
 		if(this.state.editContact) {
 			contactForm = this._createEvent(true);
 		} else {
 			contactForm = this._createEvent(false);
 		}
 		var usersquare=[];
-		var filters=[]
-		filters.push(
-			<div className='panel-heading'>
-							<div className="panel-title">
-							<label className="checkbox-inline">
-								Accueil événementiel
-								<input type="checkbox" id="inlineCheckbox1" value="Accueil événementiel" onClick={this.handleClick2.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Accueil entreprise
-								<input type="checkbox" id="inlineCheckbox2" value="Accueil entreprise" onClick={this.handleClick2.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Animation commerciale
-								<input type="checkbox" id="inlineCheckbox3" value="Animation commerciale" onClick={this.handleClick2.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Serveur
-								<input type="checkbox" id="inlineCheckbox1" value="Serveur" onClick={this.handleClick2.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Voiturier
-								<input type="checkbox" id="inlineCheckbox2" value="Voiturier" onClick={this.handleClick2.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Barman
-								<input type="checkbox" id="inlineCheckbox3" value="Barman" onClick={this.handleClick2.bind(this)} />
-							</label>
-							</div>
-							<div className="panel-title">
-							<label className="checkbox-inline">
-								English
-								<input type="checkbox" id="inlineCheckbox1" value="English" onClick={this.handleClick.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Italiano
-								<input type="checkbox" id="inlineCheckbox2" value="Italiano"onClick={this.handleClick.bind(this)} />
-							</label>
-							<label className="checkbox-inline">
-								Français
-								<input type="checkbox" id="inlineCheckbox3" value="Français" onClick={this.handleClick.bind(this)} />
-							</label>
-							</div>
-							<button className="btn btn-success margin5 float-right" onClick={this.reset.bind(this)}>reset filters</button>
-						<input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} ></input>
-						{this.state.value}
-						</div>
-		)
-
-if (this.state.users.length>0){
+		var returnusers=[];
+		var returnusers2=[];
+		var returnusers3=[];
 		var users=this.state.users
 		var val=this.state.value
-		var returnusers=[];
+if (this.state.users.length>0){
 		console.log("USERS INSDIE HANDLE CHANGE", users)
 		for (var i=0;i<users.length;i++){
 			if (users[i].salary<=val){returnusers.push(users[i])}
 		}
+		console.log("BEFORE some ", returnusers)
+		for (var k=0;k<returnusers.length;k++){
+		if (_.intersection(returnusers[k].specialty, filter1).length > 0)
+		{returnusers2.push(returnusers[k])}
+	}
+
+		console.log("ARRR2",returnusers2,filter2)
+		for (var p=0;p<returnusers2.length;p++){
+		if (_.intersection(returnusers2[p].job, filter2).length > 0)
+		{returnusers3.push(returnusers2[p])}
+	}
+	console.log("ARRR3",returnusers3)
+}
+
+// for(var j=0;j<returnusers.length;j++){
+// 		var speciality=returnusers[j].specialty
+// 		console.log("SPECIALITY INSIDE RETURNUSERS FOREACH",returnusers[j])
+// 		for (var k=0;k<filter1.length;k++){
+// 			if (speciality.indexOf(filter1[k])===-1){returnusers.splice(j,1)}
+// 		}
+// 		for (var l=0;l<filter2.length;l++){
+// 			if (speciality.indexOf(filter2[l])===-1){returnusers.splice(j,1)}
+// 		}
+// }
+
+	console.log("RETURNUSERS BEFORE FOR EACH", returnusers)
 	var user = this.context.getUser()
-	console.log("USERRRRR", user);
-	console.log("USERRRRR type", user.type);
 	if(user.type === "Profile" || user.type === "Client"){
 		console.log("I AM LOGED IN");
 		returnusers.forEach(function(u){
+
 		usersquare.push(
 					<div>
 						<div className="img">
@@ -650,14 +670,14 @@ if (this.state.users.length>0){
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
-							<button className="btn btn-success">Contact</button>
+							<button className="btn btn-success" onClick={that.invite}>Send invite link</button>
 						</div>
 					</div>
 					)
 			})
 		} else {
-		console.log("I AM NOOOOT LOGED IN");
-		returnusers.forEach(function(u){
+
+		returnusers3.forEach(function(u){
 		usersquare.push(
 					<div>
 						<div className="img">
@@ -669,10 +689,10 @@ if (this.state.users.length>0){
 						</div>
 					</div>
 					)
-			})	
+			})
 
 		}
-		}
+	
 
 		return (
 				<div className="container">

@@ -93,8 +93,8 @@ invite(e){
 	reset(e){
 		e.preventDefault(e)
 		$('input:checkbox').removeAttr('checked');
-		var users=this.state.oldusers
-		this.setState({users:users})
+		this.setState({filter1: [],
+		filter2:[]})
 	}
 
 	_searchEvent(e) {
@@ -128,6 +128,88 @@ invite(e){
 					oldusers:users
 				})
 				console.log("users", users)
+				$.ajax({
+					type: "GET",
+					url:'/checkLoggedIn',
+					success:(resp) => {
+
+
+						if (resp.authenticated===true){
+							if (!that.state.eventId){
+								console.log("Data I'm sending: ", this.state.eventData);
+								$.ajax({
+									type: "POST",
+									// specify the url we want to upload our file to
+									url: '/event/new',
+									// this is how we pass in the actual file data from the form
+									data: {
+										title: this.state.eventData.title,
+										address: this.state.eventData.address,
+										startDate: this.state.eventData.startDate,
+										endDate: this.state.eventData.endDate,
+										startHour: this.state.eventData.startHour,
+										endHour: this.state.eventData.endHour,
+										workerNumber: this.state.eventData.workerNumber,
+										description: this.state.eventData.description
+									},
+									success: function(response){
+									console.log("response", response.event);
+									var id=response.event
+									that.setState({eventId: id})
+									alert("SUCCESS CREATING A NEW EVENT!")
+								//   this.context.router.push({
+								//   pathname: '/search/'+id,
+								//   query: { modal: true },
+								//   state: { fromDashboard: true }
+								// })
+									},
+									error: function(error){
+										console.log("error", error);
+										if(!error.responseJSON.success){
+											return alert(error.responseJSON.error)
+										}
+									}
+								})
+							}
+						else{
+							console.log("something here")
+							var id = that.state.eventId;
+							$.ajax({
+								type: "POST",
+								// specify the url we want to upload our file to
+								url: '/updateEvent/'+id,
+								// this is how we pass in the actual file data from the form
+								data: {
+									title: this.state.eventData.title,
+									address: this.state.eventData.address,
+									startDate: this.state.eventData.startDate,
+									endDate: this.state.eventData.endDate,
+									startHour: this.state.eventData.startHour,
+									endHour: this.state.eventData.endHour,
+									workerNumber: this.state.eventData.workerNumber,
+									description: this.state.eventData.description
+								},
+								success: function(response){
+									alert("SUCCESS UPDATING EVENT!")
+								},
+								error: function(error){
+									console.log("error", error);
+								}
+							})
+						}
+					}
+						else{
+							alert("PLEASE LOG IN FIRST!")
+						}
+					},
+					error:(err) =>{
+						if (err){console.log("error in creating event",err); alert("PLESASE LOG IN FIRST!")}
+					}
+				})
+
+
+
+
 			},
 			error: function(err){
 				console.log("error")
@@ -142,84 +224,6 @@ invite(e){
 _createNewEventOrUpdate(e){
 	e.preventDefault();
 	var that=this
-	$.ajax({
-		type: "GET",
-		url:'/checkLoggedIn',
-		success:(resp) => {
-
-
-			if (resp.authenticated===true){
-				if (!that.state.eventId){
-					console.log("Data I'm sending: ", this.state.eventData);
-					$.ajax({
-						type: "POST",
-						// specify the url we want to upload our file to
-						url: '/event/new',
-						// this is how we pass in the actual file data from the form
-						data: {
-							title: this.state.eventData.title,
-							address: this.state.eventData.address,
-							startDate: this.state.eventData.startDate,
-							endDate: this.state.eventData.endDate,
-							startHour: this.state.eventData.startHour,
-							endHour: this.state.eventData.endHour,
-							workerNumber: this.state.eventData.workerNumber,
-							description: this.state.eventData.description
-						},
-						success: function(response){
-						console.log("response", response.event);
-						var id=response.event
-						that.setState({eventId: id})
-						alert("SUCCESS CREATING A NEW EVENT!")
-					//   this.context.router.push({
-					//   pathname: '/search/'+id,
-					//   query: { modal: true },
-					//   state: { fromDashboard: true }
-					// })
-						},
-						error: function(error){
-							console.log("error", error);
-							if(!error.responseJSON.success){
-								return alert(error.responseJSON.error)
-							}
-						}
-					})
-				}
-			else{
-				console.log("something here")
-				var id = that.state.eventId;
-				$.ajax({
-					type: "POST",
-					// specify the url we want to upload our file to
-					url: '/updateEvent/'+id,
-					// this is how we pass in the actual file data from the form
-					data: {
-						title: this.state.eventData.title,
-						address: this.state.eventData.address,
-						startDate: this.state.eventData.startDate,
-						endDate: this.state.eventData.endDate,
-						startHour: this.state.eventData.startHour,
-						endHour: this.state.eventData.endHour,
-						workerNumber: this.state.eventData.workerNumber,
-						description: this.state.eventData.description
-					},
-					success: function(response){
-						alert("SUCCESS UPDATING EVENT!")
-					},
-					error: function(error){
-						console.log("error", error);
-					}
-				})
-			}
-		}
-			else{
-				alert("PLEASE LOG IN FIRST!")
-			}
-		},
-		error:(err) =>{
-			if (err){console.log("error in creating event",err); alert("PLESASE LOG IN FIRST!")}
-		}
-	})
 
 }
 
@@ -431,7 +435,6 @@ _changeEnd(e) {
 												</div>
 												{filters}
 												<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} address={this.state.address}>Rechercher des Hôtesses</button>
-												<button className="btn btn-success margin5 float-right" onClick={this._createNewEventOrUpdate.bind(this)} address={this.state.address}>Create Event or Update</button>
 
 										</div>
 								</div>
@@ -638,12 +641,11 @@ if (this.state.users.length>0){
 		{returnusers2.push(returnusers[k])}
 	}
 
-		console.log("ARRR2",returnusers2,filter2)
+
 		for (var p=0;p<returnusers2.length;p++){
 		if (_.intersection(returnusers2[p].job, filter2).length > 0)
 		{returnusers3.push(returnusers2[p])}
 	}
-	console.log("ARRR3",returnusers3)
 }
 
 // for(var j=0;j<returnusers.length;j++){
@@ -660,9 +662,7 @@ if (this.state.users.length>0){
 	console.log("RETURNUSERS BEFORE FOR EACH", returnusers)
 	var user = this.context.getUser()
 	if(user.type === "Profile" || user.type === "Client"){
-		console.log("I AM LOGED IN");
 		returnusers.forEach(function(u){
-
 		usersquare.push(
 					<div>
 						<div className="img">
@@ -692,7 +692,6 @@ if (this.state.users.length>0){
 			})
 
 		}
-	
 
 		return (
 				<div className="container">

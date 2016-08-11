@@ -11,6 +11,7 @@ var eventSchema = mongoose.Schema({
 	workerNumber	: Number,
 	address			: String,
 	description 	: String,
+	hostess			: Array,
 	updatedAt   	: { type: Date, default: Date.now },
 	createdAt   	: { type: Date, default: Date.now }
 });

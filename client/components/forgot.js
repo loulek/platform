@@ -9,7 +9,6 @@ class Login extends React.Component {
 
 		this.state = {
 			email: null,
-			password: null,
 			message: null
 		};
 	}
@@ -18,35 +17,30 @@ class Login extends React.Component {
 		e.preventDefault();
 
 		$.ajax({
-			url: '/login',
+			url: '/forgot',
 			dataType: 'json',
 			type: 'POST',
 			data: this.state,
 			success: function(data) {
-			if(data.status === 'ok' && data.user.confirmed === true) {
-				sessionStorage.auth = true;
-				this.context.setUser(data.user);
-				this.context.router.push('/events');
-			} else if(data.status === 'error') {
-				this.setState({
-					message: data.error
-				});
-			}
+			if(data.status === 'ok') {
+					this.context.router.push(data.redirect);
+				} else if(data.status === 'error') {
+					this.setState({
+						message: data.error
+					});
+				} 
 			}.bind(this),
 			error: function(xhr, status, err) {
 				this.setState({
-					message: "Please check your inbox and confirm your email address."
+					message: "You remail does not match our database."
 				});
 			}.bind(this)
 		});
 	}
+	
 
 	emailChange(e) {
 		this.setState({email: e.target.value});
-	};
-
-	passwordChange(e) {
-		this.setState({password: e.target.value});
 	};
 
 	render() {
@@ -58,7 +52,7 @@ class Login extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"textAlign" : "center", "color" : "white", "textShadow": "2px 2px black"}}>Connexion</h2>
+			<h2 style={{"textAlign" : "center", "color" : "white", "textShadow": "2px 2px black"}}>Forgot your password?</h2>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">
@@ -70,12 +64,7 @@ class Login extends React.Component {
 										<label>Email</label>
 										<input className="form-control" name="email" type="text" onChange={this.emailChange.bind(this)} />
 									</div>
-									<div className="form-group">
-										<label>Password</label>
-										<input className="form-control" name="password" type="password" onChange={this.passwordChange.bind(this)} />
-									</div>
-									<p><a><Link to="forgot">forgot your password?</Link></a></p>
-									<button className="btn btn-lg btn-success btn-block" onClick={this.login.bind(this)}>Log In</button>
+									<button className="btn btn-lg btn-success btn-block" onClick={this.login.bind(this)}>Send New Confirmation Email</button>
 									<hr />
 									<p>New customer? <Link to="signup">Sign up here</Link></p>
 								</fieldset>

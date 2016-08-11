@@ -59,6 +59,22 @@ _saveChanges(e) {
 		});
 	}
 
+becomehost(e) {
+		e.preventDefault();
+		$.ajax({
+			url: '/event/' + this.props.params.id,
+			type: 'POST',
+			data: this.state.event,
+			success: function(data) {
+				console.log(data);
+				alert("Success on becoming a Host!")
+			},
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	}
+
 suggestSelect(e) {
 		var event = Object.assign({}, this.state.event, {address: e.label })
 		this.setState({event: event})
@@ -204,23 +220,46 @@ var dt = new Date(this.state.event.endDate);
 				    </div>
 				</div>)
     } else {
-      return (
-        <div className="container events">
-		            <div className='panel panel-default'>
-		                <div className='panel-heading'>
-		                  <h3 className="panel-title">Event Title: {this.state.event.title} </h3>
-		                </div>
-							<h4>Address: {this.state.event.address}</h4>
-							<h4>Description: {this.state.event.description}</h4>
-							<h4>Number of Hostesses: {this.state.event.workerNumber}</h4>
-							<h4>Time From: {this.state.event.startHour}</h4>
-							<h4>Time To: {this.state.event.endHour}</h4>
-							<h4>Date From: {d.toDateString()}</h4>
-							<h4>Date To: {dt.toDateString()}</h4>
-							<button className="btn btn-primary float-right" onClick={function() {this.setState({editEvent: true})}.bind(this)}>Modifier</button>
-				    </div>
-				</div>
-      );
+
+    	var user = this.context.getUser()
+    	if(user.type === "Client"){
+	      return (
+	        <div className="container events">
+			            <div className='panel panel-default'>
+			                <div className='panel-heading'>
+			                  <h3 className="panel-title">Event Title: {this.state.event.title} </h3>
+			                </div>
+								<h4>Address: {this.state.event.address}</h4>
+								<h4>Description: {this.state.event.description}</h4>
+								<h4>Number of Hostesses: {this.state.event.workerNumber}</h4>
+								<h4>Time From: {this.state.event.startHour}</h4>
+								<h4>Time To: {this.state.event.endHour}</h4>
+								<h4>Date From: {d.toDateString()}</h4>
+								<h4>Date To: {dt.toDateString()}</h4>
+								<button className="btn btn-primary float-right" onClick={function() {this.setState({editEvent: true})}.bind(this)}>Modifier</button>
+					    </div>
+					</div>
+	      );
+		}
+		if(user.type === "Profile"){
+	      return (
+	        <div className="container events">
+			            <div className='panel panel-default'>
+			                <div className='panel-heading'>
+			                  <h3 className="panel-title">Event Title: {this.state.event.title} </h3>
+			                </div>
+								<h4>Address: {this.state.event.address}</h4>
+								<h4>Description: {this.state.event.description}</h4>
+								<h4>Number of Hostesses: {this.state.event.workerNumber}</h4>
+								<h4>Time From: {this.state.event.startHour}</h4>
+								<h4>Time To: {this.state.event.endHour}</h4>
+								<h4>Date From: {d.toDateString()}</h4>
+								<h4>Date To: {dt.toDateString()}</h4>
+								<button className="btn btn-primary float-right" onClick={this.becomehost.bind(this)}>Become Host</button>
+					    </div>
+					</div>
+	      );
+		}
     }
   }  
 
@@ -329,6 +368,10 @@ class MyDatePicker extends React.Component {
 
 		)
 	}
+}
+EventProfile.contextTypes = {
+	router: Object,
+	getUser: Object
 }
 
 export default EventProfile;

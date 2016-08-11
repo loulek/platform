@@ -21,7 +21,8 @@ class CreateEvent extends React.Component {
 				startHour: null,
 				endHour: null,
 				workerNumber: null,
-				budget: null
+				budget: null,
+				hostess: null
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -40,7 +41,11 @@ class CreateEvent extends React.Component {
 		this.invite = this.invite.bind(this);
 	}
 
-componentDidMount(){
+
+	componentDidMount(){
+		var user = this.context.getUser();
+		console.log("Do I have the user?", user);
+		console.log("user type:", user.type);
 		var neweventData = {
 			address: this.state.eventData.address,
 			startDate: new Date(this.props.startDate)|| this.state.eventData.startDate,
@@ -57,7 +62,8 @@ componentDidMount(){
 			url: '/search',
 			dataType: 'json',
 			type: 'POST',
-			data: {address: $('#address').val()},
+			data: {	address: this.state.eventData.address
+			},
 			success: function(users){
 				this.setState({
 					users:users,
@@ -652,7 +658,9 @@ if (this.state.users.length>0){
 // }
 
 	console.log("RETURNUSERS BEFORE FOR EACH", returnusers)
-	returnusers3.forEach(function(u){
+	var user = this.context.getUser()
+	if(user.type === "Profile" || "Client"){
+		returnusers3.forEach(function(u){
 		usersquare.push(
 					<div>
 						<div className="img">
@@ -665,6 +673,24 @@ if (this.state.users.length>0){
 					</div>
 					)
 			})
+		} else {
+		returnusers3.forEach(function(u){
+		usersquare.push(
+					<div>
+						<div className="img">
+						<Link to={`/signup`} onClick={that.handleClick3}><img src={u.profileImageUrl} alt="Image" /></Link>
+						</div>
+						<div className="text_image">
+							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
+							<button className="btn btn-success">Contact</button>
+						</div>
+					</div>
+					)
+			})
+
+		}
+		}
+
 		return (
 				<div className="container">
 					<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
@@ -765,7 +791,8 @@ class MyDatePicker extends React.Component {
 }
 
 CreateEvent.contextTypes = {
-	router: Object
+	router: Object,
+	getUser: Object
 }
 
 

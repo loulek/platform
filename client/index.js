@@ -18,6 +18,8 @@ import Profile from "./components/profile";
 import CreateEvent from "./components/CreateEvent";
 import WorkerSignup from "./components/WorkerSignup";
 import EventProfile from "./components/EventProfile";
+import Forgot from "./components/forgot";
+import Change from "./components/change";
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -40,6 +42,7 @@ function render() {
 	    	<Route path="/login" component={Login} />
 	    	<Route path="/signup" component={Signup} />
         <Route path="workersignup" component={WorkerSignup} />
+        <Route path="/forgot" component={Forgot} />
         <Route path="/account" component={Account} onEnter={requireAuth}>
           <IndexRoute component={AccountInfo} />
           <Route path="/account/edit-profile" component={EditProfile} onEnter={requireAuth} />
@@ -51,6 +54,7 @@ function render() {
           <Route path="/search/:id" component={Search}/>
         </Route>
     	</Route>
+      <Route path="/change/:id" component={Change} />
     </Router>
     ,
     document.getElementById('root')

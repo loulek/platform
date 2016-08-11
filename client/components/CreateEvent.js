@@ -638,7 +638,7 @@ if (this.state.users.length>0){
 			if (users[i].salary<=val){returnusers.push(users[i])}
 		}
 	var user = this.context.getUser()
-	if(user.type === "Profile" || user.type === "Client"){
+	if(user.type === "Profile" || "Client"){
 		returnusers.forEach(function(u){
 		usersquare.push(
 					<div>

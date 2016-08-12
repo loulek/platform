@@ -127,7 +127,7 @@ router.post("/sendDayAndTime",function(req,res){
                 var newModel = aa
                 console.log(newModel.times[day])
                 var timesInThatDay=newModel.times[day];
-                console.log("timesInThatDay",timesInThatDay)
+                console.log("LENGTH OF THE FUKING TIME",time.length)
                 for (var i=0;i<time.length;i++){
                     console.log("timesiii",time[i]);
                     console.log("timeiiiiii2",timesInThatDay)
@@ -135,7 +135,9 @@ router.post("/sendDayAndTime",function(req,res){
                 }
                 Availability.findByIdAndUpdate(id, newModel,function(err){
                     if (err){res.json({success:false,error:err})}
-                    else{res.json({success:true})}
+                    else{
+						res.json({success: true, availability: newModel.times})
+					}
                 })
             })
         }
@@ -149,7 +151,7 @@ router.post("/sendDayAndTime",function(req,res){
                 }
                 Availability.findByIdAndUpdate(id, newModel,function(err){
                     if (err){res.json({success:false,error:err})}
-                    else{res.json({success:true})}
+                    else{res.json({success: true, availability: newModel.times})}
                 })
             }
         });

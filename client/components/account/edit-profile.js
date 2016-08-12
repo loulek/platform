@@ -119,7 +119,8 @@ class EditProfile extends React.Component {
 			editBio: false,
 			editCalendar: false,
 			availability:[],
-			events: []
+			events: [],
+			modifyAvailability: false
 		}
 	}
 
@@ -695,55 +696,101 @@ class EditProfile extends React.Component {
 		var arrayOfTimes = [];
 		var dayOfWeek = data.slots[0].getDay();
 		console.log("THIS IS A CONSOLE LOG: ", data.slots);
-
-		if(data.start.getDay() === data.end.getDay())
+		if(this.state.modifyAvailability)
 		{
+			if(data.start.getDay() === data.end.getDay())
+				{
 
-			if (data.slots.length===2){
-			console.log("INSIDE IF STATEMENT")
-			alert("You must be at least available for an hour"); 
-			return
-			}
-				for(var i = 0; i < data.slots.length-1; i++)
-				{
-					arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
-				}
-				console.log(arrayOfTimes)
-				if((data.slots[data.slots.length-1].getHours()+data.slots[data.slots.length-1].getMinutes()/60)*2 === 47)
-				{
-					arrayOfTimes.push(47)
-				}
-				$.ajax("/sendDayAndTime",{
-					type: "POST",
-					data: {
-						day: dayOfWeek,
-						time: JSON.stringify(arrayOfTimes)
-					},
-					success:function(resp){
-						// if(data.slots[data.slots.length-1])
-						var newObjectAgain = {
-							'start': data.slots[0],
-							'end': data.slots[data.slots.length-1]
-						}
-						that.setState({
-							availability: resp.availability,
-							events: that.state.events.concat(newObjectAgain)
-						})
-						console.log("SUCCESS",that.state.availability)
-					},
-					error:function(err){
-						console.log("EEEEEE",err)
+					if (data.slots.length===2){
+					console.log("INSIDE IF STATEMENT")
+					alert("You must be at least available for an hour"); 
+					return
 					}
-				})
+						for(var i = 0; i < data.slots.length-1; i++)
+						{
+							arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
+						}
+						console.log(arrayOfTimes)
+						if((data.slots[data.slots.length-1].getHours()+data.slots[data.slots.length-1].getMinutes()/60)*2 === 47)
+						{
+							arrayOfTimes.push(47)
+						}
+						$.ajax("/sendDayAndTime2",{
+							type: "POST",
+							data: {
+								day: dayOfWeek,
+								time: JSON.stringify(arrayOfTimes)
+							},
+							success:function(resp){
+								// if(data.slots[data.slots.length-1])
+								var newObjectAgain = {
+									'title': 'DELETED EVENTS',
+									'start': data.slots[0],
+									'end': data.slots[data.slots.length-1]
+								}
+								that.setState({
+									availability: resp.availability,
+									events: that.state.events.concat(newObjectAgain)
+								})
+								console.log("SUCCESS",that.state.availability)
+							},
+							error:function(err){
+								console.log("EEEEEE",err)
+							}
+						})
+				}
 		}
+			else
+			{
+				if(data.start.getDay() === data.end.getDay())
+				{
+
+					if (data.slots.length===2){
+					console.log("INSIDE IF STATEMENT")
+					alert("You must be at least available for an hour"); 
+					return
+					}
+						for(var i = 0; i < data.slots.length-1; i++)
+						{
+							arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
+						}
+						console.log(arrayOfTimes)
+						if((data.slots[data.slots.length-1].getHours()+data.slots[data.slots.length-1].getMinutes()/60)*2 === 47)
+						{
+							arrayOfTimes.push(47)
+						}
+						$.ajax("/sendDayAndTime",{
+							type: "POST",
+							data: {
+								day: dayOfWeek,
+								time: JSON.stringify(arrayOfTimes)
+							},
+							success:function(resp){
+								// if(data.slots[data.slots.length-1])
+								var newObjectAgain = {
+									'start': data.slots[0],
+									'end': data.slots[data.slots.length-1]
+								}
+								that.setState({
+									availability: resp.availability,
+									events: that.state.events.concat(newObjectAgain)
+								})
+								console.log("SUCCESS",that.state.availability)
+							},
+							error:function(err){
+								console.log("EEEEEE",err)
+							}
+						})
+				}
+			}
 	}
 
 	_editCalendar(isEnabled) {
 		var calendar = <BigCalendar
-								events={this.state.events}
-								defaultDate={new Date()}
-							    selectable={true}
-							    onSelectSlot={this.onSelectSlot.bind(this)}
+							events={this.state.events}
+							defaultDate={new Date()}
+						    selectable={true}
+						    onSelectSlot={this.onSelectSlot.bind(this)}
 						/>
 		if(isEnabled) {
 			return (
@@ -757,6 +804,7 @@ class EditProfile extends React.Component {
 
 						</div>
 						{calendar}
+						<button className="btn btn-success margin5 float-right" onClick={function() {this.setState({editCalendar: false, modifyAvailability: false})}.bind(this)}>Save Changes2</button>
 						<button className="btn btn-success margin5 float-right" onClick={this._updateCalendar.bind(this)}>Save</button>
 						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editCalendar: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
 					</div>
@@ -774,6 +822,7 @@ class EditProfile extends React.Component {
 
 						</div>
 						{calendar}
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar:true, modifyAvailability: true})}.bind(this)}>Modify2</button>
 						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar: true})}.bind(this)}>Modifier</button>
 					</div>
 				</div>

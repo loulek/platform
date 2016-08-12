@@ -20,6 +20,7 @@ import WorkerSignup from "./components/WorkerSignup";
 import EventProfile from "./components/EventProfile";
 import Forgot from "./components/forgot";
 import Change from "./components/change";
+import Notifications from "./components/notifications";
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -36,6 +37,7 @@ function render() {
     	<Route path="/" component={App}>
 	    	<IndexRoute component={Home}></IndexRoute>
         <Route path="/events" component={Events}/>
+        <Route path="/notifications" component={Notifications}/>
         <Route path="/event/:id" component={EventProfile}/>
         <Route path="/profile" component={Profile}/>
         <Route path="/profile/:id" component={Profile}/>

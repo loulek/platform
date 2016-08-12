@@ -13,7 +13,8 @@ class TopNavBar extends React.Component{
 			success: function(data) {
 				sessionStorage.auth = false;
 				this.context.router.push('/');
-				}.bind(this),
+				this.context.setUser({});
+			}.bind(this),
 			error: function(xhr, status, err) {
 				return err;
 			}.bind(this)
@@ -29,6 +30,23 @@ class TopNavBar extends React.Component{
 
 								</ul>;
 
+		var user = this.context.getUser()
+		console.log("USER.TYPE", user.type)
+		if(user.type === "Profile"){
+		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
+								<li className="dropdown">
+									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
+									<ul className="dropdown-menu">
+										<li><Link to="/account"><i className="fa fa-cog"></i> Account Settings</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><Link to="/notifications"><i className="fa fa-cog"></i> Notifications</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+									</ul>
+								</li>
+							</ul>;	
+		}
+		else if(user.type === "Client"){
 		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
 								<li className="dropdown">
 									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
@@ -40,10 +58,23 @@ class TopNavBar extends React.Component{
 										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
 									</ul>
 								</li>
-							</ul>;
+							</ul>;	
+		} else if (user.type !== "Client" || user.type !== "Profile"){
+		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
+								<li className="dropdown">
+									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
+									<ul className="dropdown-menu">
+										<li><Link to="/account"><i className="fa fa-cog"></i> Account Settings</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+									</ul>
+								</li>
+							</ul>;		
+
+		}
 
 		var options = null;
-		if(sessionStorage.auth === "true") {
+		if(sessionStorage.auth === true || Object.keys(user).length > 0) {
 			options = optionsUser;
 		} else {
 			options = optionsGuest;
@@ -73,7 +104,11 @@ class TopNavBar extends React.Component{
 }
 
 TopNavBar.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    getUser: Object,
+    setUser: Object,
 };
+
+
 
 export default TopNavBar;

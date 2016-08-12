@@ -163,7 +163,7 @@ module.exports = function(passport) {
 	});
 
   router.get('/checkLoggedIn', function(req,res,next){
-    if (req.user){res.send({authenticated:true})}
+    if (req.user){res.send({authenticated:true, user: req.user})}
     else{res.send({authenticated:false})}
   })
 

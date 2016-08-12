@@ -5,6 +5,7 @@ var Client = require('../models/client')
 var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
+var Notification = require('../models/notification');
 var geocoder = NodeGeocoder({
   provider: "google",
   apiKey: process.env.GEOCODING_API_KEY,
@@ -169,15 +170,43 @@ router.post('/user/profile', function(req, res) {
 	// });
 });
 
+router.get('/notifications', function(req, res){
+  console.log("INSIDE NOTIFICATIONS ROUTE");
+  Notification.find({
+    profile: req.user.profile._id
+  })
+  .populate('event')
+  .exec(function(err, notifications){
+    console.log("NOTIFICATIONS", notifications)
+    if(err){res.status(500).send("error", err)}
+      res.json(notifications);
+  });
+});
+
+router.post('/notifications', function(req, res){
+  console.log("[got this data]", req.body);
+  var notification = new Notification ({
+    client: req.user._id,
+    profile: req.body.profile,
+    event: req.body.id
+  })
+  .save(function(err, notifications){
+    if(err){ return res.status(500).send(err)}
+    return res.status(200).json({
+      success: "ok"
+    });
+  })
+})
+
 router.get('/events',function(req,res){
-  console.log("INSIDE EVENTS ROUTE")
+  console.log("INSIDE EVENTS ROUTE");
   Event.find({
     organizer: req.user._id
   }).exec(function(err,events){
-    if (err){res.status(500).send("errrrrr")}
-    res.json(events)
-  })
-})
+    if (err){res.status(500).send("error", err)}
+    res.json(events);
+  });
+});
 
 // update event information
 router.post('/user/update-event', function(req, res) {

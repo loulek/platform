@@ -23,7 +23,9 @@ class Login extends React.Component {
 			data: this.state,
 			success: function(data) {
 			if(data.status === 'ok') {
-					this.context.router.push(data.redirect);
+
+				this.context.router.push(data.redirect);
+				
 				} else if(data.status === 'error') {
 					this.setState({
 						message: data.error
@@ -37,7 +39,7 @@ class Login extends React.Component {
 			}.bind(this)
 		});
 	}
-	
+
 
 	emailChange(e) {
 		this.setState({email: e.target.value});

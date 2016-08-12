@@ -9,7 +9,10 @@ class EventProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state={
-		event:{}
+			event:{
+				startDate: 0,
+				endDate: 0
+			}
 		}
 	}
 

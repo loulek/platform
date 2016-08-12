@@ -41,8 +41,21 @@ class App extends React.Component{
 			type: 'GET',
 			success: function(resp){
 				if (resp.authenticated){
-					sessionStorage.auth=true}
-			this.context.router.push('/');
+					sessionStorage.auth = true;
+					this.setUser(resp.user);
+					console.log("HELLOO I AM CHECKING IF I AM A PROFILE OR A CLIENT")
+					if (resp.user.type === "Client"){
+						this.context.router.push('/events');
+					}
+					if (resp.user.type === "Profile"){
+						this.context.router.push("/notifications");
+					}
+
+				} else {
+					sessionStorage.auth = false
+					this.context.router.push("/login")
+				}
+
 		}.bind(this),
 			error: function(err){
 				console.log("error",err)

@@ -77,11 +77,29 @@ class CreateEvent extends React.Component {
 		})
 	}
 
-invite(e){
-	e.preventDefault();
-	var id=this.state.eventId;
-	var link='/event/'+id;
-	console.log("inside invite", link)
+invite(userId, e){
+	console.log("[sending this data]", {
+		profile: userId,
+		id: this.state.eventId
+	})
+	$.ajax({
+		url: '/notifications',
+		dataType: 'json',
+		type: 'POST',
+		data: {
+			profile: userId,
+			id: this.state.eventId
+		},
+		success: function(notifications){
+			console.log("NOTIFICATIONS", notifications)
+			this.setState({
+				notifications: notifications
+			})
+		}.bind(this),
+		error: function(err) {
+			console.log("error", err)
+		}	
+	})
 }
 
 	handleChange(e) {
@@ -670,7 +688,7 @@ if (this.state.users.length>0){
 						</div>
 						<div className="text_image">
 							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
-							<button className="btn btn-success" onClick={that.invite}>Send invite link</button>
+							<button className="btn btn-success" onClick={that.invite.bind(this, u._id)}>Send invite link</button>
 						</div>
 					</div>
 					)

@@ -128,8 +128,24 @@ class EditProfile extends React.Component {
 			url:'/user/calendar',
 			type:"GET",
 			success:function(calendar){
-				console.log("calendar success",calendar)
-				that.setState({availability:calendar})
+				if(!calendar){
+					that.setState({availability: [
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		              ]})
+				console.log(that.state.availability);
+				}
+					else{
+						that.setState({
+							availability: calendar.times
+						})
+						console.log(that.state.availability);
+					}
 			},
 			error:function(err){
 				if (err){console.log("error in calendar",err)}
@@ -589,16 +605,28 @@ class EditProfile extends React.Component {
 	}
 
 	onSelectSlot(data){
+		var that=this
 		var arrayOfTimes = [];
 		var dayOfWeek = data.slots[0].getDay();
-		console.log(data.slots[0].getWeek());
+		console.log("THIS IS A CONSOLE LOG: ", data.slots);
+
 		if(data.start.getDay() === data.end.getDay())
 		{
+
+			if (data.slots.length===2){
+			console.log("INSIDE IF STATEMENT")
+			alert("You must be at least available for an hour"); 
+			return
+			}
 				for(var i = 0; i < data.slots.length-1; i++)
 				{
 					arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
 				}
 				console.log(arrayOfTimes)
+				if((data.slots[data.slots.length-1].getHours()+data.slots[data.slots.length-1].getMinutes()/60)*2 === 47)
+				{
+					arrayOfTimes.push(47)
+				}
 				$.ajax("/sendDayAndTime",{
 					type: "POST",
 					data: {
@@ -606,7 +634,10 @@ class EditProfile extends React.Component {
 						time: JSON.stringify(arrayOfTimes)
 					},
 					success:function(resp){
-						console.log("success",resp)
+						that.setState({
+							availability: resp.availability
+						})
+						console.log("SUCCESS",that.state.availability)
 						alert("success")
 					},
 					error:function(err){
@@ -617,6 +648,49 @@ class EditProfile extends React.Component {
 	}
 
 	_editCalendar(isEnabled) {
+		var events = [];
+		for(var i = 0; i < this.state.availability.length; i++)//each day
+		{
+			var ones = [];
+			var consecutiveOnes = [];
+			console.log("THIS IS THE 2nd STATE RIGHT NOW: ", this.state.availability[i].length)
+			for(var j = 0; j < this.state.availability[i].length; j++) //each 30min time
+			{
+				
+				if(this.state.availability[i][j] === 1)
+					{
+						console.log(this.state.availability[i][j]);
+						ones.push(j);
+					}
+
+			}
+			console.log("THESE ARE THE ONE INDEXES: ", ones);
+			if(ones.length > 1)
+				{
+					for (var k = 0; k < ones.length-1; k++)
+						{
+							if(ones.length === 1)
+								{
+									console.log("THIS IS A BREAK")
+									break;
+								}
+							if (ones[k+1] !== ones[k]+1)
+								{
+									console.log("HOPE THIS WORKS", ones)
+									consecutiveOnes.push(ones.splice(0,k+1))
+									k=0;
+								}
+						}
+						consecutiveOnes.push(ones)
+				}
+			if (ones.length === 1)
+				{
+					console.log("THIS IS THE FUKING ONE PROBLEM", ones)
+					consecutiveOnes.push(ones)
+					console.log("WHY THE FUK WON'T THIS WORK", consecutiveOnes)
+				}
+			console.log("THESE ARE WORKINGS YAY", consecutiveOnes)
+		}
 		var calendar = <BigCalendar
 
 								events={[{
@@ -626,7 +700,7 @@ class EditProfile extends React.Component {
 								}]}
 								defaultDate={new Date()}
 							    selectable={true}
-							    onSelectSlot={this.onSelectSlot}
+							    onSelectSlot={this.onSelectSlot.bind(this)}
 						/>
 		if(isEnabled) {
 			return (

@@ -618,6 +618,7 @@ class EditProfile extends React.Component {
 
 	_editCalendar(isEnabled) {
 		var calendar = <BigCalendar
+
 								events={[{
 								    'title': 'DTS ENDS',
 								    'start': new Date(),

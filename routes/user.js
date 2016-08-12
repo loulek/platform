@@ -147,9 +147,9 @@ router.post("/sendDayAndTime",function(req,res){
                     console.log("timesiii",time[i]);
                     newModel.times[day][time[i]] = 1;
                 }
-                Availability.findByIdAndUpdate(id, newModel,function(err){
+                Availability.findByIdAndUpdate(id, newModel,function(err,a){
                     if (err){res.json({success:false,error:err})}
-                    else{res.json({success:true})}
+                    else{res.json({success:true,availability:a})}
                 })
             }
         });

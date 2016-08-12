@@ -118,7 +118,8 @@ class EditProfile extends React.Component {
 			editContact: false,
 			editBio: false,
 			editCalendar: false,
-			availability:[]
+			availability:[],
+			events: []
 		}
 	}
 
@@ -141,16 +142,101 @@ class EditProfile extends React.Component {
 				console.log(that.state.availability);
 				}
 					else{
+						var newDate = new Date();
+						newDate.setHours(0);
+						newDate.setMinutes(0);
+						newDate.setSeconds(0);
+						newDate.setMilliseconds(0);
 						that.setState({
 							availability: calendar.times
 						})
-						console.log(that.state.availability);
+						
+							for(var i = 0; i < calendar.times.length; i++)//each day
+							{
+								var ones = [];
+								var consecutiveOnes = [];
+								for(var j = 0; j < calendar.times[i].length; j++) //each 30min time
+								{
+									
+									if(calendar.times[i][j] === 1)
+										{
+											console.log(calendar.times[i][j]);
+											ones.push(j);
+										}
+
+								}
+								if(ones.length > 1)
+									{
+										for (var k = 0; k < ones.length-1; k++)
+											{
+												if(ones.length === 1)
+													{
+														break;
+													}
+												if (ones[k+1] !== ones[k]+1)
+													{
+														consecutiveOnes.push(ones.splice(0,k+1))
+														k=0;
+													}
+											}
+											consecutiveOnes.push(ones)
+									}
+								if (ones.length === 1)
+									{
+										consecutiveOnes.push(ones)
+									}
+								console.log("THESE ARE WORKINGS YAY", consecutiveOnes)	
+								var currentMS = newDate.getTime()
+								var currentDay = newDate.getDay();
+								var difference = i-currentDay;
+								if (i!==0){
+								var newMS=currentMS+86400000*difference
+								}
+								if (i===0){
+								var newMS=currentMS+86400000*(difference+7)
+								}
+								var secondDate = new Date(newMS)
+								console.log("SECOND MSMSMSMSMSM", secondDate)
+								for(var l = 0; l < consecutiveOnes.length; l++)
+									{
+										var startIndex = consecutiveOnes[l][0];
+										var startDate = new Date(secondDate.setMinutes(startIndex*30))
+										secondDate.setHours(0);
+										secondDate.setMinutes(0);
+										secondDate.setSeconds(0);
+										secondDate.setMilliseconds(0);
+										var endIndex = consecutiveOnes[l][consecutiveOnes[l].length-1];
+										if(endIndex === 47)
+										{
+											var endDate = new Date(secondDate.setMinutes(endIndex*30+29));
+										}
+											else
+												{
+													var endDate = new Date(secondDate.setMinutes(endIndex*30+30));
+												}
+										secondDate.setHours(0);
+										secondDate.setMinutes(0);
+										secondDate.setSeconds(0);
+										secondDate.setMilliseconds(0);
+										console.log("THIS IS START INDEX AND DATE", startIndex, startDate)
+										console.log("THIS IS END INDEX AND DATE", endIndex, endDate)
+										var newObject = {
+											'start': startDate,
+											'end': endDate
+										}
+										that.setState({
+											events: that.state.events.concat(newObject)
+										})
+									}
+							}
+
 					}
 			},
 			error:function(err){
 				if (err){console.log("error in calendar",err)}
 			}
 		})
+
 	}
 
 	componentWillMount() {
@@ -634,11 +720,16 @@ class EditProfile extends React.Component {
 						time: JSON.stringify(arrayOfTimes)
 					},
 					success:function(resp){
+						// if(data.slots[data.slots.length-1])
+						var newObjectAgain = {
+							'start': data.slots[0],
+							'end': data.slots[data.slots.length-1]
+						}
 						that.setState({
-							availability: resp.availability
+							availability: resp.availability,
+							events: that.state.events.concat(newObjectAgain)
 						})
 						console.log("SUCCESS",that.state.availability)
-						alert("success")
 					},
 					error:function(err){
 						console.log("EEEEEE",err)
@@ -648,55 +739,8 @@ class EditProfile extends React.Component {
 	}
 
 	_editCalendar(isEnabled) {
-		var events = [];
-		for(var i = 0; i < this.state.availability.length; i++)//each day
-		{
-			var ones = [];
-			var consecutiveOnes = [];
-			console.log("THIS IS THE 2nd STATE RIGHT NOW: ", this.state.availability[i].length)
-			for(var j = 0; j < this.state.availability[i].length; j++) //each 30min time
-			{
-				
-				if(this.state.availability[i][j] === 1)
-					{
-						console.log(this.state.availability[i][j]);
-						ones.push(j);
-					}
-
-			}
-			console.log("THESE ARE THE ONE INDEXES: ", ones);
-			if(ones.length > 1)
-				{
-					for (var k = 0; k < ones.length-1; k++)
-						{
-							if(ones.length === 1)
-								{
-									console.log("THIS IS A BREAK")
-									break;
-								}
-							if (ones[k+1] !== ones[k]+1)
-								{
-									console.log("HOPE THIS WORKS", ones)
-									consecutiveOnes.push(ones.splice(0,k+1))
-									k=0;
-								}
-						}
-						consecutiveOnes.push(ones)
-				}
-			if (ones.length === 1)
-				{
-					console.log("THIS IS THE FUKING ONE PROBLEM", ones)
-					consecutiveOnes.push(ones)
-					console.log("WHY THE FUK WON'T THIS WORK", consecutiveOnes)
-				}
-			console.log("THESE ARE WORKINGS YAY", consecutiveOnes)
-		}
 		var calendar = <BigCalendar
-								events={[{
-								    'title': 'DTS ENDS',
-								    'start': new Date(),
-								    'end': new Date(2016, 7, 10, 12, 0, 0)
-								}]}
+								events={this.state.events}
 								defaultDate={new Date()}
 							    selectable={true}
 							    onSelectSlot={this.onSelectSlot.bind(this)}

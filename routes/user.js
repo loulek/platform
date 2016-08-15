@@ -128,7 +128,7 @@ router.post("/sendDayAndTime",function(req,res){
                 var newModel = aa
                 console.log(newModel.times[day])
                 var timesInThatDay=newModel.times[day];
-                console.log("timesInThatDay",timesInThatDay)
+                console.log("LENGTH OF THE FUKING TIME",time.length)
                 for (var i=0;i<time.length;i++){
                     console.log("timesiii",time[i]);
                     console.log("timeiiiiii2",timesInThatDay)
@@ -136,7 +136,9 @@ router.post("/sendDayAndTime",function(req,res){
                 }
                 Availability.findByIdAndUpdate(id, newModel,function(err){
                     if (err){res.json({success:false,error:err})}
-                    else{res.json({success:true})}
+                    else{
+						res.json({success: true, availability: newModel.times})
+					}
                 })
             })
         }
@@ -150,7 +152,68 @@ router.post("/sendDayAndTime",function(req,res){
                 }
                 Availability.findByIdAndUpdate(id, newModel,function(err){
                     if (err){res.json({success:false,error:err})}
-                    else{res.json({success:true})}
+                    else{res.json({success: true, availability: newModel.times})}
+                })
+            }
+        });
+})
+
+router.post("/sendDayAndTime2",function(req,res){
+    req.body.time =JSON.parse(req.body.time)
+    var day = req.body.day;
+    var time = req.body.time;
+    var user = req.user._id;
+    console.log("INSIDE AJAX SEND DAY AND TIME", time)
+    Availability.findOne({user:req.user.profile},function(err,a){
+        console.log("AAAAAAAAA",req.user.profile)
+        if(!a){
+            var aa = new Availability({
+                times: [
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                ],
+                user: req.user.profile
+            })
+            aa.save(function(err,aa){
+                if (err){
+                    console.log("creation error", err);
+                    res.json({success:false,error:err})
+                }
+                console.log("aa",aa)
+                var id = aa._id
+                var newModel = aa
+                console.log(newModel.times[day])
+                var timesInThatDay=newModel.times[day];
+                console.log("LENGTH OF THE FUKING TIME",time.length)
+                for (var i=0;i<time.length;i++){
+                    console.log("timesiii",time[i]);
+                    console.log("timeiiiiii2",timesInThatDay)
+                    newModel.times[day][time[i]] = 0;
+                }
+                Availability.findByIdAndUpdate(id, newModel,function(err){
+                    if (err){res.json({success:false,error:err})}
+                    else{
+						res.json({success: true, availability: newModel.times})
+					}
+                })
+            })
+        }
+        else{
+        
+                var id=a._id
+                var newModel = a
+                for (var i=0;i<time.length;i++){
+                    console.log("timesiii",time[i]);
+                    newModel.times[day][time[i]] = 0;
+                }
+                Availability.findByIdAndUpdate(id, newModel,function(err){
+                    if (err){res.json({success:false,error:err})}
+                    else{res.json({success: true, availability: newModel.times})}
                 })
             }
         });
@@ -195,6 +258,11 @@ router.post('/notifications', function(req, res){
     return res.status(200).json({
       success: "ok"
     });
+
+router.get('/user/calendar',function(req,res){
+  Availability.findOne({user:req.user.profile},function(err,calendar){
+    if (err){res.status(500).json("something wrong in calendar", err)}
+    res.json(calendar)
   })
 })
 

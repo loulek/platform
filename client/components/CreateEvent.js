@@ -217,11 +217,12 @@ invite(userId, e){
 						}
 					}
 						else{
-							alert("PLEASE LOG IN FIRST!")
+							console.log("PLEASE LOG IN FIRST!22");
+							return
 						}
 					},
 					error:(err) =>{
-						if (err){console.log("error in creating event",err); alert("PLESASE LOG IN FIRST!")}
+						if (err){console.log("error in creating event",err); return}
 					}
 				})
 

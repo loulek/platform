@@ -258,6 +258,8 @@ router.post('/notifications', function(req, res){
     return res.status(200).json({
       success: "ok"
     });
+  }); 
+});  
 
 router.get('/user/calendar',function(req,res){
   Availability.findOne({user:req.user.profile},function(err,calendar){

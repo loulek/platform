@@ -54,14 +54,36 @@ handleClick(e){
 }
 
 	render() {
+		if (this.state.user.specialty){
+			console.log("thisthsi",this)
+			var languages = this.state.user.specialty.join(', ')
+		}
 		return (
-			<div>
-				<h3>Profile</h3>
-				<h2>{this.state.user.firstName} {this.state.user.lastName}</h2>
-				<h2>{this.state.user.salary}€/heure</h2>
-				<img src={this.state.user.profileImageUrl} alt="Image" width="150px"/>
-				<button className="btn btn-success" onClick={this.handleClick.bind(this)}>Contact</button>
-
+			<div className="container">
+				<div className="panel panel-default">
+					<div className='panel-heading'>
+						<h3 className="panel-title">Profile</h3>
+					</div>
+						<div className='panel-body'>
+							<div className='form-group row'>
+								<div className="squaresContainer">	
+									<div className="row col-md-4"><img src={this.state.user.profileImageUrl} alt="Image" width="150px"/>
+									</div>
+									<div className="row col-md-5">
+									<h3>Name: {this.state.user.firstName} {this.state.user.lastName}</h3>
+										<h4>Gender: {this.state.user.gender}</h4>
+									</div>
+									<div className="row col-md-10">
+										<h4>Languages: {languages}</h4>
+										<h4>Phone: {this.state.user.phone}</h4>
+										<h4>Salary: {this.state.user.salary}$/hour</h4>
+										<iframe src={this.state.user.resumeImageUrl} alt="Image"/>
+									</div>
+								  <button className="btn btn-success">Send message</button>
+								</div>
+							</div>
+						</div>	
+				</div>
 			</div>
 		);
 	}

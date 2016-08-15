@@ -66,6 +66,7 @@ router.post('/event/new',function(req,res){
 });
 
 router.post('/updateEvent/:id',function(req,res){
+
   geocoder.geocode(req.body.address, function(err, data) {
     console.log("data", data)
     if(!data){
@@ -105,9 +106,12 @@ router.post('/findProfile',function(req,res){
   var c2=req.body.criteria2
   if (c2.length===0){c2=["Accueil événementiel","Accueil entreprise","Animation commerciale","Serveur","Voiturier","Barman"]}
   if (c1.length===0){c1=["English","Italiano","Français"]}
-  console.log("INSIDE, filters",req.body)
+  console.log("INSIDE, filters",c1, c2)
   geocoder.geocode(req.body.address, function(err, data) {
-    if (err){console.log("error in geocode in findprofile",err); res.status(500).json({success:false,error:err}); return}
+    if(err){
+      console.log("err", err);
+      return err
+    }
     if(data.length === 0){
       console.log("data is undefined")
       return;
@@ -139,7 +143,9 @@ router.post('/contact',function(req,res){
 // GET /event/:id
 //  This route retrieves an event by its Id and all the informations with it.
 router.get('/event/:id',function(req,res){
-  Event.findById(req.params.id, function(err, event){
+  Event.findById(req.params.id)
+  .populate('hostess')
+  .exec(function(err, event){
     if(err) return res.status(500).json({
       "success": false,
       "error": err
@@ -153,19 +159,20 @@ router.get('/event/:id',function(req,res){
 
 router.post('/event/:id', function(req, res){
   console.log("EVENTTTTT OBJECT")
-  Event.findById(req.params.id,
+  Event.findById(req.params.id, 
     function(err, event){
       if(err) return res.status(500).json({
         "success": false,
         "error": err
       })
         var arr = event.hostess
-        console.log("EVENT HOSTESS", arr);
-        console.log("req.user._id", req.user._id);
-        arr.push(req.user._id);
+        arr.push(req.user.profile._id);
         Event.findByIdAndUpdate(req.params.id,{
           hostess: arr
-        }, function(err,event){
+        })
+        .populate('hostess')
+        .exec(function(err,event){
+          console.log("event", event)
             if(err) return res.status(500).json({
               "success": false,
               "error": err
@@ -176,7 +183,66 @@ router.post('/event/:id', function(req, res){
             })
         })
         console.log("EVENT HOSTESS 2", arr)
+        
+  })
+});
 
+router.post('/deletehost/:id', function(req, res){
+  console.log("I AM IN THE DELETE PROCESS")
+  console.log("Req.params.id", req.params.id)
+  Event.findById(req.params.id).populate('hostess').exec(
+    function(err, event){
+      console.log(err)
+      if(err) return res.status(500).json({
+        "success": false,
+        "error": err
+      })
+    console.log("event", event)
+      
+        var arr = event.hostess
+        console.log("EVENT HOSTESS", arr);
+        console.log("BODYYYY", req.body);
+        var n = -1;
+        for(var i; i < arr.length; i++) {
+          if (arr[i]._id = hostess) {
+            n = i;
+            break;
+          }
+        }
+        // var n = arr.indexOf(req.body.hostess)
+        console.log("ARRAYYYY", arr)
+        arr.splice(n, 1)
+
+        event.hostess = arr;
+        event.save(function(err,event){
+          console.log("event", event)
+            if(err) return res.status(500).json({
+              "success": false,
+              "error": err
+            })
+            res.status(200).json({
+              "success": true,
+              "event": event
+            })
+        })
+
+        // Event.findByIdAndUpdate(req.params.id,{
+        //   hostess: arr
+        // })
+        // .populate('hostess')
+        // .exec(function(err,event){
+        //   console.log("event", event)
+        //     if(err) return res.status(500).json({
+        //       "success": false,
+        //       "error": err
+        //     })
+        //     res.status(200).json({
+        //       "success": true,
+        //       "event": event
+        //     })
+        // })
+        // console.log("EVENT HOSTESS 2", arr)
+        
   })
 });
 
@@ -235,6 +301,11 @@ router.get('/confirmed/:id', function(req, res, next){
     });
   })
 
+})
+
+router.get('/change/:id', function(req, res){
+  var changePass = req.params.id;
+  User.findOne({confirmId : changePass})
 })
 
 // //redirecting to search with address

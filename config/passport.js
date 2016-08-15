@@ -6,12 +6,10 @@ var configAuth = require('./auth');
 var User = require('../models/user');
 
 passport.serializeUser(function(user, done) {
-  console.log("!!user.profile", !!user.profile)
   done(null, JSON.stringify({id:user._id, type: user.type}));
 });
 
 passport.deserializeUser(function(serialized, done) {
-    console.log("SERIALIZE", serialized)
   var deserialized = JSON.parse(serialized)
 
   User.findById(deserialized.id)
@@ -20,9 +18,7 @@ passport.deserializeUser(function(serialized, done) {
         model: deserialized.type
       })
       .exec(function(err, user){
-        console.log("DESERIALIZED.TYPE", deserialized.type)
-        console.log("USER", user)
-        done(err, user)
+        done(err, user);
       })
 
 });

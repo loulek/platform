@@ -1,0 +1,18 @@
+HTTrack3.48-21 launched on Sun, 14 Aug 2016 19:51:26 at http://www.jtbnow.com/#home
+(winhttrack http://www.jtbnow.com/#home -O "copy/copy" -%v )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+19:51:29	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link primary/robots.txt (from primary/primary)
+19:51:29	Warning: 	Retry after error -5 (Unable to get server's address: nodename nor servname provided, or not known) at link primary/home (from primary/primary)
+19:51:31	Error: 	"Not Found" (404) at link www.jtbnow.com/jtb-gives-1 (from www.jtbnow.com/)
+19:51:31	Error: 	"Not Found" (404) at link www.jtbnow.com/"https://player.vimeo.com/video/119418561?wmode=opaque&amp;api=1\%22 (from www.jtbnow.com/)
+19:51:31	Error: 	"Not Found" (404) at link www.jtbnow.com/"https://player.vimeo.com/video/119418561?wmode=opaque&api=1%22 (from www.jtbnow.com/)
+19:51:31	Warning: 	Retry after error -5 (Unable to get server's address: unknown error) at link primary/home (from primary/primary)
+19:51:32	Error: 	"Unable to get server's address: unknown error" (-5) after 2 retries at link primary/home (from primary/primary)
+
+HTTrack Website Copier/3.48-21 mirror complete in 6 seconds : 23 links scanned, 15 files written (1146824 bytes overall), 1 files updated [39581 bytes received at 6596 bytes/sec], 124730 bytes transferred using HTTP compression in 4 files, ratio 27%
+(5 errors, 2 warnings, 0 messages)

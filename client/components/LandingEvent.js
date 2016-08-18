@@ -48,11 +48,6 @@ class LandingEvent extends React.Component {
 		this.context.router.push({
 
 			pathname: '/search',
-			query: {
-				address: this.state.eventData.address,
-				startDate: this.state.eventData.startDate.toString(),
-				endDate: this.state.eventData.endDate.toString()
-			},
 		});
 
 	}
@@ -82,35 +77,10 @@ class LandingEvent extends React.Component {
 
 	_createEvent(isEnabled) {
 		return (
-			<div className='panel panel-default videoland'>
-				<div className='panel-heading'>
-					<h3 className="panel-title">Create Event</h3>
+				
+				<div className='landcenter'>
+							<button className="btn btn-default" onClick={this._searchEvent.bind(this)} >Rent a MasterPiece</button>
 				</div>
-				<div className='panel-body'>
-					<div className="form-group row">
-
-						{ /*  This is the location autocompleter */ }
-						<div className="col-sm-8">
-							<Geosuggest inputClassName="form-control" placeholder="Address" initialValue={this.state.eventData.address} onSuggestSelect={this.suggestSelect.bind(this)} id="address" />
-						</div>
-
-					</div>
-
-					<div className="form-group row">
-
-						{ /*  This is the start date datepicket */ }
-						<div className="col-sm-1">
-							<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Start Date"} />
-						</div>
-
-						{ /*  This is the end date datepicket */ }
-						<div className="col-sm-1 col-sm-offset-3">
-							<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"End Date"} />
-						</div>
-					</div>
-					<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} >Find Hosts</button>
-				</div>
-			</div>
 			);
 	}
 	render() {
@@ -123,11 +93,44 @@ class LandingEvent extends React.Component {
 		
 		return (
 			<div>
-			<video id="background-video" loop autoPlay >
-  			<source src="https://s3-us-west-2.amazonaws.com/joshmagic/landingg.mp4" type="video/mp4" />
-  			</video>
+				<div id="carousel-example-generic" className="carousel slide" data-ride="carousel">
+				  <ol className="carousel-indicators">
+				    <li data-target="#carousel-example-generic" data-slide-to="0" className="active"></li>
+				    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+				    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+				  </ol>
+
+				  <div className="carousel-inner" role="listbox">
+				    <div className="item active">
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-17+a%CC%80+21.35.52.png" style={{width:"100%"}} />
+				      <div className="carousel-caption">
+				      </div>
+				    </div>
+				    <div className="item">
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-15+a%CC%80+23.53.25.png" style={{width:"100%"}} />
+				      <div className="carousel-caption">       
+				      </div>
+				    </div>
+				    <div className="item">
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-15+a%CC%80+23.56.18.png" style={{width:"100%"}} />
+				      <div className="carousel-caption">       
+				      </div>
+				    </div>
+				    
+				  </div>
+
+				  <a className="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+				    <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				    <span className="sr-only">Previous</span>
+				  </a>
+				  <a className="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+				    <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				    <span className="sr-only">Next</span>
+				  </a>
+				</div>
+				
 			<div className="container">
-				<h3 className='landcenter'>Find your independent event hosts</h3>
+				<h5 className='landcenter'>We give you access to genius</h5>
 				{contactForm}
 			</div>
 			</div>
@@ -162,13 +165,13 @@ class MyDatePicker extends React.Component {
 						moment: {
 							lang: 'en',
 							settings: {
-					        months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
-					        monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
-					        monthsParseExact : true,
-					        weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
-					        weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-					        weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
-					        weekdaysParseExact : true,
+					        // months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+					        // monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+					        // monthsParseExact : true,
+					        // weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+					        // weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+					        // weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
+					        // weekdaysParseExact : true,
 					        longDateFormat : {
 					            LT : 'HH:mm',
 					            LTS : 'HH:mm:ss',
@@ -219,7 +222,7 @@ class MyDatePicker extends React.Component {
 }
 
 LandingEvent.contextTypes = {
-	router: Object
+	router: React.PropTypes.object,
 }
 
 module.exports=LandingEvent

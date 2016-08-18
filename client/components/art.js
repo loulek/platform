@@ -1,25 +1,23 @@
 import React from "react";
 import {Link} from "react-router";
 
-class Profile extends React.Component {
+class Art extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state={
-		user:{}
+		art:{}
 	}
 	}
-
 
 	componentDidMount() {
-
 	    $.ajax({
-	      url: '/profile/' + this.props.params.id,
+	      url: '/art/' + this.props.params.id,
 	      dataType: 'json',
 	      type: 'GET',
-	      success: function(user) {
-	        console.log("success finding users", user)
+	      success: function(response) {
+	        console.log("success finding art", response)
 	        this.setState({
-				user: user.user
+				art: response.arto
 			})
 	      }.bind(this),
 	      error: function(err){
@@ -29,10 +27,9 @@ class Profile extends React.Component {
 	    });
   	}
 
-
 	handleClick(e){
 		e.preventDefault();
-		var num=this.state.user.phone
+		var num=this.state.art.phone
 		console.log("thisclick", this)
 		$.ajax({
 			url: '/contact',
@@ -86,34 +83,43 @@ class Profile extends React.Component {
 
 
 	render() {
-		if (this.state.user.specialty){
-			console.log("thisthsi",this)
-			var languages = this.state.user.specialty.join(', ')
-		}
+		
 		return (
 			<div className="container">
 				<div className="panel panel-default">
 					<div className='panel-heading'>
-						<h3 className="panel-title">Profile</h3>
+						<h3 className="panel-title">MasterPiece</h3>
 					</div>
 						<div className='panel-body'>
 							<div className='form-group row'>
 								<div className="squaresContainer">	
-									<div className="row col-md-4"><img src={this.state.user.profileImageUrl} alt="Image" width="150px"/>
+									<div className="row col-md-4"><img src={this.state.art.artImageUrl} alt="Image" width="200px"/>
 									</div>
 									<div className="row col-md-5">
-									<h3>Name: {this.state.user.firstName} {this.state.user.lastName}</h3>
-										<h4>Gender: {this.state.user.gender}</h4>
+									<h2>{this.state.art.title}</h2>
+									<h3>{this.state.art.artist}</h3>
 									</div>
 									<div className="row col-md-10">
-										<h4>Languages: {languages}</h4>
-										<h4>Phone: {this.state.user.phone}</h4>
-										<h4>Salary: {this.state.user.salary}$/hour</h4>
-										<iframe src={this.state.user.resumeImageUrl} alt="Image"/>
+										<h4>CATEGORY</h4>
+										<h5><p>{this.state.art.category}</p>
+										</h5>
+										<h4>DIMENSIONS</h4>
+										<h5><p>{this.state.art.height} in. H x {this.state.art.width} in. W</p>
+										</h5>
+										<h4>RENTAL PRICE FROM</h4>
+										<h5><p>$ {this.state.art.price}</p>
+										</h5>
+										<h4>MUSEUM LOCATION</h4>
+										<h5><p>{this.state.art.address}</p>
+										</h5>
+
+
+
 									</div>
-								  <button className="btn btn-success" onClick={this.sendmessage.bind(this)}>Send message</button>
-								</div>
+								 </div>
 							</div>
+							 <button className="btn btn-primary" onClick={this.sendmessage.bind(this)}>Request More Info</button>
+								
 						</div>	
 				</div>
 			</div>
@@ -121,9 +127,8 @@ class Profile extends React.Component {
 	}
 }
 
-
-Profile.contextTypes = {
+Art.contextTypes = {
   router: Object
 }
 
-module.exports = Profile;
+module.exports = Art;

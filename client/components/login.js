@@ -30,10 +30,10 @@ class Login extends React.Component {
 				var user = this.context.getUser()
 
 				if (user.type === "Client"){
-					this.context.router.push('/events');
+					this.context.router.push('/');
 				}
 				if (user.type === "Profile"){
-					this.context.router.push("/notifications");
+					this.context.router.push("/account");
 				}
 				
 			} else if(data.status === 'error') {
@@ -67,7 +67,9 @@ class Login extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"textAlign" : "center", "color" : "white", "textShadow": "2px 2px black"}}>Connexion</h2>
+			<div className='landcenter'>
+			<h2>Log In</h2>
+			</div>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">

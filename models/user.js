@@ -6,7 +6,7 @@ var findOrCreate = require('mongoose-findorcreate');
 var userSchema = mongoose.Schema({
     email    : {type: String, required: true, unique: true},
     password : {type: String, required: true},
-    profile  : {type: mongoose.Schema.Types.ObjectId, ref: 'Profile'},
+    profile  : {type: mongoose.Schema.Types.ObjectId},
     type     : {type: String, required: true},
     confirmId: {type: String, required: false},
     confirmed: {type: Boolean, default: false, required: true},	

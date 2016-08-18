@@ -99,7 +99,7 @@ class Signup extends React.Component {
 			<video id="background-video" loop autoPlay >
   			<source src="https://s3-us-west-2.amazonaws.com/joshmagic/registerr.mp4" type="video/mp4" />
   			</video>
-  			<h3 className='center'>Sign Up</h3>
+  			<h3 className='center'>Museum Sign Up</h3>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">

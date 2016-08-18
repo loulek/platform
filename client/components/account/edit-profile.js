@@ -450,20 +450,19 @@ class EditProfile extends React.Component {
 
 
 
-
 	_editContact(isEnabled) {
 		if(isEnabled) {
 			return (
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Prénom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>First Name:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="firstName" defaultValue={this.state.profileData.firstName} id="firstName"/>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Last Name:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="lastName" defaultValue={this.state.profileData.lastName} id="lastName"/>
 							</div>
@@ -475,13 +474,13 @@ class EditProfile extends React.Component {
 						</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Téléphone:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Phone:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="phone" defaultValue={this.state.profileData.phone} id="phone"/>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Adresse:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Address:</b></p>
 							<div className="col-sm-8">
 
 							<Geosuggest inputClassName="form-control" placeholder="" initialValue={this.state.profileData.address} id="address" />
@@ -498,13 +497,13 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Prénom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>First Name:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.firstName}</p>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Last Name:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.lastName}</p>
 							</div>
@@ -516,18 +515,18 @@ class EditProfile extends React.Component {
 						</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Téléphone:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Phone:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.phone}</p>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Adresse:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Address:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.address}</p>
 							</div>
 						</div>
-						<button className="btn btn-primary float-right" onClick={function() {this.setState({editContact: true})}.bind(this)}>Modifier</button>
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editContact: true})}.bind(this)}>Edit</button>
 					</div>
 				</div>
 			);
@@ -595,16 +594,16 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Sexe:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Gender:</b></p>
 							<div className="col-sm-8">
 								<select className="form-control" defaultValue={this.state.profileData.gender} id="genderSelector">
-									<option value='Femme'>Femme</option>
-									<option value='Homme'>Homme</option>
+									<option value='Femme'>Woman</option>
+									<option value='Homme'>Man</option>
 								</select>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Langues:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Language:</b></p>
 							<div className="col-sm-8 languages_container">
 
 								  {specialties}
@@ -625,7 +624,7 @@ class EditProfile extends React.Component {
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>CV:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Resume:</b></p>
 							<img src={this.state.profileData.resumeImageUrl} width="150" />
 							<div className="col-sm-10">
 								<input type="file" accept="application/pdf, image/*" className="form-control" id="resume" />
@@ -654,14 +653,14 @@ class EditProfile extends React.Component {
 										{box}
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Sexe:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Gender:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.gender}</p>
 							</div>
 						</div>
 
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Langues:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Languages:</b></p>
 							<div className="col-sm-10 languages_padding">
 								{specialtyContent}
 							</div>
@@ -679,12 +678,12 @@ class EditProfile extends React.Component {
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>CV:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Resume:</b></p>
 							<div className="col-sm-10">
 							{buttonResume}
 							</div>
 						</div>
-						<button className="btn btn-primary float-right" onClick={function() {this.setState({editBio: true, tempSpecialty: this.state.profileData.specialty.slice(0)})}.bind(this)}>Modifier</button>
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editBio: true, tempSpecialty: this.state.profileData.specialty.slice(0)})}.bind(this)}>Edit</button>
 					</div>
 				</div>
 			);
@@ -865,11 +864,8 @@ class EditProfile extends React.Component {
 		          <Pane label="Contact">
 		            <div>{contactForm}</div>
 		          </Pane>
-		          <Pane label="Profil">
+		          <Pane label="Profile">
 		            <div>{bioForm}</div>
-		          </Pane>
-		          <Pane label="Calendrier / Salaire">
-		            <div>{calendarForm}</div>
 		          </Pane>
 		        </Tabs>
 		      </div>

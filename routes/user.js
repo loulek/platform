@@ -6,6 +6,10 @@ var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
 var Notification = require('../models/notification');
+var Message = require('../models/message');
+var Conversation = require('../models/conversation');
+var Art = require('../models/art');
+
 var geocoder = NodeGeocoder({
   provider: "google",
   apiKey: process.env.GEOCODING_API_KEY,
@@ -78,6 +82,99 @@ router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
     });
   }
 });
+
+router.post('/url/to/upload/to/art', upload.single('img'), function(req, res, next) {
+  if (req.user.profile) {
+    Art.findByIdAndUpdate(req.user.profile, {
+      profileImageUrl: req.file.location
+    }, function(err) {
+      if(err) {
+        return res.json({success: false, error: err.toString()});
+      } else {
+        return res.json({success: true, message: req.file.location});
+      }
+    });
+  }
+});
+
+router.get('/myGallery', function(req, res){
+  Art.find({
+    profile: req.user._id
+  })
+  .exec(function(err, myArt){
+    console.log("ARRRT", myArt)
+    if(err){res.status(500).send("error", err)}
+      res.json(myArt);
+  });
+});
+
+
+router.post('/addArt', function(req, res){
+  var art = new Art ({
+    profile    : req.user._id, 
+    title      : req.body.title,
+    artist     : req.body.artist,
+    category   : req.body.category,
+    price      : req.body.price,
+    height     : req.body.height,
+    width      : req.body.width,
+    description: req.body.description,
+    artImageUrl: req.body.artImageUrl,
+    address    : req.body.address
+  })
+  .save(function(err, art){
+    Art.find({profile: req.user._id}, function(err, art) {
+    if(err){ return res.status(500).send(err)}
+        res.status(200).json({
+          success: "ok",
+          art: art
+        });
+      })
+              
+  }); 
+}); 
+
+router.delete('/deleteArt/:id', function(req, res, next){
+  Art.findByIdAndRemove(req.params.id, function(err){
+    if(err) return next(err)
+      res.json({
+        success: "ok"
+      })
+  })
+})
+
+router.post('/updateArt/:id', function(req, res){
+console.log("I AM UPDATING ART req.params.id", req.params.id)
+console.log("I AM UPDATING ART req.params.id", req.params._id)
+
+    Art.findByIdAndUpdate(req.params.id, {
+        profile    : req.user._id, 
+        title      : req.body.title,
+        artist     : req.body.artist,
+        category   : req.body.category,
+        price      : req.body.price,
+        height     : req.body.height,
+        width      : req.body.width,
+        description: req.body.description,
+        artImageUrl: req.body.artImageUrl,
+        address    : req.body.address
+    }, function(err) {
+      console.log("I AM UPDATING ART 2")
+
+        if(err) {
+          return res.json({status: 'error', error: err.toString()});
+        } else {
+          Art.findById(req.params.id)
+          .exec(function(err, art){
+            if(err){
+              throw err;
+            } else {
+              return res.json({status: 'ok', hello: art });
+            }
+          });
+        }
+      })
+})
 
 //TODO: FIND USERS GIVEN USER INPUT
 router.post('/user/find',function(req,res){
@@ -247,7 +344,6 @@ router.get('/notifications', function(req, res){
 });
 
 router.post('/notifications', function(req, res){
-  console.log("[got this data]", req.body);
   var notification = new Notification ({
     client: req.user._id,
     profile: req.body.profile,
@@ -259,7 +355,7 @@ router.post('/notifications', function(req, res){
       success: "ok"
     });
   }); 
-});  
+}); 
 
 router.get('/user/calendar',function(req,res){
   Availability.findOne({user:req.user.profile},function(err,calendar){
@@ -267,6 +363,62 @@ router.get('/user/calendar',function(req,res){
     res.json(calendar)
   })
 })
+
+router.get('/messages', function(req, res) {
+
+  var query = {};
+
+  if (req.user.type === 'Client') {
+    query['client'] = req.user.profile._id;
+  }
+  else if (req.user.type === 'Client') {
+    query['profile'] = req.user.profile._id;
+  }
+
+  Conversation.find(query, function(err, conversations) {
+
+  })
+})
+
+router.post('/sendMessage', function(req, res) {
+   console.log("REQ.USER", req.user);
+   console.log("REQ.USER.PROFILE.ID", req.user.profile._id);
+   console.log("REQ.BODY.USER.ID", req.body['user[_id]']);
+
+  var query = {};
+
+  if (req.user.type === 'Client') {
+    query['client'] = req.user.profile._id;
+    query['profile'] = req.body['user[_id]'];
+  }
+
+  if (req.user.type === 'Client') {
+    query['profile'] = req.user.profile._id;
+    query['client'] = req.body['user[_id]'];
+  }
+
+  Conversation.findOrCreate(query, query,
+  function(err, conversation) {
+    console.log("AM I HERE IN MONGOOSE?")
+    if (err) return res.status(500).send({success: false, error: console.log("Error", err)});
+    return res.json({
+      success:true,
+      redirect: '/conversation/' + conversation._id
+    })
+  })
+    console.log("SUCCESS ENDING OF THE AJAX")
+
+})
+
+router.get('/conversation/:id', function(req, res){
+  Message.find({
+        conversation: req.params.id
+      }).exec(function(err, messages){
+        if(err){res.status(500).send("error", err)}
+          res.json(messages);
+      });
+ 
+});
 
 router.get('/events',function(req,res){
   console.log("INSIDE EVENTS ROUTE");
@@ -388,7 +540,7 @@ router.post('/user/update-profile', function(req, res) {
       }
 
       if(req.user.type === "Profile") {
-        console.log("PROFILE", Profile);
+        // console.log("PROFILE", Profile);
         var profile = new Profile({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -402,9 +554,9 @@ router.post('/user/update-profile', function(req, res) {
           address: req.body.address
         })
       } if (req.user.type === "Client") {
-        console.log("CLIENT", Client);
+        // console.log("CLIENT", Client);
 
-        var clientProfile = new Client({
+        var profile = new Client({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           phone: req.body.phone,
@@ -414,7 +566,8 @@ router.post('/user/update-profile', function(req, res) {
           address: req.body.address
         });
       }
-      clientProfile.save(function(err, client) {
+
+      profile.save(function(err, profile) {
         if(err) {
           return res.json({status: 'error', error: err.toString()});
         } else {

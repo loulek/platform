@@ -11,16 +11,15 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(serialized, done) {
   var deserialized = JSON.parse(serialized)
-
   User.findById(deserialized.id)
       .populate({
         path:'profile', 
         model: deserialized.type
       })
       .exec(function(err, user){
+        console.log("USER", user)
         done(err, user);
       })
-
 });
 
 
@@ -45,7 +44,7 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
       }
 
       if (user.confirmId === false){
-        return done(null, false, {message: 'Merci de confirmer votre adresse email via le mail que nous vous avons envoyé.'})
+        return done(null, false, {message: 'Please confirm your email address through the email we sent you.'})
       }
       
       // auth has has succeeded

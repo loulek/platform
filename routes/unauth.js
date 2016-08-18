@@ -4,6 +4,7 @@ var User = require('../models/user');
 var Profile = require('../models/profile');
 var NodeGeocoder = require('node-geocoder');
 var Event = require('../models/event');
+var Art = require('../models/art');
 var geocoder = NodeGeocoder({
   provider: "google",
   apiKey: process.env.GEOCODING_API_KEY,
@@ -246,8 +247,21 @@ router.post('/deletehost/:id', function(req, res){
   })
 });
 
+router.get('/art/:id', function(req, res){
+  Art.findById(req.params.id, function(err, art){
+    if(err) return res.status(500).json({
+      "success": false,
+      "error": err
+    })
+      return res.status(200).json({
+        "success": true,
+        "arto": art
+      })
+  })
+})
+
+
 router.get('/profile/:id', function(req, res){
-  console.log("inside backend")
   Profile.findById(req.params.id, function(err, user){
     if(err) return res.status(500).json({
       "success": false,
@@ -261,25 +275,15 @@ router.get('/profile/:id', function(req, res){
 });
 
 
-router.post('/search', function(req, res){
-  console.log("REQUEST>BODY ADDREs", req.body.address);
-  if (req.body.address){
-    geocoder.geocode(req.body.address, function(err, data) {
-      var longitude_new = data[0].longitude;
-      var latitude_new = data[0].latitude;
-      console.log("nlllllllllllll", longitude_new)
-      Profile.find(
-      {location: {
-        $near: [longitude_new, latitude_new],
-        $maxDistance: 1
-      } || null},function(err,users){
-        if (err){console.log(err); res.status(500).send("SOMETHING WRONG HERE")}
-        res.send(users)
-      })
-    })}
-     else{
-    res.send({error:"invalid address"})
-  }
+router.get('/search', function(req, res){
+  // console.log("I AM IN SEARCH RIGHT NOOOWWWWW")
+  Art.find({}, function(err, art){
+    if(err){
+      console.log("Error:", err)
+      return res.status(500).send("Error")
+    }
+    res.send({success: true, art})
+  })
 })
 
 router.get('/confirmed/:id', function(req, res, next){

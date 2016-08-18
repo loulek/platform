@@ -8,9 +8,9 @@ body {
   background-repeat: no-repeat;
 }
 .videoland{
-  margin-top: 130px;
+  margin-top: 30px;
   min-width: 200px;
-  max-width: 700px;
+  max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -24,12 +24,17 @@ body {
   z-index: -6;
   }
 .bg-result{
-  width: 100%;
   background-color: white;
-  opacity: 0.97;
+  display: inline-block;
+  margin: 20px;
 }
 .panel-default {
-   opacity: 0.97 
+   opacity: 0.97 ;
+}
+.search_box {
+  max-width:250px;
+  float: left;
+  display: inline-block;
 }
 
 .panel-heading {
@@ -51,10 +56,9 @@ body {
 }
 .landcenter {
   text-align: center;
-  color: white;
+  color: black;
   font-size: 35px;
-  text-shadow: 2px 2px black;
-  margin-top: 150px;
+  margin-top: 25px;
   margin-bottom:0px;
 }
 .center {
@@ -259,3 +263,48 @@ body {
 .events{
   margin-top: 20px;
 }
+.art-display{
+  display: inline-block;
+}
+.individual-art{
+  width: 400px;
+  height: 200px;
+  margin: 20px;
+}
+.individual-art img {
+  height: 100%;
+}
+.art-display-search{
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+}
+.container-search {
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 500px) {
+.container-search {
+    flex-wrap: wrap;
+  }
+}
+.individual-art-search{
+  width: 300px;
+  height: 200px;
+  margin: 20px;
+  di
+}
+.individual-art-search img {
+  width: 100%;
+}
+.formField {
+  margin-bottom: 5rem;
+}
+.newmessage{
+  margin-top: 20px;
+}
+.priceSearch{
+  display: flex;
+}
+.grid-sizer,
+.grid-item { width: 20%; }

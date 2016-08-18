@@ -24,8 +24,8 @@ class TopNavBar extends React.Component{
 	render() {
 
 		var optionsGuest = <ul className="nav navbar-nav navbar-right">
-								<li><Link to="workersignup"><span className="glyphicon glyphicon-user"></span> Find Jobs</Link></li>
-								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Find Hosts</Link></li>
+								<li><Link to="workersignup"><span className="glyphicon glyphicon-home"></span> Museum Sign Up </Link></li>
+								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Sign Up</Link></li>
 								<li><Link to="login"><span className="glyphicon glyphicon-log-in"></span> Login</Link></li>
 
 								</ul>;
@@ -37,11 +37,9 @@ class TopNavBar extends React.Component{
 								<li className="dropdown">
 									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
 									<ul className="dropdown-menu">
-										<li><Link to="/account"><i className="fa fa-cog"></i> Account Settings</Link></li>
+										<li><Link to="/account"><i className="glyphicon glyphicon-user"></i> Account Settings</Link></li>
 										<li role="separator" className="divider"></li>
-										<li><Link to="/notifications"><i className="fa fa-cog"></i> Notifications</Link></li>
-										<li role="separator" className="divider"></li>
-										<li><Link to="/messages"><i className="fa fa-cog"></i> Messages</Link></li>
+										<li><Link to="/messages"><i className="glyphicon glyphicon-envelope"></i> Messages</Link></li>
 										<li role="separator" className="divider"></li>
 										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
 									</ul>
@@ -53,11 +51,9 @@ class TopNavBar extends React.Component{
 								<li className="dropdown">
 									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
 									<ul className="dropdown-menu">
-										<li><Link to="/account"><i className="fa fa-cog"></i> Account Settings</Link></li>
+										<li><Link to="/account/edit-profile"><i className="glyphicon glyphicon-user"></i> Account Settings</Link></li>
 										<li role="separator" className="divider"></li>
-										<li><Link to="/events"><i className="fa fa-cog"></i> Events</Link></li>
-										<li role="separator" className="divider"></li>
-										<li><Link to="/messages"><i className="fa fa-cog"></i> Messages</Link></li>
+										<li><Link to="/messages"><i className="glyphicon glyphicon-envelope"></i> Messages</Link></li>
 										<li role="separator" className="divider"></li>
 										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
 									</ul>
@@ -109,8 +105,8 @@ class TopNavBar extends React.Component{
 
 TopNavBar.contextTypes = {
     router: React.PropTypes.object.isRequired,
-    getUser: Object,
-    setUser: Object,
+    getUser: React.PropTypes.oneOfType([() => {}]),
+    setUser: React.PropTypes.oneOfType([() => {}]),
 };
 
 

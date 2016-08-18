@@ -1,7 +1,7 @@
 var React = require('react');
 import { Link } from 'react-router'
 
-var Messages = React.createClass({
+var MessageUser = React.createClass({
  getInitialState: function() {
    return {
      messages: []
@@ -10,7 +10,7 @@ var Messages = React.createClass({
 
   componentDidMount(){
    $.ajax({
-     url: '/messages',
+     url: '/conversation/' + this.props.params.id,
      dataType: 'json',
      type: 'GET',
      success: function(data) {
@@ -62,6 +62,7 @@ var Messages = React.createClass({
 
                           </span>
                        </div>
+              
                  </Link>
                </div>
          </div>
@@ -76,7 +77,13 @@ var Messages = React.createClass({
                 </div>
                   <div className='panel-body'>
                     <div className="form-group row">
-                      <div className="squaresContainer">{messageSquare}</div>
+                      <div className="squaresContainer">{messageSquare}
+                        <div className="form-group">
+                          <label for="comment">Message:</label>
+                          <textarea className="form-control" rows="5" id="comment"></textarea>
+                          <button type="button" className="btn btn-primary" style={{"margin-top":"7px"}}>Send</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
               </div>
@@ -86,8 +93,8 @@ var Messages = React.createClass({
 
 });
 
-Messages.contextTypes = {
+MessageUser.contextTypes = {
   router: Object
 }
 
-module.exports = Messages
+module.exports = MessageUser

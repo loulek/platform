@@ -118,7 +118,8 @@ class EditProfile extends React.Component {
 			editContact: false,
 			editBio: false,
 			editCalendar: false,
-			availability:[]
+			availability:[],
+			events:[]
 		}
 	}
 
@@ -609,13 +610,12 @@ class EditProfile extends React.Component {
 		var arrayOfTimes = [];
 		var dayOfWeek = data.slots[0].getDay();
 		console.log("THIS IS A CONSOLE LOG: ", data.slots);
-
 		if(data.start.getDay() === data.end.getDay())
 		{
 
 			if (data.slots.length===2){
 			console.log("INSIDE IF STATEMENT")
-			alert("You must be at least available for an hour"); 
+			alert("You must be at least available for an hour");
 			return
 			}
 				for(var i = 0; i < data.slots.length-1; i++)
@@ -627,28 +627,31 @@ class EditProfile extends React.Component {
 				{
 					arrayOfTimes.push(47)
 				}
-				$.ajax("/sendDayAndTime",{
-					type: "POST",
-					data: {
-						day: dayOfWeek,
-						time: JSON.stringify(arrayOfTimes)
-					},
-					success:function(resp){
-						that.setState({
-							availability: resp.availability
+						$.ajax("/sendDayAndTime",{
+							type: "POST",
+							data: {
+								day: dayOfWeek,
+								time: JSON.stringify(arrayOfTimes)
+							},
+							success:function(resp){
+								that.setState({
+									availability: resp.availability
+								})
+								console.log("SUCCESS",that.state.availability)
+								alert("success sendign date and time")
+							},
+							error:function(err){
+								console.log("EEEEEE",err)
+							}
 						})
-						console.log("SUCCESS",that.state.availability)
-						alert("success")
-					},
-					error:function(err){
-						console.log("EEEEEE",err)
 					}
-				})
-		}
+
+
+
 	}
 
 	_editCalendar(isEnabled) {
-		var events = [];
+		var events = this.state.events;
 		for(var i = 0; i < this.state.availability.length; i++)//each day
 		{
 			var ones = [];
@@ -656,7 +659,7 @@ class EditProfile extends React.Component {
 			console.log("THIS IS THE 2nd STATE RIGHT NOW: ", this.state.availability[i].length)
 			for(var j = 0; j < this.state.availability[i].length; j++) //each 30min time
 			{
-				
+
 				if(this.state.availability[i][j] === 1)
 					{
 						console.log(this.state.availability[i][j]);
@@ -690,14 +693,15 @@ class EditProfile extends React.Component {
 					console.log("WHY THE FUK WON'T THIS WORK", consecutiveOnes)
 				}
 			console.log("THESE ARE WORKINGS YAY", consecutiveOnes)
+			consecutiveOnes.forEach(function(duration){
+				var startHour=duration[0];
+				var endHour=duration[duration.length-1]
+				
+			})
 		}
 		var calendar = <BigCalendar
 
-								events={[{
-								    'title': 'DTS ENDS',
-								    'start': new Date(),
-								    'end': new Date(2016, 7, 10, 12, 0, 0)
-								}]}
+								events={events}
 								defaultDate={new Date()}
 							    selectable={true}
 							    onSelectSlot={this.onSelectSlot.bind(this)}

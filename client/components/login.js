@@ -102,8 +102,8 @@ class Login extends React.Component {
 
 Login.contextTypes = {
     router: React.PropTypes.object.isRequired,
-    setUser: Object,
-    getUser: Object
+    setUser: React.PropTypes.func,
+    getUser: React.PropTypes.func
 };
 
 export default Login;

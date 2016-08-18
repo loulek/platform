@@ -511,25 +511,45 @@ router.post('/user/update-profile', function(req, res) {
         var location = [longitude_new, latitude_new]
 
       }
-
-      Profile.findByIdAndUpdate(req.user.profile, {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phone: req.body.phone,
-        specialty: req.body['specialty[]'],
-        location:location || null,
-        salary: req.body.salary,
-        image: req.body.image,
-        description: req.body.description,
-        gender: req.body.gender,
-        address: req.body.address
-      }, function(err) {
-        if(err) {
-          return res.json({status: 'error', error: err.toString()});
-        } else {
-          return res.json({status: 'ok'});
-        }
-      })
+      if(req.user.type === "Profile") {
+        console.log("REQ.USERRR DEBUG NIGHT TESTING PURPOSEE", req.user)
+        Profile.findByIdAndUpdate(req.user.profile, {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          phone: req.body.phone,
+          specialty: req.body['specialty[]'],
+          location:location || null,
+          image: req.body.image,
+          description: req.body.description,
+          gender: req.body.gender,
+          address: req.body.address
+        }, function(err) {
+          if(err) {
+            return res.json({status: 'error', error: err.toString()});
+          } else {
+            return res.json({status: 'ok'});
+          }
+        })
+      } else if (req.user.type === "Client") {
+        console.log("REQ.USERRR DEBUG NIGHT", req.user)
+        Client.findByIdAndUpdate(req.user.profile, {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          phone: req.body.phone,
+          specialty: req.body['specialty[]'],
+          location:location || null,
+          image: req.body.image,
+          description: req.body.description,
+          gender: req.body.gender,
+          address: req.body.address
+        }, function(err) {
+          if(err) {
+            return res.json({status: 'error', error: err.toString()});
+          } else {
+            return res.json({status: 'ok'});
+          }
+        })
+      }
     });
   } else {
     geocoder.geocode(req.body.address, function(err, data) {
@@ -555,14 +575,16 @@ router.post('/user/update-profile', function(req, res) {
         })
       } if (req.user.type === "Client") {
         // console.log("CLIENT", Client);
-
         var profile = new Client({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           phone: req.body.phone,
-          location: req.body.location,
+          location: location || null,
+          salary: req.body.salary,
+          specialty: req.body.specialty,
+          image: req.body.image,
           description: req.body.description,
-          profileImageUrl: req.body.profileImageUrl,
+          gender: req.body.gender,
           address: req.body.address
         });
       }

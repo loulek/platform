@@ -186,7 +186,7 @@ _filter(item, filters) {
 		var res = false;
 		if (key === 'pricemin') res = filters.pricemin < item.price;
 		else if (key === 'pricemax') res = item.price < filters.pricemax;
-		else if (itemField != null && searchField != null) res = itemField.toLowerCase().startsWith( searchField.toLowerCase() );
+		else if (itemField != null && searchField != null) res = itemField.toLowerCase().includes( searchField.toLowerCase() );
 		if (ANDkeys.indexOf(key) !== -1) {
 			// console.log(key, "AND | itemField: ", itemField, "vs searchField:", searchField);
 			isTrue = isTrue && res;

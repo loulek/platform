@@ -52,27 +52,34 @@ class Art extends React.Component {
 
 	sendmessage(e){
 		e.preventDefault();
-		$.ajax({
-			url: '/sendMessage',
-			dataType: 'json',
-			type: 'POST',
-			data: this.state,
-				success: function(data) {
-					if(data.success === true) {
-						console.log("IT IS A GIANT SUCCESS")
-						this.context.router.push(data.redirect);
-					} else if(data.status === 'error') {
+		var user = this.context.getUser();
+		if(user.type === "Client" || user.type === "Profile"){
+			$.ajax({
+				url: '/sendMessage',
+				dataType: 'json',
+				type: 'POST',
+				data: this.state,
+					success: function(data) {
+						if(data.success === true) {
+							console.log("IT IS A GIANT SUCCESS")
+							this.context.router.push(data.redirect);
+						} else if(data.status === 'error') {
+							this.setState({
+								message: data.error
+							});
+						}
+					}.bind(this),
+					error: function(hello, status, err){
 						this.setState({
-							message: data.error
+							message: "Error sending a message"
 						});
-					}
-				}.bind(this),
-				error: function(hello, status, err){
-					this.setState({
-						message: "Error sending a message"
-					});
-				}.bind(this)
-		});
+					}.bind(this)
+			});
+		} else {
+			this.context.router.push({
+			pathname: '/login'
+			})
+		}
 	}
 
 
@@ -83,7 +90,6 @@ class Art extends React.Component {
 
 
 	render() {
-		
 		return (
 			<div className="container">
 				<div className="panel panel-default">
@@ -128,7 +134,8 @@ class Art extends React.Component {
 }
 
 Art.contextTypes = {
-  router: Object
+  router: React.PropTypes.object,
+  getUser: React.PropTypes.func
 }
 
 module.exports = Art;

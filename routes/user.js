@@ -60,6 +60,7 @@ router.post('/url/to/upload/to', upload.single('img'), function(req, res, next) 
     Profile.findByIdAndUpdate(req.user.profile, {
       profileImageUrl: req.file.location
     }, function(err) {
+      console.log("in here");
       if(err) {
         return res.json({success: false, error: err.toString()});
       } else {
@@ -84,25 +85,29 @@ router.post('/url/to/upload', upload.single('resu'), function(req, res, next) {
 });
 
 router.post('/url/to/upload/to/art', upload.single('img'), function(req, res, next) {
+  console.log("uploaded an image");
   if (req.user.profile) {
     Art.findByIdAndUpdate(req.user.profile, {
       profileImageUrl: req.file.location
     }, function(err) {
+      console.log("[err uploading image]", err);
       if(err) {
         return res.json({success: false, error: err.toString()});
       } else {
         return res.json({success: true, message: req.file.location});
       }
     });
+  } else {
+    return res.json({success: true, message: req.file.location});
   }
 });
 
 router.get('/myGallery', function(req, res){
   Art.find({
-    profile: req.user._id
+    profile: req.user.profile._id
   })
   .exec(function(err, myArt){
-    console.log("ARRRT", myArt)
+    // console.log("ARRRT", myArt)
     if(err){res.status(500).send("error", err)}
       res.json(myArt);
   });
@@ -110,8 +115,9 @@ router.get('/myGallery', function(req, res){
 
 
 router.post('/addArt', function(req, res){
+  console.log("REQ.USER.PROFILE eeeeeeee",req.user.profile)
   var art = new Art ({
-    profile    : req.user._id, 
+    profile    : req.user.profile._id, 
     title      : req.body.title,
     artist     : req.body.artist,
     category   : req.body.category,
@@ -123,7 +129,7 @@ router.post('/addArt', function(req, res){
     address    : req.body.address
   })
   .save(function(err, art){
-    Art.find({profile: req.user._id}, function(err, art) {
+    Profile.find({profile: req.user.profile._id}, function(err, art) {
     if(err){ return res.status(500).send(err)}
         res.status(200).json({
           success: "ok",
@@ -148,7 +154,7 @@ console.log("I AM UPDATING ART req.params.id", req.params.id)
 console.log("I AM UPDATING ART req.params.id", req.params._id)
 
     Art.findByIdAndUpdate(req.params.id, {
-        profile    : req.user._id, 
+        profile    : req.user.profile._id, 
         title      : req.body.title,
         artist     : req.body.artist,
         category   : req.body.category,
@@ -366,36 +372,41 @@ router.get('/user/calendar',function(req,res){
 
 router.get('/messages', function(req, res) {
 
-  var query = {};
+  // var query = {};
 
-  if (req.user.type === 'Client') {
-    query['client'] = req.user.profile._id;
-  }
-  else if (req.user.type === 'Client') {
-    query['profile'] = req.user.profile._id;
-  }
+  // if (req.user.type === 'Client') {
+  //   query['client'] = req.user.profile._id;
+  // }
+  // else if (req.user.type === 'Client') {
+  //   query['profile'] = req.user.profile._id;
+  // }
 
-  Conversation.find(query, function(err, conversations) {
-
+  Conversation.find({$or:[{profile:req.user.profile._id},{client:req.user.pro}]}, function(err, conversations) {
+    res.json(conversations)
   })
 })
-
 router.post('/sendMessage', function(req, res) {
    console.log("REQ.USER", req.user);
    console.log("REQ.USER.PROFILE.ID", req.user.profile._id);
    console.log("REQ.BODY.USER.ID", req.body['user[_id]']);
+   console.log("Req.body..", req.body);
+
+   req.body = JSON.parse(req.body.data);
 
   var query = {};
 
   if (req.user.type === 'Client') {
     query['client'] = req.user.profile._id;
-    query['profile'] = req.body['user[_id]'];
+    query['profile'] = req.body.art.profile;
   }
 
-  if (req.user.type === 'Client') {
+  if (req.user.type === 'Profile') {
     query['profile'] = req.user.profile._id;
-    query['client'] = req.body['user[_id]'];
+    query['client'] = req.body.art.profile;
   }
+
+  console.log(query, 'query')
+
 
   Conversation.findOrCreate(query, query,
   function(err, conversation) {
@@ -410,9 +421,43 @@ router.post('/sendMessage', function(req, res) {
 
 })
 
+router.post('/sendMessage/:id', function(req, res) {
+   console.log("REQ.USER", req.user);
+   console.log("REQ.USER.PROFILE.ID", req.user.profile._id);
+   console.log("REQ.BODY.USER.ID", req.body['user[_id]']);
+
+  Conversation.findById(req.params.id,
+  function(err, conversation) {
+    console.log("AM I HERE IN MONGOOSE SENDING A MESSAGE")
+    if (err) return res.status(500).send({success: false, error: console.log("Error", err)});
+    var message = new Message({
+      from          : req.user._id,
+      to            : req.user._id === conversation.profile ? conversation.client : conversation.profile,
+      message       : req.body.message,
+      time          : new Date(),
+      conversationId:req.params.id
+    })
+    message.save(function (err, message){
+      if(err) return res.status(500).send({success: false, error: console.log("Error", err)});
+     Message.find({
+       conversationId: req.params.id
+     }, function(err, mesgs){
+      if(err) return res.status(500).send({success: false, error: console.log("Error", err)});
+         return res.json({
+          success:true,
+          msgs: mesgs
+        })
+     })
+    })
+    
+  })
+    console.log("SUCCESS ENDING OF THE AJAX")
+
+})
+
 router.get('/conversation/:id', function(req, res){
   Message.find({
-        conversation: req.params.id
+        conversationId: req.params.id
       }).exec(function(err, messages){
         if(err){res.status(500).send("error", err)}
           res.json(messages);

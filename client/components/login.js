@@ -85,7 +85,7 @@ class Login extends React.Component {
 										<label>Password</label>
 										<input className="form-control" name="password" type="password" onChange={this.passwordChange.bind(this)} />
 									</div>
-									<p><a><Link to="forgot">forgot your password?</Link></a></p>
+									<p><Link to="forgot">forgot your password?</Link></p>
 									<button className="btn btn-lg btn-success btn-block" onClick={this.login.bind(this)}>Log In</button>
 									<hr />
 									<p>New customer? <Link to="signup">Sign up here</Link></p>

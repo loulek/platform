@@ -3,9 +3,11 @@ import { Link } from 'react-router'
 
 var MessageUser = React.createClass({
  getInitialState: function() {
+  console.log("THISSSS CONTEXTTTT", this.context)
    return {
-     messages: []
-   }
+     messages: [],
+     message: ''
+   };
  },
 
   componentDidMount(){
@@ -42,28 +44,49 @@ var MessageUser = React.createClass({
  //     }
  //   });
 
+send: function() {
+    $.ajax({
+     url: '/sendMessage/' + this.props.params.id,
+     dataType: 'json',
+     type: 'POST',
+     data: {
+      message: this.state.message
+     },
+     success: function(data) {
+       console.log("got all messages", data)
+       this.setState({
+        messages:data.msgs
+       });
+     }.bind(this),
+     error: function(xhr, status, err) {
+      console.log("error");
+     }
+   });
+  },
+
+onChange: function(e) {
+  // this function should take the new value, e.target.value, and set the state 'message' to it
+  // use setState
+  console.log("THISsssss", this)
+ this.setState({
+  message: e.target.value
+ }) 
+},
+
 
  render: function(){
-   console.log("RENDERING", this.state.notifications);
-
    var messageSquare = [];
    this.state.messages.forEach(function(message, i){
-     var id=message.event._id;
-     var address=message.event.address;
 
        messageSquare.push(
-         <div className="square" id={id}>
+         <div className="square">
                <div className="table">
-                 <Link to={`/message/${id}`}>
-                       <div className="location">
-                          <span className="backed">
-                           
-                           {address}
-
-                          </span>
-                       </div>
-              
-                 </Link>
+                
+                {message.from}
+                {message.to}
+                {message.message}
+                {message.time}
+                 
                </div>
          </div>
      );
@@ -80,8 +103,8 @@ var MessageUser = React.createClass({
                       <div className="squaresContainer">{messageSquare}
                         <div className="form-group">
                           <label for="comment">Message:</label>
-                          <textarea className="form-control" rows="5" id="comment"></textarea>
-                          <button type="button" className="btn btn-primary" style={{"margin-top":"7px"}}>Send</button>
+                          <textarea className="form-control" rows="5" defaultValue={this.state.message} onChange={this.onChange}></textarea>
+                          <button type="button" className="btn btn-primary" style={{"margin-top":"7px"}} onClick={this.send}>Send</button>
                         </div>
                       </div>
                     </div>
@@ -94,7 +117,7 @@ var MessageUser = React.createClass({
 });
 
 MessageUser.contextTypes = {
-  router: Object
+  router: React.PropTypes.object
 }
 
 module.exports = MessageUser

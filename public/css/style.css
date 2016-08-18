@@ -297,13 +297,28 @@ body {
 .individual-art-search img {
   width: 100%;
 }
+.contactartcontainer{
+  display:flex;
+  flex-direction: row;
+}
+@media (max-width: 500px) {
+.contactartcontainer {
+    flex-wrap: wrap;
+  }
+}
+.contactart{
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  margin-right: 50px;
+}
 .formField {
   margin-bottom: 5rem;
 }
 .newmessage{
   margin-top: 20px;
 }
-.priceSearch{
+.numberSearch{
   display: flex;
 }
 .grid-sizer,

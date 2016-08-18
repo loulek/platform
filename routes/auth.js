@@ -59,6 +59,7 @@ module.exports = function(passport) {
 
 	// POST process signup
 	router.post('/signup', function(req, res, next) {
+		console.log("I AM IN SIGN UP", req.body)
 		if (req.body.password !== req.body.repeatPassword){
 			return next("Passwords did not match")
 		}

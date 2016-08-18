@@ -253,10 +253,19 @@ router.get('/art/:id', function(req, res){
       "success": false,
       "error": err
     })
+      console.log("ARRRRT DOT PROFILLEEE", art.profile)
+    Profile.findById(art.profile, function(err, profile){
+      if(err) return res.status(500).json({
+        "success": false,
+        "error": err
+      })
+        console.log("profileeeeeeeeee",profile)
       return res.status(200).json({
         "success": true,
-        "arto": art
+        "arto": art,
+        "artprofile": profile
       })
+    })
   })
 })
 

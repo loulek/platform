@@ -4,7 +4,8 @@ import { Link } from 'react-router'
 var Messages = React.createClass({
  getInitialState: function() {
    return {
-     messages: []
+     messages: [],
+     conversations:[]
    }
  },
 
@@ -16,7 +17,7 @@ var Messages = React.createClass({
      success: function(data) {
        console.log("got all messages", data)
        this.setState({
-        messages:data
+        conversations:data
        });
      }.bind(this),
      error: function(xhr, status, err) {
@@ -47,22 +48,20 @@ var Messages = React.createClass({
    console.log("RENDERING", this.state.notifications);
 
    var messageSquare = [];
-   this.state.messages.forEach(function(message, i){
-     var id=message.event._id;
-     var address=message.event.address;
+   this.state.conversations.forEach(function(conversation, i){
+     
 
        messageSquare.push(
-         <div className="square" id={id}>
+         <div className="square">
                <div className="table">
-                 <Link to={`/message/${id}`}>
+                 <Link to={`/conversation/${conversation._id}`}>Go to ceonversation</Link>
                        <div className="location">
                           <span className="backed">
                            
-                           {address}
+                           {conversation.from}
 
                           </span>
                        </div>
-                 </Link>
                </div>
          </div>
      );

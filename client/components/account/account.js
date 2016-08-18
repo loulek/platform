@@ -67,7 +67,7 @@ class Account extends React.Component {
 
 Account.contextTypes = {
     router: React.PropTypes.object.isRequired,
-	getUser: React.PropTypes.object.func
+	getUser: React.PropTypes.func
 }
 
 export default Account;

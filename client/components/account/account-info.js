@@ -75,6 +75,7 @@ class Addart extends React.Component {
 	    	// so that you can get the file you wanted to upload
 		    var file = fileInput[0].files[0];
 			this.uploadNewPhoto(file).then(function(JSONsentFromServer) {
+				console.log("Sending data to server");
 		        // what do you do went it goes through
 		        if (JSONsentFromServer.success) {
 					console.log("[Message]", JSONsentFromServer.message);
@@ -85,7 +86,7 @@ class Addart extends React.Component {
 						type: 'POST',
 						data: artData,
 						success: function(data) {
-							console.log(data);
+							console.log("data received, successful save",data);
 							this.setState({
 								art: data.art,
 								open: false
@@ -114,10 +115,10 @@ class Addart extends React.Component {
 		        if (JSONsentFromServer.success) {
 					console.log("[Message]", JSONsentFromServer.message);
 		          	this.setState({
-		          		selected:Object.assign({}, this.state.selected, {artImageUrl: JSONsentFromServer.message})
+		          		selected: Object.assign({}, this.state.selected, {artImageUrl: JSONsentFromServer.message})
 		          	})
-		console.log("HERE IA AM IN REQUEST 2")
-		 this.saveChanges(e);
+					console.log("HERE IA AM IN REQUEST 2")
+					this.saveChanges(e);
 		        } else {
 		        	console.log("[Error]", JSONsentFromServer.message);
 		        }
@@ -181,13 +182,13 @@ class Addart extends React.Component {
 
 
 	uploadNewPhoto(file) {
-console.log("FIIIILE", file)
-	    // create the container for our file data
-	    var fileData = new FormData();
-	    // encode the file
-	    fileData.append('img', file);
-	    console.log("File data we sent: ", file);
 	    return new Promise(function(resolve, reject) {
+	    	console.log("Sending image to server");
+	    	// create the container for our file data
+		    var fileData = new FormData();
+		    // encode the file
+		    fileData.append('img', file);
+
 		    // Send AJAX request with form data
 		    $.ajax({
 		      type: "POST",
@@ -198,7 +199,7 @@ console.log("FIIIILE", file)
 		      processData: false,
 		      contentType: false,
 		      success: resolve,
-		      error: resolve
+		      error: reject
 		    })
 	    });
 	}
@@ -229,13 +230,13 @@ console.log("FIIIILE", file)
 				</div>
 					<div className="art-display">
 						{
-							this.state.art.map((item) => { 
-								return <div className="individual-art art-display" onClick={this.editArt.bind(this, item)}><img src={item.artImageUrl} /></div>
+							this.state.art.map((item, i) => { 
+								return <div key={"art-" + i} className="individual-art art-display" onClick={this.editArt.bind(this, item)}><img src={item.artImageUrl} /></div>
 							})
 						}
 						<Modal
 					  isOpen={this.state.open}
-					  onRequestClose={this.state.open}
+					  onRequestClose={() => {}}
 					  style={{overlay : {
 							    position          : 'fixed',
 							    top               : 0,
@@ -328,7 +329,7 @@ console.log("FIIIILE", file)
 					</Modal>
 					<Modal
 					  isOpen={this.state.openEdit}
-					  onRequestClose={this.state.open}
+					  onRequestClose={() => {}}
 					  style={{overlay : {
 							    position          : 'fixed',
 							    top               : 0,

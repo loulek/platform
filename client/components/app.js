@@ -6,18 +6,13 @@ import ReactDOM from "react-dom";
 import {Router, Route, IndexRoute, hashHistory, RouterContext} from "react-router";
 import {Link} from "react-router";
 
-
 class App extends React.Component{
 
-	
-
 	setUser(user) {
-		console.log("[setting the user]");
 		this.setState({user: user});
 	}
 
 	getUser(user) {
-		console.log("[getting the user]");
 		return this.state.user;
 	}
 
@@ -44,7 +39,6 @@ class App extends React.Component{
 				if (resp.authenticated){
 					sessionStorage.auth = true;
 					this.setUser(resp.user);
-					console.log("HELLOO I AM CHECKING IF I AM A PROFILE OR A CLIENT")
 					if (resp.user.type === "Client"){
 						this.context.router.push('/');
 					}
@@ -62,6 +56,8 @@ class App extends React.Component{
 				console.log("error",err)
 			}
 		})
+
+
 	}
 
 	render() {
@@ -83,7 +79,7 @@ App.contextTypes = {
 
 
 App.childContextTypes = {
-    getUser: React.PropTypes.oneOfType([() => {}]),
-    setUser: React.PropTypes.oneOfType([() => {}]),
+    getUser: React.PropTypes.func,
+    setUser: React.PropTypes.func,
 }
 export default App;

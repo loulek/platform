@@ -5,7 +5,8 @@ class Art extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state={
-		art:{}
+		art:{},
+		artprofile: {}
 	}
 	}
 
@@ -17,8 +18,10 @@ class Art extends React.Component {
 	      success: function(response) {
 	        console.log("success finding art", response)
 	        this.setState({
-				art: response.arto
+				art: response.arto,
+				artprofile: response.artprofile
 			})
+			console.log("I GET THIS BACKKK", this.state.artprofile)
 	      }.bind(this),
 	      error: function(err){
 	        console.log(err,"hereeeee")
@@ -26,29 +29,6 @@ class Art extends React.Component {
 
 	    });
   	}
-
-	handleClick(e){
-		e.preventDefault();
-		var num=this.state.art.phone
-		console.log("thisclick", this)
-		$.ajax({
-			url: '/contact',
-			dataType: 'json',
-			type: 'POST',
-			data: {
-				num:num,
-				message: "hi"},
-			success: function(resp){
-				console.log("resp from twilio", resp)
-				if (resp.success){
-					alert("success!")
-				}
-			},
-			error: function(err){
-				console.log("error",err)
-			}
-		})
-	}
 
 	sendmessage(e){
 		e.preventDefault();
@@ -58,7 +38,7 @@ class Art extends React.Component {
 				url: '/sendMessage',
 				dataType: 'json',
 				type: 'POST',
-				data: this.state,
+				data: {data: JSON.stringify(this.state)},
 					success: function(data) {
 						if(data.success === true) {
 							console.log("IT IS A GIANT SUCCESS")
@@ -83,13 +63,15 @@ class Art extends React.Component {
 	}
 
 
-
-
-
-
-
-
 	render() {
+		if(!this.state.artprofile){
+			this.setState({
+				artprofile : {
+					firstName : "Thank you Z"
+				}
+			})
+		}
+		console.log("THIS.STATE.ARTPROFILE", this.state.artprofile)
 		return (
 			<div className="container">
 				<div className="panel panel-default">
@@ -98,7 +80,7 @@ class Art extends React.Component {
 					</div>
 						<div className='panel-body'>
 							<div className='form-group row'>
-								<div className="squaresContainer">	
+								<div className="squaresContainer contactartcontainer">	
 									<div className="row col-md-4"><img src={this.state.art.artImageUrl} alt="Image" width="200px"/>
 									</div>
 									<div className="row col-md-5">
@@ -118,14 +100,14 @@ class Art extends React.Component {
 										<h4>MUSEUM LOCATION</h4>
 										<h5><p>{this.state.art.address}</p>
 										</h5>
-
-
-
+										<div className="contactart">
+											<h4>Contact Person</h4>
+											<h5>{this.state.artprofile.firstName} {this.state.artprofile.lastName}</h5>
+										<button className="btn btn-primary" onClick={this.sendmessage.bind(this)}>Request More Info</button>
+									</div>	
 									</div>
 								 </div>
 							</div>
-							 <button className="btn btn-primary" onClick={this.sendmessage.bind(this)}>Request More Info</button>
-								
 						</div>	
 				</div>
 			</div>

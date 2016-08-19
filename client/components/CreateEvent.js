@@ -21,7 +21,11 @@ class CreateEvent extends React.Component {
 				category: '',
 				artist: '',
 				pricemin:'',
-				pricemax:''
+				pricemax:'',
+				widthmin:'',
+				widthmax:'',
+				heightmin:'',
+				heightmax:''
 			},
 			tempSpecialty: [],
 			editContact: false,
@@ -148,7 +152,7 @@ _createNewEventOrUpdate(e){
 _filter(item, filters) {
 	var keysToExclude = ['_id, "startDate','endDate', 'startHour', 'endHour', "profile", "location", "description", "artImageUrl"];
 	var ORkeys = ['_id, "startDate','endDate', 'startHour', 'endHour', "profile", "location", "description"];
-	var ANDkeys = ['title', 'category', 'artist', 'pricemin', 'pricemax'];
+	var ANDkeys = ['title', 'category', 'artist', 'pricemin', 'pricemax', 'widthmin','widthmax', 'heightmin', 'heightmax'];
 	var keys = Object.keys(filters);
 	var isTrue = true;
 
@@ -186,6 +190,10 @@ _filter(item, filters) {
 		var res = false;
 		if (key === 'pricemin') res = filters.pricemin < item.price;
 		else if (key === 'pricemax') res = item.price < filters.pricemax;
+		else if (key === 'widthmin') res = filters.widthmin < item.width;
+		else if (key === 'widthmax') res = item.width < filters.widthmax;
+		else if (key === 'heightmin') res = filters.heightmin < item.height;
+		else if (key === 'heightmax') res = item.height < filters.heightmax;
 		else if (itemField != null && searchField != null) res = itemField.toLowerCase().includes( searchField.toLowerCase() );
 		if (ANDkeys.indexOf(key) !== -1) {
 			// console.log(key, "AND | itemField: ", itemField, "vs searchField:", searchField);
@@ -259,6 +267,35 @@ _changeEnd(e) {
 			art: this.state.artCopy.filter(function(item) { if (item.pricemax !== null) return this._filter(item, artData) }.bind(this))
 		})
 	}
+	widthminchange(e) {
+		var artData = Object.assign({}, this.state.artData, {widthmin: e.target.value})
+		this.setState({
+			artData: artData,
+			art: this.state.artCopy.filter(function(item) { if (item.widthmin !== null) return this._filter(item, artData) }.bind(this))
+		})
+	}
+	widthmaxchange(e) {
+		var artData = Object.assign({}, this.state.artData, {widthmax: e.target.value})
+		this.setState({
+			artData: artData,
+			art: this.state.artCopy.filter(function(item) { if (item.widthmax !== null) return this._filter(item, artData) }.bind(this))
+		})
+	}
+	heightminchange(e) {
+		var artData = Object.assign({}, this.state.artData, {heightmin: e.target.value})
+		this.setState({
+			artData: artData,
+			art: this.state.artCopy.filter(function(item) { if (item.heightmin !== null) return this._filter(item, artData) }.bind(this))
+		})
+	}
+	heightmaxchange(e) {
+		var artData = Object.assign({}, this.state.artData, {heightmax: e.target.value})
+		this.setState({
+			artData: artData,
+			art: this.state.artCopy.filter(function(item) { if (item.heightmax !== null) return this._filter(item, artData) }.bind(this))
+		})
+	}
+
 
 	_createEvent(isEnabled) {
 
@@ -292,7 +329,7 @@ _changeEnd(e) {
 							</select>
 						</div>
 					</div>
-					<div className="priceSearch">
+					<div className="numberSearch">
 						<div className="form-group row">
 							<div className="col-sm-12 col-md-12">
 								<input type="text" placeholder="$ Min" className="form-control" defaultValue={this.state.artData.pricemin} onChange={this.priceminchange.bind(this)} />
@@ -303,7 +340,32 @@ _changeEnd(e) {
 								<input type="text" placeholder="$ Max" className="form-control" defaultValue={this.state.artData.pricemax} onChange={this.pricemaxchange.bind(this)} />
 							</div>
 						</div>
-					</div>		
+					</div>
+					Dimensions:
+					<div className="numberSearch">
+						<div className="form-group row">
+							<div className="col-sm-12 col-md-12">
+								<input type="text" placeholder="W in. Min" className="form-control" defaultValue={this.state.artData.widthmin} onChange={this.widthminchange.bind(this)} />
+							</div>
+						</div>
+						<div className="form-group row">
+							<div className="col-sm-12 col-md-12">
+								<input type="text" placeholder="W in. Max" className="form-control" defaultValue={this.state.artData.widthmax} onChange={this.widthmaxchange.bind(this)} />
+							</div>
+						</div>
+					</div>
+					<div className="numberSearch">
+						<div className="form-group row">
+							<div className="col-sm-12 col-md-12">
+								<input type="text" placeholder="H in. Min" className="form-control" defaultValue={this.state.artData.heightmin} onChange={this.heightminchange.bind(this)} />
+							</div>
+						</div>
+						<div className="form-group row">
+							<div className="col-sm-12 col-md-12">
+								<input type="text" placeholder="H in. Max" className="form-control" defaultValue={this.state.artData.heightmax} onChange={this.heightmaxchange.bind(this)} />
+							</div>
+						</div>
+					</div>				
 				</div>
 			</div>
 			);

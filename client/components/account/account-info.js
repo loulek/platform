@@ -25,7 +25,8 @@ class Addart extends React.Component {
 			art: [],
 			open:false,
 			openEdit: false,
-			selected: {}
+			selected: {},
+			artprofile: {}
 		}	
 	}
 
@@ -89,7 +90,8 @@ class Addart extends React.Component {
 							console.log("data received, successful save",data);
 							this.setState({
 								art: data.art,
-								open: false
+								open: false,
+								artprofile: data.artprofile
 							})
 						}.bind(this),
 						error: function(data) {

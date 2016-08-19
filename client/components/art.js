@@ -65,11 +65,7 @@ class Art extends React.Component {
 
 	render() {
 		if(!this.state.artprofile){
-			this.setState({
-				artprofile : {
-					firstName : "Thank you Z"
-				}
-			})
+			return
 		}
 		console.log("THIS.STATE.ARTPROFILE", this.state.artprofile)
 		return (

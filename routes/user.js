@@ -129,12 +129,16 @@ router.post('/addArt', function(req, res){
     address    : req.body.address
   })
   .save(function(err, art){
-    Profile.find({profile: req.user.profile._id}, function(err, art) {
+    Art.find({profile: req.user.profile._id}, function(err, art) {
     if(err){ return res.status(500).send(err)}
-        res.status(200).json({
+      Profile.findById(art.profile, function (err, profile){
+        if(err){ return res.status(500).send(err)}
+          res.status(200).json({
           success: "ok",
-          art: art
+          art: art,
+          artprofile: profile
         });
+      })
       })
               
   }); 

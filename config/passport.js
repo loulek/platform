@@ -22,7 +22,6 @@ passport.deserializeUser(function(serialized, done) {
       })
 });
 
-
 passport.use(new LocalStrategy({usernameField: 'email'}, function(username, password, done) {
     // Find the user with the given username 
     console.log("username", username, "pass", password)
@@ -59,6 +58,5 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
   });
 
 }));
-
 
 module.exports = passport;

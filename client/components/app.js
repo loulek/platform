@@ -30,7 +30,7 @@ class App extends React.Component{
 			user: {}
 		};
 	}
-	componentWillMount(){
+	componentDidMount(){
 		$.ajax({
 			url: '/checkLoggedIn',
 			dataType: 'json',

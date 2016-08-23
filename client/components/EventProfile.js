@@ -107,7 +107,6 @@ deletehost(user,e) {
 		});
 	}	
 
-
 suggestSelect(e) {
 		var event = Object.assign({}, this.state.event, {address: e.label })
 		this.setState({event: event})
@@ -134,12 +133,12 @@ endHourchange(e) {
 }
 changeStart(e) {
 		var newState = Object.assign({}, this.state);
-		newState.event = Object.assign({}, newState.event, { startDate: e })
+		newState.event = Object.assign({}, newState.event, {startDate: e})
 		this.setState(newState)
 	}
 changeEnd(e) {
 		var newState = Object.assign({}, this.state);
-		newState.event = Object.assign({}, newState.event, { endDate: e })
+		newState.event = Object.assign({}, newState.event, {endDate: e})
 		this.setState(newState)
 	}	
 
@@ -305,7 +304,6 @@ var dt = new Date(this.state.event.endDate);
     }
   }  
 
-
 	render() {
 
 	var eventForm = null;
@@ -323,8 +321,6 @@ var dt = new Date(this.state.event.endDate);
 			</div>
 		);
 	}
-
-
 }
 
 class MyDatePicker extends React.Component {
@@ -413,7 +409,7 @@ class MyDatePicker extends React.Component {
 }
 EventProfile.contextTypes = {
 	router: Object,
-	getUser: Object
+	getUser: React.PropTypes.func
 }
 
 export default EventProfile;

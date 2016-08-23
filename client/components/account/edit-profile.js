@@ -16,7 +16,7 @@ BigCalendar.setLocalizer(
 	    return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
 	}
 
-const Tabs = React.createClass({
+var Tabs = React.createClass({
 	displayName: "Tabs",
 	propTypes: {
 		selected: React.PropTypes.number,
@@ -92,7 +92,6 @@ const Pane = React.createClass({
 	}
 });
 
-
 // END OF TABS
 
 class EditProfile extends React.Component {
@@ -164,7 +163,6 @@ class EditProfile extends React.Component {
 											console.log(calendar.times[i][j]);
 											ones.push(j);
 										}
-
 								}
 								if(ones.length > 1)
 									{
@@ -230,14 +228,12 @@ class EditProfile extends React.Component {
 										})
 									}
 							}
-
 					}
 			},
 			error:function(err){
 				if (err){console.log("error in calendar",err)}
 			}
 		})
-
 	}
 
 	componentWillMount() {
@@ -273,19 +269,15 @@ class EditProfile extends React.Component {
 					resumeImageUrl = user.profile.resumeImageUrl;
 					address = user.profile.address;
 					salary=user.profile.salary
-
 					if(user.profile.gender) {
 						gender = user.profile.gender;
 					}
-
 					if(user.profile.specialty) {
 						specialty = user.profile.specialty;
 					} else {
 						specialty = [];
 					}
-
 				}
-
 				// set react state using values from function variables
 				this.setState({
 					profileData: {
@@ -432,7 +424,6 @@ class EditProfile extends React.Component {
 		this._saveChanges(e);
 	}
 
-
 	_saveChanges(e) {
 		e.preventDefault();
 		$.ajax({
@@ -441,14 +432,13 @@ class EditProfile extends React.Component {
 			data: this.state.profileData,
 			success: function(data) {
 				console.log(data);
-			},
+				this.context.setUser(Object.assign(this.context.getUser(), {profile: data.user}));
+			}.bind(this),
 			error: function(data) {
 				console.log(data);
 			}
 		});
 	}
-
-
 
 	_editContact(isEnabled) {
 		if(isEnabled) {
@@ -561,7 +551,6 @@ class EditProfile extends React.Component {
 
                     onCloseRequest={this.closeLightbox.bind(this)}/>
             );
-
 		}
 
 		if(isEnabled) {
@@ -694,14 +683,12 @@ class EditProfile extends React.Component {
 		var that=this
 		var arrayOfTimes = [];
 		var dayOfWeek = data.slots[0].getDay();
-		console.log("THIS IS A CONSOLE LOG: ", data.slots);
 		if(this.state.modifyAvailability)
 		{
 			if(data.start.getDay() === data.end.getDay())
 				{
 
 					if (data.slots.length===2){
-					console.log("INSIDE IF STATEMENT")
 					alert("You must be at least available for an hour"); 
 					return
 					}
@@ -734,7 +721,7 @@ class EditProfile extends React.Component {
 								console.log("SUCCESS",that.state.availability)
 							},
 							error:function(err){
-								console.log("EEEEEE",err)
+								console.log("ERROR",err)
 							}
 						})
 				}
@@ -745,7 +732,6 @@ class EditProfile extends React.Component {
 				{
 
 					if (data.slots.length===2){
-					console.log("INSIDE IF STATEMENT")
 					alert("You must be at least available for an hour"); 
 					return
 					}
@@ -853,12 +839,8 @@ class EditProfile extends React.Component {
 			calendarForm = this._editCalendar(false);
 		}
 
-
 		return (
-
 			<div>
-
-
 			  <div>
 		        <Tabs selected={0}>
 		          <Pane label="Contact">
@@ -869,14 +851,14 @@ class EditProfile extends React.Component {
 		          </Pane>
 		        </Tabs>
 		      </div>
-
-
-
-
 			</div>
 		);
 	}
 }
 
+EditProfile.contextTypes = {
+  getUser: React.PropTypes.func,
+  setUser: React.PropTypes.func
+}
 
 export default EditProfile;

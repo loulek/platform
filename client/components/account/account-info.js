@@ -51,11 +51,16 @@ class Addart extends React.Component {
 };
 
 	addArt(e){
-		e.preventDefault;
-		this.setState({
-			open: true,
-			selected: {}
-		})
+		var user = this.context.getUser();
+		if(!user.profile){
+			alert("Please create a profile before posting art.");
+		} else {
+			e.preventDefault;
+			this.setState({
+				open: true,
+				selected: {}
+			})
+		}	
 	}
 
 	editArt(item, e){
@@ -437,7 +442,8 @@ class Addart extends React.Component {
 
 
 Addart.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object,
+    getUser: React.PropTypes.func
 };
 
 export default Addart;

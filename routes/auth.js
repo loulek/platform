@@ -14,8 +14,8 @@ function randomString(length, chars) {
 var sendEmail = function(options) {
 	from_email = new helper.Email("louisbiret@gmail.com")
 	to_email = new helper.Email(options.email)
-	subject = "Email de confirmation"
-	content = new helper.Content("text/html", "Afin de valider votre inscription, veuillez ouvrir ce lien: <a href='http://localhost:3000/confirmed/" + options.id + "'>Cliquer ici</a>");
+	subject = "Confirmation Email"
+	content = new helper.Content("text/html", "To complete your registration, please follow this link: <a href='http://localhost:3000/confirmed/" + options.id + "'>Validate my account</a>");
 	mail = new helper.Mail(from_email, subject, to_email, content)
 
 	var requestBody = mail.toJSON()
@@ -35,8 +35,8 @@ var sendEmail = function(options) {
 var sendForgetEmail = function(options) {
 	from_email = new helper.Email("louisbiret@gmail.com")
 	to_email = new helper.Email(options.email)
-	subject = "New password"
-	content = new helper.Content("text/html", "Afin de changer votre email, veuillez ouvrir ce lien: <a href='http://localhost:3000/#/change/" + options.id + "'>Cliquer ici</a>");
+	subject = "Reset Password"
+	content = new helper.Content("text/html", "To reset your password, please open this link: <a href='http://localhost:3000/#/change/" + options.id + "'>Change password</a>");
 	mail = new helper.Mail(from_email, subject, to_email, content)
 
 	var requestBody = mail.toJSON()
@@ -173,7 +173,6 @@ module.exports = function(passport) {
 		req.logout();
 		res.json({success: true});
 	});
-
 
 	// POST check if user is authenticated THIS IS THE WALL
 	router.post('/isauthenticated', function(req, res) {

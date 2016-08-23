@@ -1,5 +1,5 @@
 var React = require('react');
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 
 var Messages = React.createClass({
  getInitialState: function() {
@@ -9,7 +9,7 @@ var Messages = React.createClass({
    }
  },
 
-  componentDidMount(){
+  componentWillMount(){
    $.ajax({
      url: '/messages',
      dataType: 'json',
@@ -17,7 +17,7 @@ var Messages = React.createClass({
      success: function(data) {
        console.log("got all messages", data)
        this.setState({
-        conversations:data
+        conversations: data
        });
      }.bind(this),
      error: function(xhr, status, err) {
@@ -25,7 +25,6 @@ var Messages = React.createClass({
      }
    });
  },
-
  // $.ajax({
  //     url: '/event/:id',
  //     dataType: 'json',
@@ -43,29 +42,30 @@ var Messages = React.createClass({
  //     }
  //   });
 
-
  render: function(){
-   console.log("RENDERING", this.state.notifications);
-
    var messageSquare = [];
-   this.state.conversations.forEach(function(conversation, i){
-     
-
-       messageSquare.push(
-         <div className="square">
-               <div className="table">
-                 <Link to={`/conversation/${conversation._id}`}>Go to ceonversation</Link>
-                       <div className="location">
-                          <span className="backed">
-                           
-                           {conversation.from}
-
-                          </span>
-                       </div>
-               </div>
-         </div>
-     );
-   }.bind(this))
+   var user = this.context.getUser();
+      if(user.type === "Profile"){
+        this.state.conversations.forEach(function(conversation, i){
+         messageSquare.push(
+           <div className="square" key={"message-" + i}>
+                 <div className="table">
+                   <Link to={`/conversation/${conversation._id}`}>{conversation.client.firstName} {conversation.client.lastName}</Link>
+                 </div>
+           </div>
+       );
+      }.bind(this))
+      } else if (user.type === "Client"){ 
+        this.state.conversations.forEach(function(conversation, i){
+         messageSquare.push(
+           <div className="square" key={"message-" + i}>
+                 <div className="table">
+                   <Link to={`/conversation/${conversation._id}`}>{conversation.profile.firstName} {conversation.profile.lastName}</Link>
+                 </div>
+           </div>
+       );
+      }.bind(this))
+    }
 
    return (<div className="newmessage">
             <div className="container">
@@ -86,7 +86,9 @@ var Messages = React.createClass({
 });
 
 Messages.contextTypes = {
-  router: Object
+  router: React.PropTypes.object,
+  getUser: React.PropTypes.func
+
 }
 
 module.exports = Messages

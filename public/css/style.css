@@ -260,6 +260,9 @@ body {
   max-width: 700px;
   min-width: 300px;
 }
+.squaresArtContainer{
+  min-width: 300px;
+}
 .events{
   margin-top: 20px;
 }

@@ -31,7 +31,11 @@ class Art extends React.Component {
   	}
 
 	sendmessage(e){
-		e.preventDefault();
+		var user = this.context.getUser();
+		if(!user.profile){
+			alert("Please create a profile before requesting info.");
+		}else{
+			e.preventDefault();
 		var user = this.context.getUser();
 		if(user.type === "Client" || user.type === "Profile"){
 			$.ajax({
@@ -60,30 +64,31 @@ class Art extends React.Component {
 			pathname: '/login'
 			})
 		}
+
+		}
 	}
 
 
 	render() {
 		if(!this.state.artprofile){
-			return
+			return null
 		}
-		console.log("THIS.STATE.ARTPROFILE", this.state.artprofile)
 		return (
-			<div className="container">
+			<div className="container" style= {{marginTop:20}}>
 				<div className="panel panel-default">
 					<div className='panel-heading'>
 						<h3 className="panel-title">MasterPiece</h3>
 					</div>
 						<div className='panel-body'>
 							<div className='form-group row'>
-								<div className="squaresContainer contactartcontainer">	
-									<div className="row col-md-4"><img src={this.state.art.artImageUrl} alt="Image" width="200px"/>
+								<div className="squaresArtContainer contactartcontainer">	
+									<div className="row col-md-4" style= {{margin:"1%"}}><img src={this.state.art.artImageUrl} alt="Image" width="200px"/>
 									</div>
-									<div className="row col-md-5">
+									<div className="row col-md-12" style= {{margin:"1%"}}>
 									<h2>{this.state.art.title}</h2>
 									<h3>{this.state.art.artist}</h3>
 									</div>
-									<div className="row col-md-10">
+									<div className="row col-md-10" style= {{margin:"1%"}}>
 										<h4>CATEGORY</h4>
 										<h5><p>{this.state.art.category}</p>
 										</h5>
@@ -96,11 +101,10 @@ class Art extends React.Component {
 										<h4>MUSEUM LOCATION</h4>
 										<h5><p>{this.state.art.address}</p>
 										</h5>
-										<div className="contactart">
-											<h4>Contact Person</h4>
-											<h5>{this.state.artprofile.firstName} {this.state.artprofile.lastName}</h5>
+										<h4>CONTACT PERSON</h4>
+										<h5><p>{this.state.artprofile.firstName} {this.state.artprofile.lastName}</p>
+										</h5>
 										<button className="btn btn-primary" onClick={this.sendmessage.bind(this)}>Request More Info</button>
-									</div>	
 									</div>
 								 </div>
 							</div>

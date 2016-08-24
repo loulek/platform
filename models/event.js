@@ -11,7 +11,7 @@ var eventSchema = mongoose.Schema({
 	workerNumber	: Number,
 	address			: String,
 	description 	: String,
-	hostess			: Array,
+	hostess			: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' }],
 	updatedAt   	: { type: Date, default: Date.now },
 	createdAt   	: { type: Date, default: Date.now }
 });

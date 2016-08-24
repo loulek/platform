@@ -61,9 +61,7 @@ handleClick3(e){
                     </span>
                    </div>
                    <div className="time"> 
-                    <span className="backed"> From {startDate} {startHour} To {endDate} {endHour}
-                    </span>
-                     <button className="btn btn-success float-right">See Hosts</button>
+                    <span className="backed"> From {startDate} {startHour} To {endDate} {endHour}</span>
                    </div>
                    </Link>
                </div>

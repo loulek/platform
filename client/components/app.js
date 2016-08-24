@@ -1,22 +1,18 @@
 import React from "react";
+// import oneOf from React;
 import TopNavBar from "./top-navbar";
 import Login from "./login";
 import ReactDOM from "react-dom";
 import {Router, Route, IndexRoute, hashHistory, RouterContext} from "react-router";
 import {Link} from "react-router";
 
-
 class App extends React.Component{
 
-	
-
 	setUser(user) {
-		console.log("[setting the user]");
 		this.setState({user: user});
 	}
 
 	getUser(user) {
-		console.log("[getting the user]");
 		return this.state.user;
 	}
 
@@ -34,20 +30,34 @@ class App extends React.Component{
 			user: {}
 		};
 	}
-	componentWillMount(){
+	componentDidMount(){
 		$.ajax({
 			url: '/checkLoggedIn',
 			dataType: 'json',
 			type: 'GET',
 			success: function(resp){
 				if (resp.authenticated){
-					sessionStorage.auth=true}
-			this.context.router.push('/');
+					sessionStorage.auth = true;
+					this.setUser(resp.user);
+					if (resp.user.type === "Client"){
+						this.context.router.push('/');
+					}
+					if (resp.user.type === "Profile"){
+						this.context.router.push("/account");
+					}
+
+				} else {
+					sessionStorage.auth = false
+					this.context.router.push("/")
+				}
+
 		}.bind(this),
 			error: function(err){
 				console.log("error",err)
 			}
 		})
+
+
 	}
 
 	render() {
@@ -69,7 +79,7 @@ App.contextTypes = {
 
 
 App.childContextTypes = {
-    getUser: Object,
-    setUser: Object
+    getUser: React.PropTypes.func,
+    setUser: React.PropTypes.func,
 }
 export default App;

@@ -20,7 +20,7 @@ class Signup extends React.Component {
 		e.preventDefault();
 		if(!this.state.email) {
 			return this.setState({
-				message: 'Email manquant'
+				message: 'Missing Email'
 			});
 		}
 
@@ -29,25 +29,25 @@ class Signup extends React.Component {
 	    var dotpos = x.lastIndexOf(".");
 	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
 	    	return this.setState({
-	    		message: 'Email invalide.'
+	    		message: 'Invalid Email.'
 	    	})
 	    }
     
 		if(!this.state.password) {
 			return this.setState({
-				message: 'Il manque un mot de passe.'
+				message: 'Missing Password.'
 			});
 		}
 
 		if(!this.state.repeatPassword) {
 			return this.setState({
-				message: 'Veuillez confirmer le mot de passe.'
+				message: 'Please confirm Password.'
 			});
 		}
 
 		if(this.state.password !== this.state.repeatPassword) {
 			return this.setState({
-				message: "Les mots de passe ne sont pas pareil."
+				message: "Passwords must match."
 			});
 		}
 

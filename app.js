@@ -13,7 +13,6 @@ var LocalStrategy = require('passport-local');
 var flash = require('connect-flash');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
 var webpack = require('webpack');
 var webpackMiddleware = require("webpack-dev-middleware");
 var webpackConfig = require('./webpack.config');
@@ -71,10 +70,7 @@ app.use('/', routesAuth(passport));
 app.use('/', authWall);  // routes below this olny for authenticated users
 app.use('/', routesUser);
 
-// socket io ==================================================================
-io.on('connection', function(socket){
-  socket.emit('connect', true);
-});
+
 
 // error handlers==============================================================
 // catch 404 and forward to error handler

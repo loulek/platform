@@ -9,7 +9,11 @@ class EventProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state={
-		event:{}
+			event:{
+				startDate: 0,
+				endDate: 0,
+				hostess: []
+			}
 		}
 	}
 
@@ -61,6 +65,7 @@ _saveChanges(e) {
 
 becomehost(e) {
 		e.preventDefault();
+		console.log("this.state.event", this.state.event);
 		$.ajax({
 			url: '/event/' + this.props.params.id,
 			type: 'POST',
@@ -68,12 +73,39 @@ becomehost(e) {
 			success: function(data) {
 				console.log(data);
 				alert("Success on becoming a Host!")
-			},
+				this.setState({
+					event: data.event
+				})
+			}.bind(this),
 			error: function(data) {
 				console.log(data);
 			}
 		});
 	}
+
+deletehost(user,e) {
+		e.preventDefault();
+		console.log("this.state.event", this.state.event);
+		$.ajax({
+			url: '/deletehost/' + this.props.params.id,
+			type: 'POST',
+			data: {
+				hostess : user._id
+			},
+			success: function(data) {
+				console.log(data);
+				alert("Success on deleting a Host!")
+				console.log("data", data)
+				console.log("data.event", data.event)
+				this.setState({
+					event: data.event
+				})
+			}.bind(this),
+			error: function(data) {
+				console.log(data);
+			}
+		});
+	}	
 
 suggestSelect(e) {
 		var event = Object.assign({}, this.state.event, {address: e.label })
@@ -101,12 +133,12 @@ endHourchange(e) {
 }
 changeStart(e) {
 		var newState = Object.assign({}, this.state);
-		newState.event = Object.assign({}, newState.event, { startDate: e })
+		newState.event = Object.assign({}, newState.event, {startDate: e})
 		this.setState(newState)
 	}
 changeEnd(e) {
 		var newState = Object.assign({}, this.state);
-		newState.event = Object.assign({}, newState.event, { endDate: e })
+		newState.event = Object.assign({}, newState.event, {endDate: e})
 		this.setState(newState)
 	}	
 
@@ -220,6 +252,7 @@ var dt = new Date(this.state.event.endDate);
 				    </div>
 				</div>)
     } else {
+								console.log("this.state.event.", this.state.event)
 
     	var user = this.context.getUser()
     	if(user.type === "Client"){
@@ -236,6 +269,14 @@ var dt = new Date(this.state.event.endDate);
 								<h4>Time To: {this.state.event.endHour}</h4>
 								<h4>Date From: {d.toDateString()}</h4>
 								<h4>Date To: {dt.toDateString()}</h4>
+								<h4>Date To: {dt.toDateString()}</h4>
+								<h4>Available Hosts: {this.state.event.hostess.map((hostess) => {
+									return <div>
+												<Link to={`/profile/${hostess._id}`}><img src={hostess.profileImageUrl} style={{width:'110px', margin:'5px'}}/></Link>
+												<button className="btn btn-primary" onClick={this.deletehost.bind(this, hostess)}>Delete</button>
+											</div>
+									}
+								)}</h4>
 								<button className="btn btn-primary float-right" onClick={function() {this.setState({editEvent: true})}.bind(this)}>Modifier</button>
 					    </div>
 					</div>
@@ -254,7 +295,7 @@ var dt = new Date(this.state.event.endDate);
 								<h4>Time From: {this.state.event.startHour}</h4>
 								<h4>Time To: {this.state.event.endHour}</h4>
 								<h4>Date From: {d.toDateString()}</h4>
-								<h4>Date To: {dt.toDateString()}</h4>
+								<h4>Date To: {dt.toDateString()}</h4>								
 								<button className="btn btn-primary float-right" onClick={this.becomehost.bind(this)}>Become Host</button>
 					    </div>
 					</div>
@@ -262,7 +303,6 @@ var dt = new Date(this.state.event.endDate);
 		}
     }
   }  
-
 
 	render() {
 
@@ -281,8 +321,6 @@ var dt = new Date(this.state.event.endDate);
 			</div>
 		);
 	}
-
-
 }
 
 class MyDatePicker extends React.Component {
@@ -371,7 +409,7 @@ class MyDatePicker extends React.Component {
 }
 EventProfile.contextTypes = {
 	router: Object,
-	getUser: Object
+	getUser: React.PropTypes.func
 }
 
 export default EventProfile;

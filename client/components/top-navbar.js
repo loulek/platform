@@ -31,7 +31,7 @@ class TopNavBar extends React.Component{
 								</ul>;
 
 		var user = this.context.getUser()
-		console.log("USER.TYPE", user.type)
+		console.log("USER.TYPE", user)
 		if(user.type === "Profile"){
 		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
 								<li className="dropdown">
@@ -91,7 +91,7 @@ class TopNavBar extends React.Component{
 							<span className="icon-bar"></span>
 						</button>
 						<Link to="/" className="navbar-brand">
-							Platform
+							Louvre En Ligne
 						</Link>
 					</div>
 					<div className="collapse navbar-collapse" id="collapsibleTopNavbar">
@@ -105,7 +105,7 @@ class TopNavBar extends React.Component{
 
 TopNavBar.contextTypes = {
     router: React.PropTypes.object.isRequired,
-    getUser: React.PropTypes.oneOfType([() => {}]),
+    getUser: React.PropTypes.func,
     setUser: React.PropTypes.oneOfType([() => {}]),
 };
 

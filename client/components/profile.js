@@ -9,7 +9,6 @@ class Profile extends React.Component {
 	}
 	}
 
-
 	componentDidMount() {
 
 	    $.ajax({
@@ -28,7 +27,6 @@ class Profile extends React.Component {
 
 	    });
   	}
-
 
 	handleClick(e){
 		e.preventDefault();
@@ -62,7 +60,6 @@ class Profile extends React.Component {
 			data: this.state,
 				success: function(data) {
 					if(data.success === true) {
-						console.log("IT IS A GIANT SUCCESS")
 						this.context.router.push(data.redirect);
 					} else if(data.status === 'error') {
 						this.setState({
@@ -77,13 +74,6 @@ class Profile extends React.Component {
 				}.bind(this)
 		});
 	}
-
-
-
-
-
-
-
 
 	render() {
 		if (this.state.user.specialty){
@@ -120,7 +110,6 @@ class Profile extends React.Component {
 		);
 	}
 }
-
 
 Profile.contextTypes = {
   router: Object

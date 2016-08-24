@@ -64,7 +64,6 @@ class Login extends React.Component {
 		if(this.state.message) {
 			message = <div className="alert alert-danger">{this.state.message}</div>;
 		}
-
 		return(
 			<div>
 			<div className='landcenter'>

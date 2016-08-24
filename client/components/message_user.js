@@ -55,7 +55,8 @@ send: function() {
      success: function(data) {
        console.log("got all messages", data)
        this.setState({
-        messages:data.msgs
+        messages:data.msgs,
+        message:""
        });
      }.bind(this),
      error: function(xhr, status, err) {
@@ -73,24 +74,28 @@ onChange: function(e) {
  }) 
 },
 
-
  render: function(){
    var messageSquare = [];
-   this.state.messages.forEach(function(message, i){
-
-       messageSquare.push(
+   if (this.state.messages) {
+ this.state.messages.forEach(function(message, i){
+       console.log("message, message", message)
+ 
+        console.log(message.from);
+      
+       var date = new Date(message.time);
+       
+        messageSquare.push(
          <div className="square">
                <div className="table">
-                
-                {message.from}
-                {message.to}
-                {message.message}
-                {message.time}
-                 
+                <p>{date.toLocaleString()}</p>
+                <p>{message.from.firstName}</p>
+                <p>{message.message}</p>
                </div>
          </div>
      );
+       
    }.bind(this))
+   }
 
    return (<div className="newmessage">
             <div className="container">
@@ -103,7 +108,7 @@ onChange: function(e) {
                       <div className="squaresContainer">{messageSquare}
                         <div className="form-group">
                           <label for="comment">Message:</label>
-                          <textarea className="form-control" rows="5" defaultValue={this.state.message} onChange={this.onChange}></textarea>
+                          <textarea className="form-control" rows="5" value={this.state.message} onChange={this.onChange}></textarea>
                           <button type="button" className="btn btn-primary" style={{"margin-top":"7px"}} onClick={this.send}>Send</button>
                         </div>
                       </div>
@@ -113,7 +118,6 @@ onChange: function(e) {
             </div>
           </div>);
  },
-
 });
 
 MessageUser.contextTypes = {

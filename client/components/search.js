@@ -18,9 +18,8 @@ class App extends React.Component {
 
     var guestContent = <div><CreateEvent address={queryParams.address} startDate={queryParams.startDate} endDate={queryParams.endDate} /></div>;
 
-
     var userContent = <div>
-              <h3>Bienvenue</h3>
+              <h3>Welcome</h3>
               <hr />
               </div>;
 

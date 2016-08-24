@@ -159,15 +159,15 @@ console.log("I AM UPDATING ART req.params.id", req.params._id)
 
     Art.findByIdAndUpdate(req.params.id, {
         profile    : req.user.profile._id, 
-        title      : req.body.title,
-        artist     : req.body.artist,
-        category   : req.body.category,
-        price      : req.body.price,
-        height     : req.body.height,
-        width      : req.body.width,
-        description: req.body.description,
-        artImageUrl: req.body.artImageUrl,
-        address    : req.body.address
+        title      : req.body.title || null,
+        artist     : req.body.artist || null,
+        category   : req.body.category || null,
+        price      : req.body.price || null,
+        height     : req.body.height || null,
+        width      : req.body.width || null,
+        description: req.body.description || null,
+        artImageUrl: req.body.artImageUrl || null,
+        address    : req.body.address || null
     }, function(err) {
       console.log("I AM UPDATING ART 2")
 
@@ -385,17 +385,22 @@ router.get('/messages', function(req, res) {
   //   query['profile'] = req.user.profile._id;
   // }
 
-  Conversation.find({$or:[{profile:req.user.profile._id},{client:req.user.pro}]}, function(err, conversations) {
+  Conversation
+    .find({$or:[{profile:req.user.profile._id},{client:req.user.profile._id}]})
+    .populate('client profile')
+    .exec(function(err, conversations) {
     res.json(conversations)
   })
 })
-router.post('/sendMessage', function(req, res) {
+router.post('/sendMessage', function(req, res, next) {
+req.body = JSON.parse(req.body.data);
+  if(req.user.profile._id.toString() === req.body.art.profile.toString()){
+    return next (err);
+  }
    console.log("REQ.USER", req.user);
    console.log("REQ.USER.PROFILE.ID", req.user.profile._id);
    console.log("REQ.BODY.USER.ID", req.body['user[_id]']);
    console.log("Req.body..", req.body);
-
-   req.body = JSON.parse(req.body.data);
 
   var query = {};
 
@@ -408,9 +413,7 @@ router.post('/sendMessage', function(req, res) {
     query['profile'] = req.user.profile._id;
     query['client'] = req.body.art.profile;
   }
-
   console.log(query, 'query')
-
 
   Conversation.findOrCreate(query, query,
   function(err, conversation) {
@@ -435,23 +438,48 @@ router.post('/sendMessage/:id', function(req, res) {
     console.log("AM I HERE IN MONGOOSE SENDING A MESSAGE")
     if (err) return res.status(500).send({success: false, error: console.log("Error", err)});
     var message = new Message({
-      from          : req.user._id,
-      to            : req.user._id === conversation.profile ? conversation.client : conversation.profile,
+      from          : req.user.profile._id,
+      to            : req.user.profile._id.toString() === conversation.profile.toString() ? conversation.client : conversation.profile,
       message       : req.body.message,
       time          : new Date(),
       conversationId:req.params.id
     })
     message.save(function (err, message){
       if(err) return res.status(500).send({success: false, error: console.log("Error", err)});
-     Message.find({
-       conversationId: req.params.id
-     }, function(err, mesgs){
-      if(err) return res.status(500).send({success: false, error: console.log("Error", err)});
-         return res.json({
-          success:true,
-          msgs: mesgs
-        })
-     })
+     var EthanSaver = req.user.type === "Profile"? "Client" : "Profile";
+  Message.find({
+        conversationId: req.params.id
+      }).exec(function(err, messages){
+        if(err){res.status(500).send("error", err)}
+          var arrFinal = []
+          for (var i = 0; i < messages.length; i++){
+            if(req.user.profile._id.toString() === messages[i].from.toString()){
+              messages[i]
+              .populate({
+                path: "from",
+                model: req.user.type})
+              .populate({
+                path: "to",
+                model: EthanSaver
+              })  
+            } else {
+              messages[i]
+              .populate({
+                path: "to",
+                model: req.user.type})
+              .populate({
+                path: "from",
+                model: EthanSaver
+              })  
+            }
+          arrFinal.push(messages[i].execPopulate())
+          }
+          Promise.all(arrFinal).then(function(messages){
+            res.json({msgs: messages})
+          }).catch(function(err){
+            next (err)
+          })
+      });
     })
     
   })
@@ -459,12 +487,40 @@ router.post('/sendMessage/:id', function(req, res) {
 
 })
 
-router.get('/conversation/:id', function(req, res){
+router.get('/conversation/:id', function(req, res, next){
+  var EthanSaver = req.user.type === "Profile"? "Client" : "Profile";
   Message.find({
         conversationId: req.params.id
       }).exec(function(err, messages){
         if(err){res.status(500).send("error", err)}
-          res.json(messages);
+          var arrFinal = []
+          for (var i = 0; i < messages.length; i++){
+            if(req.user.profile._id.toString() === messages[i].from.toString()){
+              messages[i]
+              .populate({
+                path: "from",
+                model: req.user.type})
+              .populate({
+                path: "to",
+                model: EthanSaver
+              })  
+            } else {
+              messages[i]
+              .populate({
+                path: "to",
+                model: req.user.type})
+              .populate({
+                path: "from",
+                model: EthanSaver
+              })  
+            }
+          arrFinal.push(messages[i].execPopulate())
+          }
+          Promise.all(arrFinal).then(function(messages){
+            res.json(messages)
+          }).catch(function(err){
+            next (err)
+          })
       });
  
 });
@@ -572,11 +628,11 @@ router.post('/user/update-profile', function(req, res) {
           description: req.body.description,
           gender: req.body.gender,
           address: req.body.address
-        }, function(err) {
+        }, {new: true}, function(err, profile) {
           if(err) {
             return res.json({status: 'error', error: err.toString()});
           } else {
-            return res.json({status: 'ok'});
+            return res.json({status: 'ok', user: profile});
           }
         })
       } else if (req.user.type === "Client") {
@@ -591,11 +647,11 @@ router.post('/user/update-profile', function(req, res) {
           description: req.body.description,
           gender: req.body.gender,
           address: req.body.address
-        }, function(err) {
+        }, {new: true}, function(err, client) {
           if(err) {
             return res.json({status: 'error', error: err.toString()});
           } else {
-            return res.json({status: 'ok'});
+            return res.json({status: 'ok', user: client});
           }
         })
       }
@@ -644,11 +700,11 @@ router.post('/user/update-profile', function(req, res) {
         } else {
           User.findByIdAndUpdate(req.user._id, {
             profile: profile
-          }, function(err) {
+          }, {new: true}, function(err, user) {
             if(err) {
               return res.json({status: 'error', error: err.toString()});
             } else {
-              return res.json({status: 'ok'});
+              return res.json({status: 'ok', user: user});
             }
           });
         }

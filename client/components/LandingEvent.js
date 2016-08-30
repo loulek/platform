@@ -79,7 +79,7 @@ class LandingEvent extends React.Component {
 		return (
 				
 				<div className='landcenter'>
-							<button className="btn btn-default" onClick={this._searchEvent.bind(this)} >Rent a MasterPiece</button>
+							<button className="btn btn-default" onClick={this._searchEvent.bind(this)} >Browse Spaces</button>
 				</div>
 			);
 	}
@@ -102,23 +102,21 @@ class LandingEvent extends React.Component {
 
 				  <div className="carousel-inner" role="listbox">
 				    <div className="item active">
-				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-17+a%CC%80+21.35.52.png" style={{width:"100%"}} />
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.52.04.png" style={{width:"100%"}} />
 				      <div className="carousel-caption">
 				      </div>
 				    </div>
 				    <div className="item">
-				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-15+a%CC%80+23.53.25.png" style={{width:"100%"}} />
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.14.14.png" style={{width:"100%"}} />
 				      <div className="carousel-caption">       
 				      </div>
 				    </div>
 				    <div className="item">
-				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-15+a%CC%80+23.56.18.png" style={{width:"100%"}} />
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.59.32.png" style={{width:"100%"}} />
 				      <div className="carousel-caption">       
 				      </div>
 				    </div>
-				    
 				  </div>
-
 				  <a className="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
 				    <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 				    <span className="sr-only">Previous</span>
@@ -128,22 +126,22 @@ class LandingEvent extends React.Component {
 				    <span className="sr-only">Next</span>
 				  </a>
 				</div>
-				
 			<div className="container">
-				<h5 className='landcenter'>We Give You Access To Genius Art</h5>
+				<h5 className='landcenter'>Find a Space that fits You</h5>
 				{contactForm}
+			</div>
+			<div>
+			<img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+15.24.53.png" style={{width:"100%"}} />
 			</div>
 			</div>
 		);
 	}
 }
 
-
-
 class MyDatePicker extends React.Component {
 	constructor(props) {
 		super(props);
-
+		
 		this.state = {}
 	}
 

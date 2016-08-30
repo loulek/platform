@@ -24,7 +24,7 @@ class TopNavBar extends React.Component{
 	render() {
 
 		var optionsGuest = <ul className="nav navbar-nav navbar-right">
-								<li><Link to="workersignup"><span className="glyphicon glyphicon-home"></span> Museum Sign Up </Link></li>
+								<li><Link to="workersignup"><span className="glyphicon glyphicon-home"></span> List Your Space </Link></li>
 								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Sign Up</Link></li>
 								<li><Link to="login"><span className="glyphicon glyphicon-log-in"></span> Login</Link></li>
 

@@ -17,7 +17,7 @@ var geocoder = NodeGeocoder({
   formatter: null
 });
 var aws = require('aws-sdk');
-var Availability=require('../models/Availability')
+var Availability=require('../models/availability')
 
 // require multer
 var multer = require('multer');

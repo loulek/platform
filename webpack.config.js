@@ -3,11 +3,7 @@ var webpack = require('webpack');
 
 module.exports = {
   devtool: 'eval',
-  entry: [
-    // 'webpack-dev-server/client?http://localhost:3000',
-    // 'webpack/hot/only-dev-server',
-    './client/index'
-  ],
+  entry: path.join(__dirname, 'client', 'index.js'),
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -18,9 +14,10 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx?$/,
       loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'client')
+      include: path.join(__dirname, 'client'),
+      exclude: /node_modules/
     }]
   }
 };

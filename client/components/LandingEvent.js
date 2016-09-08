@@ -48,11 +48,6 @@ class LandingEvent extends React.Component {
 		this.context.router.push({
 
 			pathname: '/search',
-			query: {
-				address: this.state.eventData.address,
-				startDate: this.state.eventData.startDate.toString(),
-				endDate: this.state.eventData.endDate.toString()
-			},
 		});
 
 	}
@@ -82,41 +77,12 @@ class LandingEvent extends React.Component {
 
 	_createEvent(isEnabled) {
 		return (
-			<div className='panel panel-default'>
-				<div className='panel-heading'>
-					<h3 className="panel-title">Créez votre événement</h3>
+				
+				<div className='landcenter'>
+							<button className="btn btn-default" onClick={this._searchEvent.bind(this)} >Browse Spaces</button>
 				</div>
-				<div className='panel-body'>
-					<div className="form-group row">
-
-						{ /*  This is the location autocompleter */ }
-						<div className="col-sm-6">
-							<Geosuggest inputClassName="form-control" placeholder="Adresse" initialValue={this.state.eventData.address} onSuggestSelect={this.suggestSelect.bind(this)} id="address" />
-						</div>
-
-					</div>
-
-					<div className="form-group row">
-
-						{ /*  This is the start date datepicket */ }
-						<div className="col-sm-1">
-							<MyDatePicker onChange={this._changeStart.bind(this)} datetime={this.state.eventData.startDate} placeholder={"Date de début"} />
-						</div>
-
-						{ /*  This is the end date datepicket */ }
-						<div className="col-sm-1 col-sm-offset-3">
-							<MyDatePicker onChange={this._changeEnd.bind(this)} datetime={this.state.eventData.endDate} placeholder={"Date de fin"} />
-						</div>
-
-					</div>
-
-
-					<button className="btn btn-success margin5 float-right" onClick={this._searchEvent.bind(this)} >Rechercher des Hôtesses</button>
-				</div>
-			</div>
 			);
 	}
-
 	render() {
 		var contactForm = null;
 		if(this.state.editContact) {
@@ -124,85 +90,58 @@ class LandingEvent extends React.Component {
 		} else {
 			contactForm = this._createEvent(false);
 		}
-		var usersquare=[];
-		var filters=[]
-		if (this.state.users.length>0){
-			filters.push(
-				<div className='panel-heading'>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Accueil événementiel </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Accueil entreprise </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Animation commerciale </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="option1"> Serveur </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="option2"> Voiturier </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="option3"> Barman </input>
-		            </label>
-		            </div>
-		            <div className="panel-title">
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox1" value="English"> English </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox2" value="Italiano"> Italiano </input>
-		            </label>
-		            <label className="checkbox-inline">
-		              <input type="checkbox" id="inlineCheckbox3" value="Français"> Français </input>
-		            </label>
-		            </div>
-		          <input type="range" value={this.state.value} onChange={this.handleChange.bind(this)} />
-	            </div>
-			)
-			this.state.users.forEach(function(u){
-				usersquare.push(
-
-					<div>
-						<div className="img">
-						<Link to={`/profile/${u._id}`}><img src={u.profileImageUrl} alt="Image" /></Link>
-						</div>
-						<div className="text_image">
-							<h2 style={{fontSize: "100%"}}>{u.firstName}&nbsp;&nbsp;{u.salary}€/heure</h2>
-							<button className="btn btn-success">Contact</button>
-						</div>
-					  </div>
-
-
-					)
-			})
-		}
-
-		console.log("CONTACTFORM", contactForm);
-		console.log("FILTERS", filters);
-		console.log("USERSQUARE", usersquare);
+		
 		return (
 			<div>
-				<h3 className='center'>Travaillez avec les meilleures Hôtesses</h3>
-				{contactForm}
-				{filters}
-				<div className="row col-sm-offset-1">
-					{usersquare}
+				<div id="carousel-example-generic" className="carousel slide" data-ride="carousel">
+				  <ol className="carousel-indicators">
+				    <li data-target="#carousel-example-generic" data-slide-to="0" className="active"></li>
+				    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+				    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+				  </ol>
+
+				  <div className="carousel-inner" role="listbox">
+				    <div className="item active">
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.52.04.png" style={{width:"100%"}} />
+				      <div className="carousel-caption">
+				      </div>
+				    </div>
+				    <div className="item">
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.14.14.png" style={{width:"100%"}} />
+				      <div className="carousel-caption">       
+				      </div>
+				    </div>
+				    <div className="item">
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.59.32.png" style={{width:"100%"}} />
+				      <div className="carousel-caption">       
+				      </div>
+				    </div>
+				  </div>
+				  <a className="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+				    <span className="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				    <span className="sr-only">Previous</span>
+				  </a>
+				  <a className="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+				    <span className="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				    <span className="sr-only">Next</span>
+				  </a>
 				</div>
+			<div className="container">
+				<h5 className='landcenter'>Find a Space that fits You</h5>
+				{contactForm}
+			</div>
+			<div>
+			<img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+15.24.53.png" style={{width:"100%"}} />
+			</div>
 			</div>
 		);
 	}
 }
 
-
-
 class MyDatePicker extends React.Component {
 	constructor(props) {
 		super(props);
-
+		
 		this.state = {}
 	}
 
@@ -222,15 +161,15 @@ class MyDatePicker extends React.Component {
 						font: "helvetica",
 						color: "black",
 						moment: {
-							lang: 'fr',
+							lang: 'en',
 							settings: {
-					        months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
-					        monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
-					        monthsParseExact : true,
-					        weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
-					        weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-					        weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
-					        weekdaysParseExact : true,
+					        // months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
+					        // monthsShort : 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
+					        // monthsParseExact : true,
+					        // weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
+					        // weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
+					        // weekdaysMin : 'Lu_Ma_Me_Je_Ve_Sa_Di'.split('_'),
+					        // weekdaysParseExact : true,
 					        longDateFormat : {
 					            LT : 'HH:mm',
 					            LTS : 'HH:mm:ss',
@@ -281,7 +220,7 @@ class MyDatePicker extends React.Component {
 }
 
 LandingEvent.contextTypes = {
-	router: Object
+	router: React.PropTypes.object,
 }
 
 module.exports=LandingEvent

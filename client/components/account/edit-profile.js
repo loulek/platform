@@ -1,10 +1,22 @@
 import React from "react";
 import Geosuggest from 'react-geosuggest';
+import BigCalendar from 'react-big-calendar';
+import moment from 'moment';
+
 var Lightbox = require('react-image-lightbox');
 
-//TABS
+// Using moment.js as the localizer instead of globalize.js
+BigCalendar.setLocalizer(
+	BigCalendar.momentLocalizer(moment)
+);
 
-const Tabs = React.createClass({
+//TABS
+	Date.prototype.getWeek = function() {
+	    var onejan = new Date(this.getFullYear(),0,1);
+	    return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+	}
+
+var Tabs = React.createClass({
 	displayName: "Tabs",
 	propTypes: {
 		selected: React.PropTypes.number,
@@ -80,7 +92,6 @@ const Pane = React.createClass({
 	}
 });
 
-
 // END OF TABS
 
 class EditProfile extends React.Component {
@@ -105,8 +116,124 @@ class EditProfile extends React.Component {
 			tempSpecialty: [],
 			editContact: false,
 			editBio: false,
-			editCalendar: false
+			editCalendar: false,
+			availability:[],
+			events: [],
+			modifyAvailability: false
 		}
+	}
+
+	componentDidMount(){
+		var that=this
+		$.ajax({
+			url:'/user/calendar',
+			type:"GET",
+			success:function(calendar){
+				if(!calendar){
+					that.setState({availability: [
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		              ]})
+				console.log(that.state.availability);
+				}
+					else{
+						var newDate = new Date();
+						newDate.setHours(0);
+						newDate.setMinutes(0);
+						newDate.setSeconds(0);
+						newDate.setMilliseconds(0);
+						that.setState({
+							availability: calendar.times
+						})
+						
+							for(var i = 0; i < calendar.times.length; i++)//each day
+							{
+								var ones = [];
+								var consecutiveOnes = [];
+								for(var j = 0; j < calendar.times[i].length; j++) //each 30min time
+								{
+									
+									if(calendar.times[i][j] === 1)
+										{
+											console.log(calendar.times[i][j]);
+											ones.push(j);
+										}
+								}
+								if(ones.length > 1)
+									{
+										for (var k = 0; k < ones.length-1; k++)
+											{
+												if(ones.length === 1)
+													{
+														break;
+													}
+												if (ones[k+1] !== ones[k]+1)
+													{
+														consecutiveOnes.push(ones.splice(0,k+1))
+														k=0;
+													}
+											}
+											consecutiveOnes.push(ones)
+									}
+								if (ones.length === 1)
+									{
+										consecutiveOnes.push(ones)
+									}
+								console.log("THESE ARE WORKINGS YAY", consecutiveOnes)	
+								var currentMS = newDate.getTime()
+								var currentDay = newDate.getDay();
+								var difference = i-currentDay;
+								if (i!==0){
+								var newMS=currentMS+86400000*difference
+								}
+								if (i===0){
+								var newMS=currentMS+86400000*(difference+7)
+								}
+								var secondDate = new Date(newMS)
+								console.log("SECOND MSMSMSMSMSM", secondDate)
+								for(var l = 0; l < consecutiveOnes.length; l++)
+									{
+										var startIndex = consecutiveOnes[l][0];
+										var startDate = new Date(secondDate.setMinutes(startIndex*30))
+										secondDate.setHours(0);
+										secondDate.setMinutes(0);
+										secondDate.setSeconds(0);
+										secondDate.setMilliseconds(0);
+										var endIndex = consecutiveOnes[l][consecutiveOnes[l].length-1];
+										if(endIndex === 47)
+										{
+											var endDate = new Date(secondDate.setMinutes(endIndex*30+29));
+										}
+											else
+												{
+													var endDate = new Date(secondDate.setMinutes(endIndex*30+30));
+												}
+										secondDate.setHours(0);
+										secondDate.setMinutes(0);
+										secondDate.setSeconds(0);
+										secondDate.setMilliseconds(0);
+										console.log("THIS IS START INDEX AND DATE", startIndex, startDate)
+										console.log("THIS IS END INDEX AND DATE", endIndex, endDate)
+										var newObject = {
+											'start': startDate,
+											'end': endDate
+										}
+										that.setState({
+											events: that.state.events.concat(newObject)
+										})
+									}
+							}
+					}
+			},
+			error:function(err){
+				if (err){console.log("error in calendar",err)}
+			}
+		})
 	}
 
 	componentWillMount() {
@@ -142,19 +269,15 @@ class EditProfile extends React.Component {
 					resumeImageUrl = user.profile.resumeImageUrl;
 					address = user.profile.address;
 					salary=user.profile.salary
-
 					if(user.profile.gender) {
 						gender = user.profile.gender;
 					}
-
 					if(user.profile.specialty) {
 						specialty = user.profile.specialty;
 					} else {
 						specialty = [];
 					}
-
 				}
-
 				// set react state using values from function variables
 				this.setState({
 					profileData: {
@@ -301,7 +424,6 @@ class EditProfile extends React.Component {
 		this._saveChanges(e);
 	}
 
-
 	_saveChanges(e) {
 		e.preventDefault();
 		$.ajax({
@@ -310,15 +432,13 @@ class EditProfile extends React.Component {
 			data: this.state.profileData,
 			success: function(data) {
 				console.log(data);
-			},
+				this.context.setUser(Object.assign(this.context.getUser(), {profile: data.user}));
+			}.bind(this),
 			error: function(data) {
 				console.log(data);
 			}
 		});
 	}
-
-
-
 
 	_editContact(isEnabled) {
 		if(isEnabled) {
@@ -326,13 +446,13 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Prénom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>First Name:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="firstName" defaultValue={this.state.profileData.firstName} id="firstName"/>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Last Name:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="lastName" defaultValue={this.state.profileData.lastName} id="lastName"/>
 							</div>
@@ -344,13 +464,13 @@ class EditProfile extends React.Component {
 						</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Téléphone:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Phone:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="phone" defaultValue={this.state.profileData.phone} id="phone"/>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Adresse:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Address:</b></p>
 							<div className="col-sm-8">
 
 							<Geosuggest inputClassName="form-control" placeholder="" initialValue={this.state.profileData.address} id="address" />
@@ -367,13 +487,13 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Prénom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>First Name:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.firstName}</p>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Last Name:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.lastName}</p>
 							</div>
@@ -385,18 +505,18 @@ class EditProfile extends React.Component {
 						</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Téléphone:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Phone:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.phone}</p>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Adresse:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Address:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.address}</p>
 							</div>
 						</div>
-						<button className="btn btn-primary float-right" onClick={function() {this.setState({editContact: true})}.bind(this)}>Modifier</button>
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editContact: true})}.bind(this)}>Edit</button>
 					</div>
 				</div>
 			);
@@ -431,7 +551,6 @@ class EditProfile extends React.Component {
 
                     onCloseRequest={this.closeLightbox.bind(this)}/>
             );
-
 		}
 
 		if(isEnabled) {
@@ -442,9 +561,6 @@ class EditProfile extends React.Component {
 					<span className="specialty-span" key={i}>{this.state.tempSpecialty[i]} <span className='rem-specialty-btn'>×</span></span>
 				);
 			}
-
-
-
 
 			var specialties = ['Bahasa Indonesia', 'Bahasa Malaysia', 'Bengali', 'Dansk', 'Deutsch', 'English', 'Español', 'Français', 'Hindi', 'Italiano',
 			'Magyar', 'Nederlands', 'Norsk', 'Polski', 'Português', 'Punjabi', 'Sign Language', 'Suomi', 'Svenska', 'Tagalog', 'Türkçe', 'Čeština', 'Ελληνικά',
@@ -467,16 +583,16 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Sexe:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Gender:</b></p>
 							<div className="col-sm-8">
 								<select className="form-control" defaultValue={this.state.profileData.gender} id="genderSelector">
-									<option value='Femme'>Femme</option>
-									<option value='Homme'>Homme</option>
+									<option value='Femme'>Woman</option>
+									<option value='Homme'>Man</option>
 								</select>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Langues:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Language:</b></p>
 							<div className="col-sm-8 languages_container">
 
 								  {specialties}
@@ -497,7 +613,7 @@ class EditProfile extends React.Component {
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>CV:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Resume:</b></p>
 							<img src={this.state.profileData.resumeImageUrl} width="150" />
 							<div className="col-sm-10">
 								<input type="file" accept="application/pdf, image/*" className="form-control" id="resume" />
@@ -526,14 +642,14 @@ class EditProfile extends React.Component {
 										{box}
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Sexe:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Gender:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.gender}</p>
 							</div>
 						</div>
 
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Langues:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Languages:</b></p>
 							<div className="col-sm-10 languages_padding">
 								{specialtyContent}
 							</div>
@@ -551,29 +667,129 @@ class EditProfile extends React.Component {
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>CV:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Resume:</b></p>
 							<div className="col-sm-10">
 							{buttonResume}
 							</div>
 						</div>
-						<button className="btn btn-primary float-right" onClick={function() {this.setState({editBio: true, tempSpecialty: this.state.profileData.specialty.slice(0)})}.bind(this)}>Modifier</button>
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editBio: true, tempSpecialty: this.state.profileData.specialty.slice(0)})}.bind(this)}>Edit</button>
 					</div>
 				</div>
 			);
 		}
 	}
 
+	onSelectSlot(data){
+		var that=this
+		var arrayOfTimes = [];
+		var dayOfWeek = data.slots[0].getDay();
+		if(this.state.modifyAvailability)
+		{
+			if(data.start.getDay() === data.end.getDay())
+				{
+
+					if (data.slots.length===2){
+					alert("You must be at least available for an hour"); 
+					return
+					}
+						for(var i = 0; i < data.slots.length-1; i++)
+						{
+							arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
+						}
+						console.log(arrayOfTimes)
+						if((data.slots[data.slots.length-1].getHours()+data.slots[data.slots.length-1].getMinutes()/60)*2 === 47)
+						{
+							arrayOfTimes.push(47)
+						}
+						$.ajax("/sendDayAndTime2",{
+							type: "POST",
+							data: {
+								day: dayOfWeek,
+								time: JSON.stringify(arrayOfTimes)
+							},
+							success:function(resp){
+								// if(data.slots[data.slots.length-1])
+								var newObjectAgain = {
+									'title': 'DELETED EVENTS',
+									'start': data.slots[0],
+									'end': data.slots[data.slots.length-1]
+								}
+								that.setState({
+									availability: resp.availability,
+									events: that.state.events.concat(newObjectAgain)
+								})
+								console.log("SUCCESS",that.state.availability)
+							},
+							error:function(err){
+								console.log("ERROR",err)
+							}
+						})
+				}
+		}
+			else
+			{
+				if(data.start.getDay() === data.end.getDay())
+				{
+
+					if (data.slots.length===2){
+					alert("You must be at least available for an hour"); 
+					return
+					}
+						for(var i = 0; i < data.slots.length-1; i++)
+						{
+							arrayOfTimes.push((data.slots[i].getHours()+data.slots[i].getMinutes()/60)*2)
+						}
+						console.log(arrayOfTimes)
+						if((data.slots[data.slots.length-1].getHours()+data.slots[data.slots.length-1].getMinutes()/60)*2 === 47)
+						{
+							arrayOfTimes.push(47)
+						}
+						$.ajax("/sendDayAndTime",{
+							type: "POST",
+							data: {
+								day: dayOfWeek,
+								time: JSON.stringify(arrayOfTimes)
+							},
+							success:function(resp){
+								// if(data.slots[data.slots.length-1])
+								var newObjectAgain = {
+									'start': data.slots[0],
+									'end': data.slots[data.slots.length-1]
+								}
+								that.setState({
+									availability: resp.availability,
+									events: that.state.events.concat(newObjectAgain)
+								})
+								console.log("SUCCESS",that.state.availability)
+							},
+							error:function(err){
+								console.log("EEEEEE",err)
+							}
+						})
+				}
+			}
+	}
+
 	_editCalendar(isEnabled) {
+		var calendar = <BigCalendar
+							events={this.state.events}
+							defaultDate={new Date()}
+						    selectable={true}
+						    onSelectSlot={this.onSelectSlot.bind(this)}
+						/>
 		if(isEnabled) {
 			return (
 				<div className='panel panel-default'>
-					<div className='panel-body'>		
+					<div className='panel-body'>
 						<div className="form-group row">
 							<p className="col-sm-2 form-control-static"><b>Salaire:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="salary" defaultValue={this.state.profileData.salary} id="salary"/>
 							</div>
+
 						</div>
+						{calendar}
+						<button className="btn btn-success margin5 float-right" onClick={function() {this.setState({editCalendar: false, modifyAvailability: false})}.bind(this)}>Save Changes2</button>
 						<button className="btn btn-success margin5 float-right" onClick={this._updateCalendar.bind(this)}>Save</button>
 						<button className="btn btn-warning margin5 float-right" onClick={function() {this.setState({editCalendar: false, tempSpecialty:[]})}.bind(this)}>Cancel</button>
 					</div>
@@ -588,7 +804,10 @@ class EditProfile extends React.Component {
 						<div className="col-sm-10">
 							<p className="form-control-static">{this.state.profileData.salary}</p>
 						</div>
+
 						</div>
+						{calendar}
+						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar:true, modifyAvailability: true})}.bind(this)}>Modify2</button>
 						<button className="btn btn-primary float-right" onClick={function() {this.setState({editCalendar: true})}.bind(this)}>Modifier</button>
 					</div>
 				</div>
@@ -620,33 +839,26 @@ class EditProfile extends React.Component {
 			calendarForm = this._editCalendar(false);
 		}
 
-
 		return (
-
 			<div>
-
-
 			  <div>
 		        <Tabs selected={0}>
 		          <Pane label="Contact">
 		            <div>{contactForm}</div>
 		          </Pane>
-		          <Pane label="Profil">
+		          <Pane label="Profile">
 		            <div>{bioForm}</div>
-		          </Pane>
-		          <Pane label="Calendrier / Salaire">
-		            <div>{calendarForm}</div>
 		          </Pane>
 		        </Tabs>
 		      </div>
-
-
-
-
 			</div>
 		);
 	}
 }
 
+EditProfile.contextTypes = {
+  getUser: React.PropTypes.func,
+  setUser: React.PropTypes.func
+}
 
 export default EditProfile;

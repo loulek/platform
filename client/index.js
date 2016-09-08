@@ -15,8 +15,15 @@ import Calendar from "./components/calendar";
 import Search from "./components/search";
 import Events from "./components/event";
 import Profile from "./components/profile";
-import CreateEvent from "./components/CreateEvent"
-import WorkerSignup from "./components/WorkerSignup"
+import CreateEvent from "./components/CreateEvent";
+import WorkerSignup from "./components/WorkerSignup";
+import EventProfile from "./components/EventProfile";
+import Forgot from "./components/forgot";
+import Change from "./components/change";
+import Notifications from "./components/notifications";
+import Messages from "./components/messages";
+import MessageUser from "./components/message_user";
+import Art from "./components/art";
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -33,11 +40,17 @@ function render() {
     	<Route path="/" component={App}>
 	    	<IndexRoute component={Home}></IndexRoute>
         <Route path="/events" component={Events}/>
+        <Route path="/notifications" component={Notifications}/>
+        <Route path="/conversation/:id" component={MessageUser}/>
+        <Route path="/messages" component={Messages}/>
+        <Route path="/event/:id" component={EventProfile}/>
         <Route path="/profile" component={Profile}/>
-          <Route path="/profile/:id" component={Profile}/>
+        <Route path="/profile/:id" component={Profile}/>
+        <Route path="/art/:id" component={Art}/>
 	    	<Route path="/login" component={Login} />
 	    	<Route path="/signup" component={Signup} />
         <Route path="workersignup" component={WorkerSignup} />
+        <Route path="/forgot" component={Forgot} />
         <Route path="/account" component={Account} onEnter={requireAuth}>
           <IndexRoute component={AccountInfo} />
           <Route path="/account/edit-profile" component={EditProfile} onEnter={requireAuth} />
@@ -49,6 +62,7 @@ function render() {
           <Route path="/search/:id" component={Search}/>
         </Route>
     	</Route>
+      <Route path="/change/:id" component={Change} />
     </Router>
     ,
     document.getElementById('root')

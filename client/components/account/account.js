@@ -20,7 +20,8 @@ class Account extends React.Component {
 								<div className="panel panel-default">
 									<div className="panel-body">
 										<ul className="nav nav-pills nav-stacked">
-											<li><Link to="/account/"><i className="glyphicon glyphicon-picture" aria-hidden="true"></i> My Gallery</Link></li>
+											<li><Link to="/account/"><i className="glyphicon glyphicon-plane" aria-hidden="true"></i> My Trips to be Hosted</Link></li>
+											<li><Link to="/account/"><i className="glyphicon glyphicon-home" aria-hidden="true"></i> My Places to Host</Link></li>
 											<li><Link to="/account/edit-profile"><i className="fa fa-user" aria-hidden="true"></i> Edit Profile</Link></li>
 											<li><Link to="/account/change-password"><i className="fa fa-key" aria-hidden="true"></i> Change Password</Link></li>
 										</ul>

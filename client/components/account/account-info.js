@@ -269,7 +269,7 @@ class Addart extends React.Component {
 							  }
 							}}
 					>
-					  <h2>Add Art</h2>
+					  <h2>Add Place</h2>
 					  	<p>
 						  <div>
 						    <div className="form-group row">

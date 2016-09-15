@@ -127,7 +127,7 @@ class LandingEvent extends React.Component {
 				  </a>
 				</div>
 			<div className="container">
-				<h5 className='landcenter'>Stay at a Friend's place</h5>
+				<h5 className='landcenter'>Find a Friend to Host You</h5>
 				{contactForm}
 			</div>
 			<div>

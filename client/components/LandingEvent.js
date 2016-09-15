@@ -102,7 +102,7 @@ class LandingEvent extends React.Component {
 
 				  <div className="carousel-inner" role="listbox">
 				    <div className="item active">
-				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.52.04.png" style={{width:"100%"}} />
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-09-15+a%CC%80+17.09.03.png" style={{width:"100%"}} />
 				      <div className="carousel-caption">
 				      </div>
 				    </div>

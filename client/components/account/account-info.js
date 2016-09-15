@@ -233,7 +233,7 @@ class Addart extends React.Component {
 		return (
 			<div>
 				<div style={{marginLeft:"20px"}}>
-					<h3>My Places to Host Friends of Friends<button className="btn btn-default" onClick={this.addArt.bind(this)}>Add Place</button></h3>
+					<h3>My Places to Host Friends <button className="btn btn-default" onClick={this.addArt.bind(this)}>Add Place</button></h3>
 				</div>
 					<div className="art-display">
 						{
@@ -274,7 +274,12 @@ class Addart extends React.Component {
 						  <div>
 						    <div className="form-group row">
 							  	<div className="col-sm-10">
-									<input type="text" className="form-control" name="title" placeholder="Title" onChange={this.onChangeArt.bind(this)} />
+									<input type="text" className="form-control" name="title" placeholder="Place Title (Cozy couch, nice bedroom..)" onChange={this.onChangeArt.bind(this)} />
+								</div>
+							</div>
+							<div className="form-group row">	
+								<div className="col-sm-6 col-md-10">
+									<Geosuggest inputClassName="form-control" id="address" placeholder="Location (City)" onSuggestSelect={this.suggestSelect.bind(this)}  />
 								</div>
 							</div>
 							<div className="form-group row">
@@ -313,11 +318,6 @@ class Addart extends React.Component {
 							<div className="form-group row">	
 								<div className="col-sm-10">
 									<input type="text" className="form-control" name="width" placeholder="Width (inches)" onChange={this.onChangeArt.bind(this)} />
-								</div>
-							</div>
-							<div className="form-group row">	
-								<div className="col-sm-6 col-md-10">
-									<Geosuggest inputClassName="form-control" id="address" placeholder="Location (City)" onSuggestSelect={this.suggestSelect.bind(this)}  />
 								</div>
 							</div>
 							<div className="form-group row">

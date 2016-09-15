@@ -11,6 +11,7 @@ import AccountInfo from "./components/account/account-info";
 import EditProfile from "./components/account/edit-profile";
 import EditNotifications from "./components/account/edit-notifications";
 import ChangePassword from "./components/account/change-password";
+import Trips from "./components/account/trips";
 import Calendar from "./components/calendar";
 import Search from "./components/search";
 import Events from "./components/event";
@@ -24,6 +25,7 @@ import Notifications from "./components/notifications";
 import Messages from "./components/messages";
 import MessageUser from "./components/message_user";
 import Art from "./components/art";
+
 
 function requireAuth(nextState, replace) {
   if(sessionStorage.auth === "false") {
@@ -56,6 +58,7 @@ function render() {
           <Route path="/account/edit-profile" component={EditProfile} onEnter={requireAuth} />
           <Route path="/account/edit-notifications" component={EditNotifications} onEnter={requireAuth} />
           <Route path="/account/change-password" component={ChangePassword} onEnter={requireAuth} />
+          <Route path="/account/trips" component={Trips} onEnter={requireAuth} />
         </Route>
         <Route path="/calendar" component={Calendar} />
         <Route path="/search" component={Search}>

@@ -107,12 +107,12 @@ class LandingEvent extends React.Component {
 				      </div>
 				    </div>
 				    <div className="item">
-				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.14.14.png" style={{width:"100%"}} />
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-09-15+a%CC%80+17.09.45.png" style={{width:"100%"}} />
 				      <div className="carousel-caption">       
 				      </div>
 				    </div>
 				    <div className="item">
-				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+13.59.32.png" style={{width:"100%"}} />
+				      <img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-09-15+a%CC%80+17.09.56.png" style={{width:"100%"}} />
 				      <div className="carousel-caption">       
 				      </div>
 				    </div>
@@ -127,7 +127,7 @@ class LandingEvent extends React.Component {
 				  </a>
 				</div>
 			<div className="container">
-				<h5 className='landcenter'>Find a Friend to Host You</h5>
+				<h5 className='landcenter'>Friends of Friends Host You</h5>
 				{contactForm}
 			</div>
 			<div>

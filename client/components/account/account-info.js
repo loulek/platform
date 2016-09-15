@@ -233,7 +233,7 @@ class Addart extends React.Component {
 		return (
 			<div>
 				<div style={{marginLeft:"20px"}}>
-					<h3>My Places to Host Friends <button className="btn btn-default" onClick={this.addArt.bind(this)}>Add Place</button></h3>
+					<h3>My Places to Host Friends of Friends<button className="btn btn-default" onClick={this.addArt.bind(this)}>Add Place</button></h3>
 				</div>
 					<div className="art-display">
 						{

@@ -452,7 +452,7 @@ class EditProfile extends React.Component {
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Last Name:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="lastName" defaultValue={this.state.profileData.lastName} id="lastName"/>
 							</div>
@@ -487,13 +487,13 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>First Name:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Prénom:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.firstName}</p>
 							</div>
 						</div>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>Last Name:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Nom:</b></p>
 							<div className="col-sm-10">
 								<p className="form-control-static">{this.state.profileData.lastName}</p>
 							</div>

@@ -437,10 +437,6 @@ class Addart extends React.Component {
 				
 
 
-
-
-
-
 Addart.contextTypes = {
     router: React.PropTypes.object,
     getUser: React.PropTypes.func

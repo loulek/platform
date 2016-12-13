@@ -320,7 +320,7 @@ _changeEnd(e) {
 						<div className="col-sm-12 col-md-12">
 							<select className="form-control" name="category" defaultValue={this.state.artData.category} onChange={this.categorychange.bind(this)}>
 								<option value="" selected >All Categories</option>
-								<option value='Painting'>Painting</option>
+								<option value='Painting'>Food</option>
 								<option value='Photography'>Photography</option>
 								<option value='Prints'>Prints</option>
 								<option value='Sculptures'>Sculptures</option>

@@ -446,7 +446,7 @@ class EditProfile extends React.Component {
 				<div className='panel panel-default'>
 					<div className='panel-body'>
 						<div className="form-group row">
-							<p className="col-sm-2 form-control-static"><b>First Name:</b></p>
+							<p className="col-sm-2 form-control-static"><b>Prénom:</b></p>
 							<div className="col-sm-10">
 								<input type="text" className="form-control" name="firstName" defaultValue={this.state.profileData.firstName} id="firstName"/>
 							</div>

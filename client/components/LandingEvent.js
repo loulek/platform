@@ -130,6 +130,27 @@ class LandingEvent extends React.Component {
 				<h5 className='landcenter'>Find Friends of Friends to Host You</h5>
 				{contactForm}
 			</div>
+
+
+			<div className="Fonctionnement">
+				<div id="bubbleContainer">
+	  				<div className="bubbleSize" style='text-align:center'><a href="/"><img className="systeme" src="/winee1.png"></a></div>
+	  					<h5>Avec l’addition, déposez à vos clients une carte gratuite "monrestaurant".winee.me</h5>
+				</div>
+				<div id="bubbleContainer">
+	  				<div className="bubbleSize" style='text-align:center'><a href="/"><img className="systeme" src="/winee2.png"></a></div>
+	  					<h5>Les clients donnent leur avis sur le vin consommé et entrent leurs coordonnées</h5>
+				</div>
+				<div id="bubbleContainer">
+				  	<div className="bubbleSize" style='text-align:center'><a href="/"><img className="systeme" src="/winee3.png"></a></div>
+				  		<h5>Vous récupérez les coordonnées des clients et leurs notes des vins</h5>
+				</div>
+
+			</div>
+
+
+
+
 			<div>
 			<img src="https://s3-us-west-2.amazonaws.com/joshmagic/Capture+d%E2%80%99e%CC%81cran+2016-08-30+a%CC%80+15.24.53.png" style={{width:"100%"}} />
 			</div>

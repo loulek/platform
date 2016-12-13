@@ -637,7 +637,7 @@ render() {
 		return (
 			<div>
 				<h3 className='landcenter'>
-					Rent a MasterPiece
+					Epargnez vos proches
 				</h3>
 				  <div className="container-search">
 					<div className="search_box .col-md-2">

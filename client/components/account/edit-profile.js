@@ -562,7 +562,7 @@ class EditProfile extends React.Component {
 				);
 			}
 
-			var specialties = ['Bahasa Indonesia', 'Bahasa Malaysia', 'Bengali', 'Dansk', 'Deutsch', 'English', 'Español', 'Français', 'Hindi', 'Italiano',
+			var specialties = ['Happy', 'Bahasa Malaysia', 'Bengali', 'Dansk', 'Deutsch', 'English', 'Español', 'Français', 'Hindi', 'Italiano',
 			'Magyar', 'Nederlands', 'Norsk', 'Polski', 'Português', 'Punjabi', 'Sign Language', 'Suomi', 'Svenska', 'Tagalog', 'Türkçe', 'Čeština', 'Ελληνικά',
 			'Русский', 'українська', 'עברית', 'العربية', 'ภาษาไทย', '中文', '日本語', '한국어'];
 

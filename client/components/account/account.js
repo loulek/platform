@@ -40,7 +40,7 @@ class Account extends React.Component {
 				return (	
 					<div>
 						<h3 className='landcenter'>
-							My Account
+							MON COMPTE
 						</h3>
 						<hr />
 						<div className="row">

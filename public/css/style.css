@@ -1,15 +1,46 @@
 body {
   margin-top: 50px;
-/*  background-image: url("http://www.premierehostess.com/wp-content/uploads/2014/09/Premiere-Hostess-Dubai-9.jpg");
-*/  background-size: cover;
-  background-repeat: repeat-x;
+}
+
+.bg-image {
+  background-image: url("");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.videoland{
+  margin-top: 30px;
+  min-width: 200px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#background-video{
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  padding: none;
+  position: fixed;
+  z-index: -6;
+  }
+.bg-result{
+  background-color: white;
+  display: inline-block;
+  margin: 20px;
 }
 .panel-default {
-   opacity: 0.97 
+   opacity: 0.97 ;
+}
+.search_box {
+  max-width:250px;
+  float: left;
+  display: inline-block;
 }
 
 .panel-heading {
   width: 100%;
+  background-color: white;
+  opacity: 0.97;
 }
 
 .margin5 {
@@ -23,7 +54,13 @@ body {
 .float-left {
 	float: left;
 }
-
+.landcenter {
+  text-align: center;
+  color: black;
+  font-size: 35px;
+  margin-top: 25px;
+  margin-bottom:0px;
+}
 .center {
 	text-align: center;
   color: white;
@@ -58,6 +95,7 @@ body {
 
 #root{
 	position: absolute;
+  width: 100%;
 }
 
 #overlay{
@@ -195,3 +233,151 @@ body {
 .tabs__content {
   margin-bottom: -20px;
 }
+.rbc-month-view {
+    position: relative;
+    border: 1px solid #DDD;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex: 1 0;
+     flex: 1 0; 
+    width: 100%;
+    height: 464px;
+}
+
+.rbc-agenda-view {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+/*    -ms-flex: 1 0 0;*/
+    flex: 1 0; 
+    overflow: auto;
+}
+.squaresContainer{
+  margin-left: 5px;
+  max-width: 700px;
+  min-width: 300px;
+}
+.squaresArtContainer{
+  min-width: 300px;
+}
+.events{
+  margin-top: 20px;
+}
+.art-display{
+  display: inline-block;
+}
+.individual-art{
+  width: 400px;
+  height: 200px;
+  margin: 20px;
+}
+.individual-art img {
+  height: 100%;
+}
+.art-display-search{
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+}
+.container-search {
+  display: flex;
+  flex-direction: row;
+}
+@media (max-width: 500px) {
+.container-search {
+    flex-wrap: wrap;
+  }
+}
+.individual-art-search{
+  width: 300px;
+  height: 200px;
+  margin: 20px;
+  di
+}
+.individual-art-search img {
+  width: 100%;
+}
+.contactartcontainer{
+  display:flex;
+  flex-direction: row;
+}
+@media (max-width: 500px) {
+.contactartcontainer {
+    flex-wrap: wrap;
+  }
+}
+.contactart{
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  margin-right: 50px;
+}
+
+.Fonctionnement{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  text-align:center;
+  margin-top: 3%;
+  margin-bottom: 15%
+}
+@media (max-width: 980px) {
+.wineeFonctionnement {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align:center;
+  margin-bottom: 21%
+}
+}
+#bubbleContainer {
+  height: 200px;
+  width: 300px;
+  position: relative;
+  margin-right: 25px;
+}
+@media (max-width: 980px) {
+  #bubbleContainer {
+  height: 320px;
+  width: 300px;
+  position: relative;
+}
+}
+.bubbleSize{
+  width:250px;
+  height:170px;
+  margin-left: 25px;
+  margin-right: 25px;
+  cursor: pointer;
+}
+@media (max-width: 980px) {
+  .bubbleSize{
+  width:180px;
+  height:170px;
+  margin-left: 88px;
+  margin-right: 25px;
+  cursor: pointer;
+}
+}
+.systeme {
+ width: 70%;
+}
+@media (max-width: 980px) {
+.systeme {
+ width: 100%;
+}
+}
+.formField {
+  margin-bottom: 5rem;
+}
+.newmessage{
+  margin-top: 20px;
+}
+.numberSearch{
+  display: flex;
+}
+.grid-sizer,
+.grid-item { width: 20%; }

@@ -20,7 +20,7 @@ class Signup extends React.Component {
 		e.preventDefault();
 		if(!this.state.email) {
 			return this.setState({
-				message: 'Email manquant'
+				message: 'Missing Email'
 			});
 		}
 
@@ -29,29 +29,27 @@ class Signup extends React.Component {
 	    var dotpos = x.lastIndexOf(".");
 	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
 	    	return this.setState({
-	    		message: 'Email invalide.'
+	    		message: 'Invalid Email.'
 	    	})
 	    }
     
-
 		if(!this.state.password) {
 			return this.setState({
-				message: 'Il manque un mot de passe.'
+				message: 'Missing Password.'
 			});
 		}
 
 		if(!this.state.repeatPassword) {
 			return this.setState({
-				message: 'Veuillez confirmer le mot de passe.'
+				message: 'Please confirm Password.'
 			});
 		}
 
 		if(this.state.password !== this.state.repeatPassword) {
 			return this.setState({
-				message: "Les mots de passe ne sont pas pareil."
+				message: "Passwords must match."
 			});
 		}
-
 
 		$.ajax({
 			url: '/signup',
@@ -70,7 +68,7 @@ class Signup extends React.Component {
 			error: function(xhr, status, err) {
 				console.log(err)
 				this.setState({
-					message: "Cette adresse email est déjà assosiée à un compte!"
+					message: "Email already exists!"
 				});
 			}.bind(this)
 		});
@@ -96,7 +94,10 @@ class Signup extends React.Component {
 
 		return(
 			<div>
-			<h2 style={{"textAlign" : "center"}}>Sign Up</h2>
+			<video id="background-video" loop autoPlay >
+  			<source src="https://s3-us-west-2.amazonaws.com/joshmagic/registerr.mp4" type="video/mp4" />
+  			</video>
+  			<h3 className='center'>Sign Up</h3>
 				<div className="row">
 					<div className="col-sm-6 col-sm-offset-3">
 						<div className="panel panel-default">

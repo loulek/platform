@@ -1,0 +1,9 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+www.jtbnow.com	TRUE	/	FALSE	1999999999	crumb	AbpoxJ8LogeS7F_oYnuvNgNGsuJXobyg
+.jtbnow.com	TRUE	/	FALSE	1999999999	SS_MID	56f3a0d2-bf64-4d3c-ab8a-ea6233e9bb69irv9hulq
+www.jtbnow.com	TRUE	/	FALSE	1999999999	ss_cid	07d46c5d-1082-4b0b-9228-52835ca6a853
+www.jtbnow.com	TRUE	/	FALSE	1999999999	ss_cvisit	1471218480238
+www.jtbnow.com	TRUE	/	FALSE	1999999999	ss_cpvisit	1471218480238
+www.jtbnow.com	TRUE	/	FALSE	1999999999	JSESSIONID	98pr-b7auSoSkgvEwcg3kwmwvIahQRnRCWJm1VZW_aY9QsB1q2DL5g
+

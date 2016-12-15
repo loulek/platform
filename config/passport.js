@@ -6,27 +6,21 @@ var configAuth = require('./auth');
 var User = require('../models/user');
 
 passport.serializeUser(function(user, done) {
-  console.log("!!user.profile", !!user.profile)
   done(null, JSON.stringify({id:user._id, type: user.type}));
 });
 
 passport.deserializeUser(function(serialized, done) {
-    console.log("SERIALIZE", serialized)
   var deserialized = JSON.parse(serialized)
-
   User.findById(deserialized.id)
       .populate({
         path:'profile', 
         model: deserialized.type
       })
       .exec(function(err, user){
-        console.log("DESERIALIZED.TYPE", deserialized.type)
         console.log("USER", user)
-        done(err, user)
+        done(err, user);
       })
-
 });
-
 
 passport.use(new LocalStrategy({usernameField: 'email'}, function(username, password, done) {
     // Find the user with the given username 
@@ -49,7 +43,7 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
       }
 
       if (user.confirmId === false){
-        return done(null, false, {message: 'Merci de confirmer votre adresse email via le mail que nous vous avons envoyé.'})
+        return done(null, false, {message: 'Please confirm your email address through the email we sent you.'})
       }
       
       // auth has has succeeded
@@ -64,6 +58,5 @@ passport.use(new LocalStrategy({usernameField: 'email'}, function(username, pass
   });
 
 }));
-
 
 module.exports = passport;

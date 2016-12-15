@@ -13,7 +13,8 @@ class TopNavBar extends React.Component{
 			success: function(data) {
 				sessionStorage.auth = false;
 				this.context.router.push('/');
-				}.bind(this),
+				this.context.setUser({});
+			}.bind(this),
 			error: function(xhr, status, err) {
 				return err;
 			}.bind(this)
@@ -23,12 +24,42 @@ class TopNavBar extends React.Component{
 	render() {
 
 		var optionsGuest = <ul className="nav navbar-nav navbar-right">
-								<li><Link to="workersignup"><span className="glyphicon glyphicon-user"></span> Inscription Travailleur</Link></li>
-								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Inscription</Link></li>
-								<li><Link to="login"><span className="glyphicon glyphicon-log-in"></span> Connexion</Link></li>
+								<li><Link to="workersignup"><span className="glyphicon glyphicon-home"></span> List Your Space </Link></li>
+								<li><Link to="signup"><span className="glyphicon glyphicon-user"></span> Sign Up</Link></li>
+								<li><Link to="login"><span className="glyphicon glyphicon-log-in"></span> Login</Link></li>
 
 								</ul>;
 
+		var user = this.context.getUser()
+		console.log("USER.TYPE", user)
+		if(user.type === "Profile"){
+		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
+								<li className="dropdown">
+									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
+									<ul className="dropdown-menu">
+										<li><Link to="/account"><i className="glyphicon glyphicon-user"></i> Account Settings</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><Link to="/messages"><i className="glyphicon glyphicon-envelope"></i> Messages</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+									</ul>
+								</li>
+							</ul>;	
+		}
+		else if(user.type === "Client"){
+		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
+								<li className="dropdown">
+									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
+									<ul className="dropdown-menu">
+										<li><Link to="/account/edit-profile"><i className="glyphicon glyphicon-user"></i> Account Settings</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><Link to="/messages"><i className="glyphicon glyphicon-envelope"></i> Messages</Link></li>
+										<li role="separator" className="divider"></li>
+										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+									</ul>
+								</li>
+							</ul>;	
+		} else if (user.type !== "Client" || user.type !== "Profile"){
 		var optionsUser = 	<ul className="nav navbar-nav navbar-right">
 								<li className="dropdown">
 									<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Account<span className="caret"></span></a>
@@ -38,10 +69,12 @@ class TopNavBar extends React.Component{
 										<li><a href="javascript:void(0);" onClick={this._logout.bind(this)}><span className="glyphicon glyphicon-log-out"></span> Log Out</a></li>
 									</ul>
 								</li>
-							</ul>;
+							</ul>;		
+
+		}
 
 		var options = null;
-		if(sessionStorage.auth === "true") {
+		if(sessionStorage.auth === true || Object.keys(user).length > 0) {
 			options = optionsUser;
 		} else {
 			options = optionsGuest;
@@ -58,7 +91,7 @@ class TopNavBar extends React.Component{
 							<span className="icon-bar"></span>
 						</button>
 						<Link to="/" className="navbar-brand">
-							Platform
+							Patrimonline
 						</Link>
 					</div>
 					<div className="collapse navbar-collapse" id="collapsibleTopNavbar">
@@ -71,7 +104,11 @@ class TopNavBar extends React.Component{
 }
 
 TopNavBar.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    getUser: React.PropTypes.func,
+    setUser: React.PropTypes.oneOfType([() => {}]),
 };
+
+
 
 export default TopNavBar;
